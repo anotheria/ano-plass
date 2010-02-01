@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.generic.observation;
 
-import net.anotheria.anoplass.api.common.APIFactory;
+import net.anotheria.anoplass.api.APIFactory;
 
 /**
  * The factory for the ObservationAPI implementation.

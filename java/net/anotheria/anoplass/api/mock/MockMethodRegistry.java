@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.anotheria.anoplass.api.common.API;
+import net.anotheria.anoplass.api.API;
 
 import org.apache.log4j.Logger;
 /**

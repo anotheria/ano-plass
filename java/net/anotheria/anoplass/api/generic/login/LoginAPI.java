@@ -1,7 +1,7 @@
 package net.anotheria.anoplass.api.generic.login;
 
-import net.anotheria.anoplass.api.common.API;
-import net.anotheria.anoplass.api.common.APIException;
+import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIException;
 
 /**
  * Basic API for login/out purposes.

@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.generic.login.processors;
 
-import net.anotheria.anoplass.api.common.APICallContext;
+import net.anotheria.anoplass.api.APICallContext;
 import net.anotheria.anoplass.api.generic.login.LogoutPostProcessor;
 
 /**

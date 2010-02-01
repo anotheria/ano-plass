@@ -1,7 +1,7 @@
 package net.anotheria.anoplass.api.activity;
 
 
-import net.anotheria.anoplass.api.common.API;
+import net.anotheria.anoplass.api.API;
 /**
  * This api is used to track users activity. 
  * @author lrosenberg

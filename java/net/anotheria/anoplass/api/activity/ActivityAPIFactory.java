@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.activity;
 
-import net.anotheria.anoplass.api.common.APIFactory;
+import net.anotheria.anoplass.api.APIFactory;
 
 /**
  * Factory for the activity api.

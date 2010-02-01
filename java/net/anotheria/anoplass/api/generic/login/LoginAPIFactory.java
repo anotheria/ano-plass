@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.generic.login;
 
-import net.anotheria.anoplass.api.common.APIFactory;
+import net.anotheria.anoplass.api.APIFactory;
 /**
  * The factory for the current login api.
  */

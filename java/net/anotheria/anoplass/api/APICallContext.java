@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;

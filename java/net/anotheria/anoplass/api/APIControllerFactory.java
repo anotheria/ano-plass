@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 /**
  * Creates and returns an instance of the api controller which in turn configures the APIFinder.

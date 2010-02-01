@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.generic.login;
 
-import net.anotheria.anoplass.api.common.APIException;
+import net.anotheria.anoplass.api.APIException;
 /**
  * Can be thrown by a login/logout preprocessor.
  * @author lrosenberg

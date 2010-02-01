@@ -2,7 +2,7 @@ package net.anotheria.anoplass.api.validation;
 
 import java.util.List;
 
-import net.anotheria.anoplass.api.common.APIException;
+import net.anotheria.anoplass.api.APIException;
 
 /**
  * ValidationException. Happens on validation errors.

@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 /**
  * Base exception class for all exceptions thrown by the api.

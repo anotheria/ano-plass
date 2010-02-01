@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import net.anotheria.anoplass.api.common.API;
+import net.anotheria.anoplass.api.API;
 
 import org.apache.log4j.Logger;
 /**

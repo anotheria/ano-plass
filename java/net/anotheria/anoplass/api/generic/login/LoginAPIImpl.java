@@ -1,5 +1,10 @@
 package net.anotheria.anoplass.api.generic.login;
 
+import net.anotheria.anoplass.api.APIException;
+import net.anotheria.anoplass.api.APIFinder;
+import net.anotheria.anoplass.api.APIInitException;
+import net.anotheria.anoplass.api.AbstractAPIImpl;
+import net.anotheria.anoplass.api.NoLoggedInUserException;
 import net.anotheria.anoplass.api.common.*;
 import net.anotheria.anoplass.api.generic.login.processors.SessionCleanupOnLogoutProcessor;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
@@ -127,7 +132,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	/**
 	 * Calls all login preprocessors.
 	 * @param userId user id
-	 * @throws net.anotheria.anoplass.api.common.APIException on errors
+	 * @throws net.anotheria.anoplass.api.APIException on errors
 	 */
 	private void callLoginPreprocessors(String userId) throws APIException{
 		for (LoginPreProcessor p : loginPreProcessors){

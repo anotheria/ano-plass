@@ -1,15 +1,22 @@
 package net.anotheria.anoplass.api.generic.observation;
 
-import net.anotheria.anoplass.api.common.APIInitException;
-import net.anotheria.anoplass.api.common.AbstractAPIImpl;
+import net.anotheria.anoplass.api.APIInitException;
+import net.anotheria.anoplass.api.AbstractAPIImpl;
 import net.java.dev.moskito.util.storage.Storage;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
+/**
+ * Implementation of the observation api.
+ * @author lrosenberg.
+ *
+ */
 public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAPI{
 	
+	/**
+	 * Internal storage for subject-observer mappings.
+	 */
 	private Storage<String, List<Observer>> subjects;
 	
 	public void init() throws APIInitException {

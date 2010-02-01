@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.activity;
 
-import net.anotheria.anoplass.api.common.AbstractAPIImpl;
+import net.anotheria.anoplass.api.AbstractAPIImpl;
 
 public class ActivityAPIImpl extends AbstractAPIImpl implements ActivityAPI{
 

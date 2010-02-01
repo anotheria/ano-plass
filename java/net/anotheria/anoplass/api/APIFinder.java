@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 import net.anotheria.anoplass.api.mock.APIMaskImpl;
 import net.anotheria.anoplass.api.mock.APIMockImpl;

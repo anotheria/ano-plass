@@ -1,8 +1,8 @@
 package net.anotheria.anoplass.api.mock;
 
-import net.anotheria.anoplass.api.common.API;
-import net.anotheria.anoplass.api.common.APIFinder;
-import net.anotheria.anoplass.api.common.APIInitException;
+import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIFinder;
+import net.anotheria.anoplass.api.APIInitException;
 
 import org.apache.log4j.Logger;
 

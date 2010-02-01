@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 /**
  * Interface to be implemented by APIFactory for a parametrized API. 

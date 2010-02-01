@@ -1,11 +1,11 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 /**
- * NoAPIFactoryException should be used in APIFinder, when API not founded.
+ * APIInitException, for init - errors. 
  *
  * @author h3llka
  */
-public class NoAPIFactoryException extends APIException{
+public class APIInitException extends APIException {
 
 	/**
 	 * Serial UID.
@@ -17,7 +17,7 @@ public class NoAPIFactoryException extends APIException{
 	 *
 	 * @param message string message
 	 */
-	public NoAPIFactoryException(String message) {
+	public APIInitException(String message) {
 		super(message);
 	}
 
@@ -27,7 +27,7 @@ public class NoAPIFactoryException extends APIException{
 	 * @param message string message
 	 * @param cause throwable cause
 	 */
-	public NoAPIFactoryException(String message, Exception cause) {
+	public APIInitException(String message, Exception cause) {
 		super(message, cause);
 	}
 }

@@ -1,6 +1,6 @@
 package net.anotheria.anoplass.api.generic.observation;
 
-import net.anotheria.anoplass.api.common.API;
+import net.anotheria.anoplass.api.API;
 /**
  * The observer api allows a publisher/subscriber modification of an subject/observer pattern. Instead of registering observers directly at subjects, the api provides a delegate object 
  * which allows a decoupling between subjects and observers, and allows multiple third-objects to fire events for a subject.

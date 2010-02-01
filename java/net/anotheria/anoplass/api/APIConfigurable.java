@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;

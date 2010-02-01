@@ -2,7 +2,7 @@ package net.anotheria.anoplass.api.mock;
 
 import java.lang.reflect.Method;
 
-import net.anotheria.anoplass.api.common.API;
+import net.anotheria.anoplass.api.API;
 /**
  * A method implementation used to mask an underlying method in an api implementation.
  * @author lrosenberg

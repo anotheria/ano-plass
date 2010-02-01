@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +12,7 @@ import net.anotheria.anoplass.api.generic.login.LoginAPIFactory;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPIFactory;
 
+import org.apache.log4j.Logger;
 import org.configureme.ConfigurationManager;
 
 /**
@@ -45,6 +46,8 @@ public class APIConfig {
 	 */
 	private static APIConfigurable configurable;
 
+	private static Logger log = Logger.getLogger(APIConfig.class);
+	
 	/**
 	 * Initialisation.
 	 */
@@ -55,7 +58,11 @@ public class APIConfig {
 		// addAlias(ITargetingAPI.class, ITargetingTestingAPI.class);
 
 		configurable = new APIConfigurable();
-		ConfigurationManager.INSTANCE.configure(configurable);
+		try{
+			ConfigurationManager.INSTANCE.configure(configurable);
+		}catch(IllegalArgumentException apiConfigNotFound){
+			log.warn("apiconfig not found, running with default values");
+		}
 	}
 
 	@SuppressWarnings("unused")

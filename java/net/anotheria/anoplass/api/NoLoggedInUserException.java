@@ -1,4 +1,4 @@
-package net.anotheria.anoplass.api.common;
+package net.anotheria.anoplass.api;
 
 /**
  * Signals that an attempt to get Current User ID or any other data has failed cause no logged in User.
@@ -19,7 +19,7 @@ public class NoLoggedInUserException extends APIException {
 	 * Constructor by default.
 	 */
 	public NoLoggedInUserException() {
-		this("No logged in User found!");
+		this("No logged in user found!");
 	}
 
 	/**
