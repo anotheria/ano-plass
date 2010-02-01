@@ -1,19 +1,18 @@
 package net.anotheria.anoplass.api.generic.login;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.APIInitException;
 import net.anotheria.anoplass.api.AbstractAPIImpl;
 import net.anotheria.anoplass.api.NoLoggedInUserException;
-import net.anotheria.anoplass.api.common.*;
 import net.anotheria.anoplass.api.generic.login.processors.SessionCleanupOnLogoutProcessor;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
 import net.anotheria.anoplass.api.generic.observation.ObservationSubjects;
 import net.anotheria.anoplass.api.session.APISessionImpl;
 import net.anotheria.util.StringUtils;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * An implementation for the login api.
