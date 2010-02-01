@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import net.anotheria.anoplass.api.common.APICallContext;
+import net.anotheria.anoplass.api.APICallContext;
 import net.anotheria.anoplass.api.session.APISession;
 import net.anotheria.anoplass.api.session.APISessionDistributionException;
 import net.anotheria.anoplass.api.session.APISessionDistributionHelper;
@@ -109,6 +109,6 @@ public class SessionDistributionTest {
 	}
 	
 	public static class UnserializeableAttribute{
-		private String unused;
+		@SuppressWarnings("unused")private String unused;
 	}
 }
