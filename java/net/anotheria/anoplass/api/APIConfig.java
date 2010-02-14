@@ -126,4 +126,7 @@ public class APIConfig {
 		return configurable.isVerboseMethodCalls();
 	}
 
+	public static boolean associateSessions(){
+		return configurable.isAssociateSessions();
+	}
 }

@@ -11,8 +11,13 @@ public class APIConfigurable {
 	/**
 	 * APIConfigurable 'verboseMethodCalls'.
 	 */
-	@Configure	private boolean verboseMethodCalls;
+	@Configure private boolean verboseMethodCalls;
 
+	/**
+	 * 
+	 */
+	@Configure private boolean associateSessions = false;  
+	
 	/**
 	 * Constructor.
 	 */
@@ -25,6 +30,14 @@ public class APIConfigurable {
 
 	public void setVerboseMethodCalls(boolean value) {
 		verboseMethodCalls = value;
+	}
+
+	public boolean isAssociateSessions() {
+		return associateSessions;
+	}
+
+	public void setAssociateSessions(boolean associateSessions) {
+		this.associateSessions = associateSessions;
 	}
 
 }
