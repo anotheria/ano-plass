@@ -52,12 +52,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 		logoutPostProcessors = new CopyOnWriteArrayList<LogoutPostProcessor>();
 		
 		addLogoutPostprocessor(new SessionCleanupOnLogoutProcessor());
-		try {
-			observationAPI = APIFinder.findAPI(ObservationAPI.class);
-		} catch (APIException e) {
-			log.error("ObservationAPI.class not founded",e);
-			throw new APIInitException("ObservationAPI.class not founded",e);
-		}
+		observationAPI = APIFinder.findAPI(ObservationAPI.class);
 
 	}
 

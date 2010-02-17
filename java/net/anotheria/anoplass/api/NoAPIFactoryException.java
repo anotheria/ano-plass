@@ -5,7 +5,7 @@ package net.anotheria.anoplass.api;
  *
  * @author h3llka
  */
-public class NoAPIFactoryException extends APIException{
+public class NoAPIFactoryException extends RuntimeException{
 
 	/**
 	 * Serial UID.

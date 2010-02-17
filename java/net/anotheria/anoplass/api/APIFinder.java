@@ -79,7 +79,7 @@ public class APIFinder {
 	 * @throws NoAPIFactoryException when factory not founded for some API
 	 * @throws APIInitException on API init failure
 	 */
-	public static<T  extends API> T findAPI(Class<T> identifier) throws APIException {
+	public static<T  extends API> T findAPI(Class<T> identifier) {
 		log.debug("find api: "+identifier);
 		@SuppressWarnings("unchecked")
 		T loaded = (T) apis.get(identifier);
@@ -100,7 +100,7 @@ public class APIFinder {
 				created.init();
 			}catch(Exception e){
 				log.error("findAPI.init in API "+identifier, e);
-				throw new APIInitException("findAPI.init in API "+identifier, e);
+				throw new APIInitializationException(identifier, e);
 			}
 			log.debug("ready");
 			return created;

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import net.anotheria.anoplass.api.APICallContext;
-import net.anotheria.anoplass.api.APIException;
+import net.anotheria.anoplass.api.APIConfig;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.activity.ActivityAPI;
 import net.anotheria.anoplass.api.session.APISession;
@@ -35,6 +35,7 @@ public class APIFilter implements Filter{
 	
 	public static final String PARAM_DISTRIBUTED_SESSION_NAME = "asDiSeName";
 	public static final String HTTPSA_SESSION_ID = "API_SESSION_ID";
+	public static final String HTTPSA_SESSION = "API_SESSION";
 	
 	/**
 	 * The activity api, which is notified about all actions by the user.
@@ -83,9 +84,16 @@ public class APIFilter implements Filter{
 		HttpSession session = req.getSession(true);
 		APISession apiSession = APISessionManager.getInstance().createSessionCopy(copySessionParameter, session.getId());
 		session.setAttribute(HTTPSA_SESSION_ID, apiSession.getId());
-		
+		if (APIConfig.associateSessions())
+			session.setAttribute(HTTPSA_SESSION, apiSession);
 	}
 
+	/**
+	 * Restores a previously distributed session.
+	 * @param req
+	 * @param distributedSessionName
+	 * @throws ServletException
+	 */
 	private void restoreSession(HttpServletRequest req, String distributedSessionName) throws ServletException{
 		HttpSession session = req.getSession(true);
 
@@ -115,12 +123,7 @@ public class APIFilter implements Filter{
 	}
 
 	@Override public void init(FilterConfig config) throws ServletException {
-		try {
-			activityAPI = APIFinder.findAPI(ActivityAPI.class);
-		} catch (APIException e) {
-			log.error("ActivityAPI - init failure init(" + config + ")", e);
-			throw new RuntimeException(e);
-		}
+		activityAPI = APIFinder.findAPI(ActivityAPI.class);
 	}
 
 	/**
@@ -129,8 +132,6 @@ public class APIFilter implements Filter{
 	 * @return
 	 */
 	protected APISession initSession(HttpServletRequest req) {		
-
-		
 		APICallContext currentContext = APICallContext.getCallContext();
 		currentContext.reset();
 		
@@ -145,7 +146,11 @@ public class APIFilter implements Filter{
 		}else{
 			apiSession = APISessionManager.getInstance().getSession(apiSessionId);
 			if(apiSession == null) {
-				apiSession = createAPISession(session);
+				APISession apiSessionFromHttpSession = (APISession)session.getAttribute(HTTPSA_SESSION);
+				if (apiSessionFromHttpSession!=null)
+					apiSession = apiSessionFromHttpSession;
+				else
+					apiSession = createAPISession(session);
 			} 
 		}
 		
@@ -187,6 +192,8 @@ public class APIFilter implements Filter{
 	private APISession createAPISession(HttpSession session) {
 		APISession apiSession = APISessionManager.getInstance().createSession(session.getId());
 		session.setAttribute(HTTPSA_SESSION_ID, apiSession.getId());
+		if (APIConfig.associateSessions())
+			session.setAttribute(HTTPSA_SESSION, apiSession);
 		return apiSession;
 	}
 	

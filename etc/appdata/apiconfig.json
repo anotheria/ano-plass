@@ -1,0 +1,10 @@
+{
+	//if true all calls to apis will be printed out for debugging purposes.
+	verboseMethodCalls: false,
+	//if true the api session will be included in the http session. in this case the api session should include only serializeable attributes.
+	associateSessions: false,
+	dev: {
+		verboseMethodCalls: true,
+		associateSessions: true,
+	}
+}
