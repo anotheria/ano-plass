@@ -33,7 +33,7 @@ public class APIConfig {
 	 */
 	public static final int SERVICE_POLICY_DEFAULT = SERVICE_POLICY_MULTI_INSTANCE;
 	/**
-	 * APIConfig "servicePolicy".
+	 * APIConfig "servicePolicy". 
 	 */
 	private static int servicePolicy;
 	/**
