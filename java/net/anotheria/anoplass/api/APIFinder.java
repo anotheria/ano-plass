@@ -186,7 +186,6 @@ public class APIFinder {
 		apis = new HashMap<Class<? extends API>, API>();
 		//das ist die stelle zum customizen
 		factories = APIConfig.getFactories();
-		
 	}
 
 	/**
@@ -266,6 +265,7 @@ public class APIFinder {
         MaskMethodRegistry.reset();
         mockingEnabled = false;
         maskingEnabled = false;
+		factories = APIConfig.getFactories();
     }
 
 
