@@ -23,10 +23,6 @@ public class APICallContext {
 	 */
 	public static final Locale DEFAULT_LOCALE = new Locale("en", "GB");
 
-	/**
-	 * Default server name used, if server name wasn't specified.
-	 */
-	private static final String DEFAULT_SERVER_NAME = "c-date.com";
 
 	/**
 	 * Currently assigned locale.
@@ -104,7 +100,7 @@ public class APICallContext {
 	 */
 	public void reset(){
 		currentLocale = DEFAULT_LOCALE;
-		currentServerName = DEFAULT_SERVER_NAME;
+		currentServerName = "";
 		currentSession = null;
 		scope = new HashMap<String, Object>();
 		currentUserId = null;
@@ -257,7 +253,7 @@ public class APICallContext {
 	 * @return get server hostname
 	 */
 	public String getCurrentServerName() {
-		return currentServerName == null ? DEFAULT_SERVER_NAME : currentServerName;
+		return currentServerName;
 	}
 
 	/**
