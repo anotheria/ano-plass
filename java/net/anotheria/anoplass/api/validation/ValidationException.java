@@ -1,5 +1,6 @@
 package net.anotheria.anoplass.api.validation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.anotheria.anoplass.api.APIException;
@@ -24,6 +25,10 @@ public class ValidationException extends APIException {
 	 */
 	public ValidationException(List<ValidationError> someErrors){
 		errors = someErrors;
+	}
+	
+	public ValidationException(){
+		this(new ArrayList<ValidationError>());
 	}
 
 	/**

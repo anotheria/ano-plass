@@ -2,6 +2,8 @@ package net.anotheria.anoplass.api.mock;
 
 import java.lang.reflect.Method;
 
+import net.anotheria.anoplass.api.APIException;
+
 /**
  * A mocking method, used to construct an api implementation on the fly (or at least as much of it, as needed by tests).
  * @author another
@@ -15,5 +17,5 @@ public interface APIMockMethod {
 	 * @param args arguments
 	 * @return invocation result
 	 */
-	Object invoke(Method method, Object[] args);
+	Object invoke(Method method, Object[] args) throws APIException;
 }

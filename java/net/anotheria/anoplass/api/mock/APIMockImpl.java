@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIException;
 
 import org.apache.log4j.Logger;
 /**
@@ -59,16 +60,14 @@ public class APIMockImpl<T extends API> implements API, InvocationHandler{
 	 * @param args
 	 * @return
 	 */
-	private Object invokeOnMock(Object proxy, Method method, Object[] args){
+	private Object invokeOnMock(Object proxy, Method method, Object[] args) throws APIException{
 		if (log.isDebugEnabled())
 			log.debug("Called method: "+method+" in "+mockedClazz.getName());
 		
 		APIMockMethod meth = MockMethodRegistry.getMockMethod(method);
 		if (meth==null)
 			throw new IllegalArgumentException("Method "+method+" is not mocked");
-		
 		return meth.invoke(method, args);
-		
 	}
 
 }
