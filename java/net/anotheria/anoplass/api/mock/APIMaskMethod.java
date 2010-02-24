@@ -3,6 +3,7 @@ package net.anotheria.anoplass.api.mock;
 import java.lang.reflect.Method;
 
 import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIException;
 /**
  * A method implementation used to mask an underlying method in an api implementation.
  * @author lrosenberg
@@ -15,5 +16,5 @@ public interface APIMaskMethod <T extends API>{
 	 * @param maskedAPI
 	 * @return
 	 */
-	Object invoke(Method method, Object[] args, T maskedAPI);
+	Object invoke(Method method, Object[] args, T maskedAPI) throws APIException;
 }

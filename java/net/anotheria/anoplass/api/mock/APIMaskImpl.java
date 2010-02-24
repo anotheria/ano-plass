@@ -7,6 +7,7 @@ import net.anotheria.anoplass.api.APIInitException;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -58,10 +59,14 @@ public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 
-		if (method.getDeclaringClass().equals(maskedClazz) || method.getDeclaringClass().equals(API.class))
-			return invokeOnMasked(proxy, method, args);
-
-		return method.invoke(this, args);
+		try{
+			if (method.getDeclaringClass().equals(maskedClazz) || method.getDeclaringClass().equals(API.class))
+				return invokeOnMasked(proxy, method, args);
+	
+			return method.invoke(this, args);
+		}catch(InvocationTargetException e){
+			throw e.getCause();
+		}
 	}
 
 	/**
