@@ -1,6 +1,7 @@
 package net.anotheria.anoplass.api.session;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -12,8 +13,12 @@ import org.apache.log4j.Logger;
  * The default implementation of the APISession.
  * @author lrosenberg
  */
-public class APISessionImpl implements APISession {
+public class APISessionImpl implements APISession, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The id of the session
 	 */
