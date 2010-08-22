@@ -134,6 +134,13 @@ public class PagingControl {
 	public boolean hasNext(){
 		return currentPage < getNumberOfPages();
 	}
+	/**
+	 * True if there is some next page, false otherwise.
+	 * @return boolean value
+	 */
+	public boolean isHasNext(){
+		return hasNext();
+	}
 
 	/**
 	 * True if there is some previous page, false otherwise.
@@ -141,6 +148,21 @@ public class PagingControl {
 	 */
 	public boolean hasPrevious(){
 		return currentPage>=2;
+	}
+	/**
+	 * True if there is some previous page, false otherwise.
+	 * @return boolean value
+	 */
+	public boolean isHasPrevious(){
+		return hasPrevious();
+	}
+
+	/**
+	 *
+	 * @return size of page (quantity of item to be shown on page).
+	 */
+	public int getElementsPerPage(){
+		return elementsPerPage;
 	}
 	/**
 	 * True if current page is the last, false otherwise.
