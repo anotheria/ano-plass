@@ -38,6 +38,12 @@ public final class APISessionDistributionHelper {
 		}
 	}
 	
+	/**
+	 * Restores previously distributed session.
+	 * @param distributedSessionName the name of the distributed session.
+	 * @param session session to distribute into.
+	 * @throws APISessionDistributionException
+	 */
 	public static void restoreSession(String distributedSessionName, APISession session) throws APISessionDistributionException{
 		if (distributorService==null)
 			throw new IllegalStateException("No SessionDistributorService configured. Please set a SessionDistributorService.");
