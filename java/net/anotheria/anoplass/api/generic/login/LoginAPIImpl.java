@@ -73,14 +73,25 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	}
 
 	@Override public void logInUser(String userId) throws APIException {
-		callLoginPreprocessors(userId);
+		logInUser(userId, false);
+	}
+	
+	@Override public void stealthLogInUser(String userId) throws APIException {
+		logInUser(userId, true);
+	}
+
+	private void logInUser(String userId, boolean stealth) throws APIException {
+		if (!stealth)
+			callLoginPreprocessors(userId);
 		
 		((APISessionImpl)getSession()).setCurrentUserId(userId);
 		getCallContext().setCurrentUserId(userId);
 		
-		callLoginPostprocessors(userId);
-		
-		observationAPI.fireSubjectUpdateForCurrentUser(ObservationSubjects.LOGIN, this.getClass().getName());
+		if (!stealth)
+			callLoginPostprocessors(userId);
+
+		if (!stealth)
+			observationAPI.fireSubjectUpdateForCurrentUser(ObservationSubjects.LOGIN, this.getClass().getName());
 	}
 
 	@Override public void logoutMe() throws APIException {

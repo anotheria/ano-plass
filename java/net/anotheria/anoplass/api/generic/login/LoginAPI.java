@@ -15,6 +15,15 @@ public interface LoginAPI extends API{
 	 * @throws APIException
 	 */
 	void logInUser(String userId) throws APIException;
+
+	
+	/**
+	 * Logins the user without firing events or post/preprocessing. This is useful if you want to allow the admin to work in users profile.
+	 * @param userId
+	 * @throws APIException
+	 */
+	void stealthLogInUser(String userId) throws APIException;
+	
 	/**
 	 * Logouts the current user.
 	 * @throws APIException if error occurs
