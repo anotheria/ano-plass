@@ -29,6 +29,12 @@ public class AttributeWrapper implements Serializable {
 	 * Time when this attribute will expire in millis.
 	 */
 	private long expiryTimestamp;
+	
+	/**
+	 * If true the attribute has been edited recently. Needed by persistence policies.
+	 */
+	private boolean dirty;
+	
 	/**
 	 * Creates a new AttributeWrapper.
 	 * @param aKey
@@ -98,4 +104,14 @@ public class AttributeWrapper implements Serializable {
 	public boolean isSerializable(){
 		return value instanceof Serializable;
 	}
+
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+
 }

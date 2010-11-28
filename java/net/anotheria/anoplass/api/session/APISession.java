@@ -52,8 +52,13 @@ public interface APISession {
 	 * This policy enables the attribute to survive the session clean-up on logout.
 	 */
 	public int POLICY_SURVIVE_LOGOUT = 32;
-
+	
 	/**
+	 * Those attributes are persistent in cookies.
+	 */
+	public int POLICE_COOKIE_PERSISTENT = 64;
+	
+		/**
 	 * Default attribute policy.
 	 */
 	public int POLICY_DEFAULT = POLICY_LOCAL;
