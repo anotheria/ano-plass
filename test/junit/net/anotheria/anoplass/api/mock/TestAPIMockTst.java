@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * @author lrosenberg.
  *
  */
-public class TestAPIMockTest {
+public class TestAPIMockTst {
 	@Before public void init() throws Exception{
 		APIFinder.setMockingEnabled(true);
 		

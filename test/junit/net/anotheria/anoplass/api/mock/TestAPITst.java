@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestAPITest {
+public class TestAPITst {
 	@Before public void init(){
 		APIFinder.addAPIFactory(TestAPI.class, new TestAPIFactory());
 	}

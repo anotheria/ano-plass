@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestAPIMaskTest {
+public class TestAPIMaskTst {
 	@Before public void init() throws Exception{
 		APIFinder.setMaskingEnabled(true);
 		APIFinder.addAPIFactory(TestAPI.class, new TestAPIFactory());
