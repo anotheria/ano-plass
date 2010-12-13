@@ -52,6 +52,11 @@ public class APIFinder {
 	 * which allows to call single API methods by putting them in the MockMethodRegistry. Mocking must be enabled before usage (in @BeforeClass method of your unittest).
 	 */
 	private static boolean mockingEnabled = false;
+	
+	/**
+	 * If true the returned APIs are proxied by security objects.
+	 */
+	private static boolean securityEnabled = true;
 
 
 	/**
@@ -140,10 +145,8 @@ public class APIFinder {
 		
 		//newAPI.init();
 		
-		//log.debug("\tinited "+newAPI);
-		
+		Class<? extends API>[] interfaces = null;
 		try{
-			Class<? extends API>[] interfaces;
 			List<Class<? extends API>> aliases = APIConfig.getAliases(identifier);
 			if (aliases!=null && aliases.size()>0){
 				@SuppressWarnings("unchecked") 
@@ -171,12 +174,10 @@ public class APIFinder {
 				interfaces
 			);
 			@SuppressWarnings("unchecked")T ret = (T) proxy.createProxy(); 
-			//log.debug("\t created proxy, returning proxy:"+proxy+", ret: "+ret);
-			return ret;
-			//return newAPI;
+			return APICallHandler.createProxy(identifier, interfaces, ret);
 		}catch(Throwable t){
 			log.debug("THROWABLE creating "+identifier,t);			
-			return newAPI;
+			return APICallHandler.createProxy(identifier, interfaces, newAPI);
 		}finally{
 			log.debug("------ END creation API "+identifier+"\n");
 		}
@@ -265,8 +266,23 @@ public class APIFinder {
         MaskMethodRegistry.reset();
         mockingEnabled = false;
         maskingEnabled = false;
+        securityEnabled = true;
 		factories = APIConfig.getFactories();
     }
+    
+    public static void disableSecurity(){
+    	securityEnabled = false;
+    }
+    
+    public static boolean isSecurityEnabled(){
+    	return securityEnabled;
+    }
+    
+    public static void enableSecurity(){
+    	securityEnabled = true;
+    }
+    
+    
 
 
 }
