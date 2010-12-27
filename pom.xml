@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.anotheria</groupId>
   <artifactId>ano-plass</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <name>anotheria.net presentation logic and stateful services</name>
 
   <dependencies>
@@ -56,8 +56,8 @@
   </dependencies>
 
 	<scm>
-		<url>svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</url>
-		<connection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</connection>
-		<developerConnection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</developerConnection>
+		<url>svn:svn://svn.anotheria.net/opensource/ano-prise/tags/ano-plass-1.0.1</url>
+		<connection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/tags/ano-plass-1.0.1</connection>
+		<developerConnection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/tags/ano-plass-1.0.1</developerConnection>
 	</scm>
 </project>
