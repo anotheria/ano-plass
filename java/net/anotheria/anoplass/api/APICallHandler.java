@@ -16,16 +16,35 @@ import net.anotheria.anoplass.api.generic.security.SecurityAPI;
 import net.anotheria.anoplass.api.generic.security.SecurityInvocationHandler;
 import net.anotheria.anoplass.api.generic.security.SecurityObject;
 
+/**
+ * Invocation handler used to proxy APIImpls from the caller. 
+ * @author lrosenberg
+ *
+ * @param <T> an api.
+ */
 public class APICallHandler<T extends API> implements InvocationHandler{
 
+	/**
+	 * Instance of the target api implementation.
+	 */
 	private T target;
-	
+	/**
+	 * Target method cache.
+	 */
 	private ConcurrentMap<Method, MethodInfo> methodMap;
-	
+	/**
+	 * Link to the security api.
+	 */
 	private SecurityAPI securityAPI;
-	
+	/**
+	 * Logger.
+	 */
 	private static Logger log = Logger.getLogger(APICallHandler.class);
 	
+	/**
+	 * Creates a new handler for the given implementation. 
+	 * @param impl
+	 */
 	APICallHandler(T impl){
 		target = impl;
 		methodMap = new ConcurrentHashMap<Method, APICallHandler.MethodInfo>();
@@ -114,12 +133,35 @@ public class APICallHandler<T extends API> implements InvocationHandler{
 		return ret;
 	}
 	
+	/**
+	 * Helper class for MethodInfoCaching.
+	 * @author lrosenberg
+	 *
+	 */
 	static class MethodInfo{
+		/**
+		 * Instance counter for all instances.
+		 */
 		private static final AtomicInteger instanceCounter = new AtomicInteger(0);
+		/**
+		 * Number of the current instance.
+		 */
 		private int instanceNumber;
+		/**
+		 * Cached method.
+		 */
 		private Method method;
+		/**
+		 * Ensure permitted annotation, if this method has one.
+		 */
 		EnsurePermitted ensurePermittedAnn;
+		/**
+		 * InterceptIfNotPermitted, if this method has one.
+		 */
 		InterceptIfNotPermitted interceptIfNotPermittedAnn;
+		/**
+		 * Configured SecurityInvocationHandler in the annotation.
+		 */
 		SecurityInvocationHandler securityHandler;
 		
 		public MethodInfo(Method aMethod) {
@@ -127,7 +169,7 @@ public class APICallHandler<T extends API> implements InvocationHandler{
 			method = aMethod;
 		}
 		
-		public String toString(){
+		@Override public String toString(){
 			return "MethodInfo "+method+" "+instanceNumber+" ensurePermitted: "+ensurePermitted() + ", interceptIfNotPermitted: "+
 			interceptIfNotPermitted();
 		}
