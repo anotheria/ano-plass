@@ -1,15 +1,15 @@
 package net.anotheria.anoplass.api.mock;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 import net.anotheria.anoplass.api.API;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.APIInitException;
 
 import org.apache.log4j.Logger;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 /**
  * This is a masking api implementation which is used as wrapper to an underlying api implementation and allows masking of methods.
