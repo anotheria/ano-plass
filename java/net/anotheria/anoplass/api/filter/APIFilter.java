@@ -1,16 +1,5 @@
 package net.anotheria.anoplass.api.filter;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import net.anotheria.anoplass.api.APICallContext;
 import net.anotheria.anoplass.api.APIConfig;
 import net.anotheria.anoplass.api.APIFinder;
@@ -19,8 +8,12 @@ import net.anotheria.anoplass.api.session.APISession;
 import net.anotheria.anoplass.api.session.APISessionDistributionException;
 import net.anotheria.anoplass.api.session.APISessionDistributionHelper;
 import net.anotheria.anoplass.api.session.APISessionManager;
-
 import org.apache.log4j.Logger;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 /**
@@ -90,33 +83,46 @@ public class APIFilter implements Filter{
 
 	/**
 	 * Restores a previously distributed session.
-	 * @param req
-	 * @param distributedSessionName
-	 * @throws ServletException
+	 *
+	 * @param req {@link HttpServletRequest}
+	 * @param distributedSessionName string request parameter name
+	 * @throws ServletException on restore errors
 	 */
 	private void restoreSession(HttpServletRequest req, String distributedSessionName) throws ServletException{
 		HttpSession session = req.getSession(true);
 
+
+		// Checking if distribution is enabled - to prevent distributed session restore calls on undistributed systems
+		if(!APISessionDistributionHelper.isSessionDistributorHelperConfigured()){
+			log.debug("Session distribution is disabled, cause sessionDistributorService is not Assigned to APISessionDistributionHelper utility.");
+			return;
+		}
+
+		//old session - current APISession which is linked to HttpSession
+		APISession oldSession = null;
+
 		//check first whether we already have restored this session in the past.
-		String oldApiSessionId = (String)session.getAttribute(HTTPSA_SESSION_ID);
-		if (oldApiSessionId!=null){
-			APISession oldSession = APISessionManager.getInstance().getSession(oldApiSessionId);
-			if (oldSession!=null){
-				String oldDistributedSessionName = (String)oldSession.getAttribute(PARAM_DISTRIBUTED_SESSION_NAME);
-				if (oldDistributedSessionName!=null && oldDistributedSessionName.equals(distributedSessionName)){
+		String oldApiSessionId = String.class.cast(session.getAttribute(HTTPSA_SESSION_ID));
+		if (oldApiSessionId != null) {
+			oldSession = APISessionManager.getInstance().getSession(oldApiSessionId);
+			if (oldSession != null) {
+				String oldDistributedSessionName = String.class.cast(oldSession.getAttribute(PARAM_DISTRIBUTED_SESSION_NAME));
+				if (oldDistributedSessionName != null && oldDistributedSessionName.equals(distributedSessionName)) {
 					log.debug("Session was already restored, skipping.");
 					return;
 				}
 			}
 		}
-		
-		
-		APISession apiSession = createAPISession(session);
-		try{
+
+		// new APISessionWill be created only - if which is first call  to server. Otherwise
+		// session distributed attributes will be restored to Current APISession
+		APISession apiSession = oldSession == null ? createAPISession(session) : oldSession;
+
+		try {
 			APISessionDistributionHelper.restoreSession(distributedSessionName, apiSession);
-		}catch(APISessionDistributionException e){
-			log.error("restoreSession("+req+", "+distributedSessionName+")", e);
-			throw new ServletException("Restoring remote session failed: "+e.getMessage(), e);
+		} catch (APISessionDistributionException e) {
+			log.error("restoreSession(" + req + ", " + distributedSessionName + ")", e);
+			throw new ServletException("Restoring remote session failed: " + e.getMessage(), e);
 		}
 		apiSession.setAttribute(PARAM_DISTRIBUTED_SESSION_NAME, distributedSessionName);
 		
@@ -175,7 +181,7 @@ public class APIFilter implements Filter{
     /**
      * Checking HttpSession for currentUserId-  which is currently ---> editorId
      * @param currentContext APICallContext instance
-     * @param session Http sesion itself
+     * @param session Http session itself
      */
     private void setEditorId(APICallContext currentContext, HttpSession session) {
         Object editorId = session!=null&&session.getAttribute(CURRENT_USER_ID)!=null? (String) session.getAttribute(CURRENT_USER_ID) :null;

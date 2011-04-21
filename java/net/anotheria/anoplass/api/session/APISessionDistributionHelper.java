@@ -1,16 +1,15 @@
 package net.anotheria.anoplass.api.session;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import net.anotheria.anoprise.sessiondistributor.SessionAttribute;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorService;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
 import net.anotheria.net.util.ByteArraySerializer;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public final class APISessionDistributionHelper {
 	private static SessionDistributorService distributorService;
@@ -18,6 +17,16 @@ public final class APISessionDistributionHelper {
 	
 	public static void setSessionDistributorService(SessionDistributorService aSessionDistributorService){
 		distributorService = aSessionDistributorService;
+	}
+
+	/**
+	 * Return true if sessionDistribution service was assigned to current Helper,
+	 * false otherwise.
+	 * @return boolean value
+	 *
+	 */
+	public static boolean isSessionDistributorHelperConfigured(){
+		return distributorService!=null;
 	}
 	
 	/**
