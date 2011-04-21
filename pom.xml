@@ -3,7 +3,7 @@
   <parent>
 	<groupId>net.anotheria</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.4</version>
+	<version>1.8</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -56,8 +56,8 @@
   </dependencies>
 
 	<scm>
-		<url>svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</url>
-		<connection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</connection>
-		<developerConnection>scm:svn:svn://svn.anotheria.net/opensource/ano-prise/trunk</developerConnection>
+		<url>svn:svn://svn.anotheria.net/opensource/ano-plass/trunk</url>
+		<connection>scm:svn:svn://svn.anotheria.net/opensource/ano-plass/trunk</connection>
+		<developerConnection>scm:svn:svn://svn.anotheria.net/opensource/ano-plass/trunk</developerConnection>
 	</scm>
 </project>
