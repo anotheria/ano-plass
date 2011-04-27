@@ -1,120 +1,223 @@
 package net.anotheria.anoplass.api.session;
 
-import net.anotheria.anoprise.sessiondistributor.SessionAttribute;
+import net.anotheria.anoprise.sessiondistributor.DistributedSessionAttribute;
+import net.anotheria.anoprise.sessiondistributor.DistributedSessionVO;
+import net.anotheria.anoprise.sessiondistributor.NoSuchDistributedSessionException;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorService;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
 import net.anotheria.net.util.ByteArraySerializer;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
+/**
+ * Utility class which helps with Session Distribution.
+ *
+ * @author lrosenberg
+ */
 public final class APISessionDistributionHelper {
+	/**
+	 * SessionDistributor service.
+	 */
 	private static SessionDistributorService distributorService;
-	private static Logger log = Logger.getLogger(APISessionDistributionHelper.class);
-	
-	public static void setSessionDistributorService(SessionDistributorService aSessionDistributorService){
+	/**
+	 * Log4j instance.
+	 */
+	private static Logger LOG = Logger.getLogger(APISessionDistributionHelper.class);
+
+	/**
+	 * Set method for SessionDistributor service.
+	 *
+	 * @param aSessionDistributorService SessionDistributorService instance
+	 */
+	public static void setSessionDistributorService(SessionDistributorService aSessionDistributorService) {
 		distributorService = aSessionDistributorService;
 	}
 
-	/**
-	 * Return true if sessionDistribution service was assigned to current Helper,
-	 * false otherwise.
-	 * @return boolean value
-	 *
-	 */
-	public static boolean isSessionDistributorHelperConfigured(){
-		return distributorService!=null;
-	}
-	
-	/**
-	 * Distributes the session. Returns the name of the distributed session.
-	 * @param session
-	 * @return
-	 */
-	public static String distributeSession(APISession session) throws APISessionDistributionException{
-		if (distributorService==null)
-			throw new IllegalStateException("No SessionDistributorService configured. Please set a SessionDistributorService.");
-		if (!(session instanceof APISessionImpl))
-			throw new AssertionError("Unknown APISession implementation");
-		List<SessionAttribute> attributes = createAttributeList(session);
-		try{
-			return distributorService.createDistributedSession(attributes);
-		}catch(SessionDistributorServiceException e){
-			throw new APISessionDistributionException(e);
-		}
-	}
-	
+
 	/**
 	 * Restores previously distributed session.
+	 *
 	 * @param distributedSessionName the name of the distributed session.
-	 * @param session session to distribute into.
+	 * @param callServiced		   id of caller service
+	 * @return {@link APISession}
 	 * @throws APISessionDistributionException
+	 *          on errors from backend service
 	 */
-	public static void restoreSession(String distributedSessionName, APISession session) throws APISessionDistributionException{
-		if (distributorService==null)
-			throw new IllegalStateException("No SessionDistributorService configured. Please set a SessionDistributorService.");
-		if (!(session instanceof APISessionImpl))
-			throw new AssertionError("Unknown APISession implementation");
-		List<SessionAttribute> attributes = null;
-		try{
-			attributes = distributorService.getAndDeleteDistributedSession(distributedSessionName);
-		}catch(SessionDistributorServiceException e){
+	public static APISession restoreSession(String distributedSessionName, String callServiced) throws APISessionDistributionException {
+		isDistributorServiceProperlyConfigured();
+
+		DistributedSessionVO distributedSession;
+		try {
+			distributedSession = distributorService.restoreDistributedSession(distributedSessionName, callServiced);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("restoreDistributedSession " + distributedSessionName + "failed", e);
 			throw new APISessionDistributionException(e);
 		}
-		
-		APISessionImpl sessionImpl = (APISessionImpl) session;
-		sessionImpl.setCurrentUserId(byteArrayToString(attributes.get(0).getData()));
-		sessionImpl.setCurrentEditorId(byteArrayToString(attributes.get(1).getData()));
-		attributes = attributes.subList(2, attributes.size());
-		
-		for (SessionAttribute attribute : attributes){
-			try{
-				AttributeWrapper wrapper = (AttributeWrapper)ByteArraySerializer.deserializeObject(attribute.getData());
+
+
+		APISessionImpl sessionImpl = new APISessionImpl(distributedSession.getName());
+		// next to lines won't be  populated back to Distributed session
+		sessionImpl.setCurrentEditorId(distributedSession.getEditorId());
+		sessionImpl.setCurrentUserId(distributedSession.getUserId());
+
+		for (DistributedSessionAttribute attribute : distributedSession.getDistributedAttributes().values()) {
+			try {
+				AttributeWrapper wrapper = (AttributeWrapper) ByteArraySerializer.deserializeObject(attribute.getData());
 				sessionImpl.setAttributeWrapper(wrapper);
-			}catch(IOException e){
-				log.error("exception occured attempting to deserialize this attribute: "+attribute, e);
+			} catch (IOException e) {
+				LOG.error("exception occurred attempting to deSerialize this attribute: " + attribute, e);
 			}
 		}
-		
-	}
-	
-	private static byte[] stringToByteArray(String s){
-		return s == null ? null : s.getBytes();
-	}
-	
-	private static String byteArrayToString(byte[] data){
-		return data == null ? null : new String(data);
+		return sessionImpl;
+
 	}
 
-	private static List<SessionAttribute> createAttributeList(APISession session){
-		Collection<AttributeWrapper> attributes = ((APISessionImpl)session).getAttributes();
-		ArrayList<SessionAttribute> ret = new ArrayList<SessionAttribute>();
-		
-		//add session internal attributes
-		SessionAttribute userId = new SessionAttribute("userId", stringToByteArray(session.getCurrentUserId()));
-		SessionAttribute editorId = new SessionAttribute("editorId", stringToByteArray(session.getCurrentEditorId()));
-		ret.add(userId);
-		ret.add(editorId);
-		
-		for (AttributeWrapper wrapper : attributes){
-			if (PolicyHelper.isDistributed(wrapper.getPolicy())){
-				if (wrapper.isSerializable()){
-					try{
-						byte[] data = ByteArraySerializer.serializeObject(wrapper);
-						ret.add(new SessionAttribute(wrapper.getKey(), data));
-					}catch(IOException e){
-						log.error("exception occured attempting to serialize this attribute: "+wrapper, e);
-					}
-				}else{
-					log.warn("Attribute "+wrapper.getKey()+" is marked as distributed but is not serializeable, skipped.");
-				}
-			}
+	/**
+	 * Add attribute to Distributed session.
+	 * If incoming attribute policy  - is not DISTRIBUTED or attribute is not serializable - nothing will be done!
+	 *
+	 * @param sessionName	name of the  distributed session
+	 * @param attributeToAdd attributeWrapper
+	 */
+	public static void addAttributeToDistributedSession(String sessionName, AttributeWrapper attributeToAdd) {
+		isDistributorServiceProperlyConfigured();
+
+		if (!PolicyHelper.isDistributed(attributeToAdd.getPolicy()))
+			return;
+		if (!attributeToAdd.isSerializable()) {
+			LOG.warn("Attribute " + attributeToAdd.getKey() + " is marked as distributed but is not serializable, skipped.");
+			return;
 		}
-		return ret;
+		try {
+			distributorService.addDistributedAttribute(sessionName, new DistributedSessionAttribute(attributeToAdd.getKey(), ByteArraySerializer.serializeObject(attributeToAdd)));
+		} catch (IOException e) {
+			LOG.error("exception occurred attempting to serialize this attribute: " + attributeToAdd, e);
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("session with id " + sessionName + " not found!", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + sessionName + " addDistributedAttribute.", e);
+		}
 	}
-	
-	private APISessionDistributionHelper(){}
+
+	/**
+	 * Remove  attribute from distributed session.
+	 *
+	 * @param sessionName   name of the distributed session
+	 * @param attributeName name of attribute to be removed
+	 */
+	public static void removeAttributeFromDistributedSession(String sessionName, String attributeName) {
+		isDistributorServiceProperlyConfigured();
+		try {
+			distributorService.removeDistributedAttribute(sessionName, attributeName);
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("DistributedSession " + sessionName + " not found.", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + sessionName + " removeDistributedAttribute.", e);
+		}
+	}
+
+	/**
+	 * Update distributed session userId.
+	 *
+	 * @param sessionName name of session
+	 * @param userId	  user id
+	 */
+	public static void updateDistributedSessionUserId(String sessionName, String userId) {
+		isDistributorServiceProperlyConfigured();
+		try {
+			distributorService.updateSessionUserId(sessionName, userId);
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("DistributedSession " + sessionName + " not found.", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + sessionName + " updateSessionUserId.", e);
+		}
+	}
+
+	/**
+	 * Update distributed session editorId.
+	 *
+	 * @param sessionName name of session (id)
+	 * @param editor	  editor id
+	 */
+	public static void updateDistributedSessionEditorId(String sessionName, String editor) {
+		isDistributorServiceProperlyConfigured();
+		try {
+			distributorService.updateSessionEditorId(sessionName, editor);
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("DistributedSession " + sessionName + " not found.", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+		}
+	}
+
+
+	/**
+	 * Keep distributed session alive call.
+	 *
+	 * @param sessionName session id
+	 */
+	public static void keepSessionAliveCall(String sessionName) {
+		isDistributorServiceProperlyConfigured();
+		try {
+			distributorService.keepDistributedSessionAlive(sessionName);
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("DistributedSession " + sessionName + " not found.", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+		}
+	}
+
+
+	/**
+	 * Creates new distributed session. Actually Session id will be returned.
+	 * If session with such id already exist - then new id will be generated.
+	 * Current id is actually name of distributed session.
+	 *
+	 * @param aSessionId session id.
+	 * @return session id will be returned
+	 * @throws APISessionDistributionException
+	 *          on distribution exception.
+	 */
+	public static String createSession(String aSessionId) throws APISessionDistributionException {
+		isDistributorServiceProperlyConfigured();
+		try {
+			return distributorService.createDistributedSession(aSessionId);
+		} catch (SessionDistributorServiceException e) {
+			throw new APISessionDistributionException(e);
+		}
+	}
+
+	/**
+	 * Remove distributed session.
+	 *
+	 * @param aPISessionId id of session to remove
+	 */
+	public static void removeDistributedSession(String aPISessionId) {
+		isDistributorServiceProperlyConfigured();
+		try {
+			distributorService.deleteDistributedSession(aPISessionId);
+			LOG.debug("DistributedSession " + aPISessionId + " removed.");
+		} catch (NoSuchDistributedSessionException e) {
+			LOG.error("DistributedSession " + aPISessionId + " not found.", e);
+		} catch (SessionDistributorServiceException e) {
+			LOG.error("DistributedSession " + aPISessionId + " remove failed.", e);
+		}
+
+	}
+
+	/**
+	 * Throws exception if session distribution is not configured!
+	 */
+	private static void isDistributorServiceProperlyConfigured() {
+		if (distributorService == null)
+			throw new IllegalStateException("No SessionDistributorService configured. Please set a SessionDistributorService.");
+	}
+
+	/**
+	 * Private constructor.
+	 */
+	private APISessionDistributionHelper() {
+		throw new IllegalAccessError("Not possible");
+	}
 }

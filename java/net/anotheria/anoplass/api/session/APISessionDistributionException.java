@@ -8,13 +8,14 @@ import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceExcept
  */
 public class APISessionDistributionException extends Exception{
 	/**
-	 * SerialVersuinUID.
+	 * Serial version uid.
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -976156015267674943L;
 
 	/**
 	 * Constructor.
-	 * @param message
+	 *
+	 * @param message string message.
 	 */
 	public APISessionDistributionException(String message){
 		super(message);
@@ -22,9 +23,12 @@ public class APISessionDistributionException extends Exception{
 	
 	/**
 	 * Constructor.
-	 * @param cause
+	 *
+	 * @param cause {@link SessionDistributorServiceException}
 	 */
 	public APISessionDistributionException(SessionDistributorServiceException cause){
 		super("SessionDistributorService failed: "+cause.getMessage(), cause);
 	}
+
+
 }

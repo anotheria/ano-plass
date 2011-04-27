@@ -1,19 +1,20 @@
 package net.anotheria.anoplass.api.session;
 
-import java.util.Locale;
-
 import net.anotheria.util.TimeUnit;
+
+import java.util.Locale;
 
 
 /**
- * The api's internal session. This session provides more functionallity than the HttpSession and therefore should be prefered to the http session.
+ * The API's internal session. This session provides more functionality than the HttpSession and therefore should be preferred to the http session.
+ * 
  * @author another
  *
  */
 public interface APISession {
 	
 	/**
-	 * Default expiration period for attributes with policy autoexpire.
+	 * Default expiration period for attributes with policy auto-expire.
 	 */
 	public static final long DEFAULT_EXPIRE_PERIOD = TimeUnit.MINUTE.getMillis() * 5; // 5minutes
 	
@@ -22,19 +23,19 @@ public interface APISession {
 	 */
 	public int POLICY_LOCAL = 1;
 	/**
-	 * This policy states that the attribute will be distributed to other servers. Only useable with 
+	 * This policy states that the attribute will be distributed to other servers. Only usable with 
 	 * Serializable attributes. <b>This feature isn't yet implemented</b>
 	 */
 	public int POLICY_DISTRIBUTED = 2;
 
 	/**
-	 * This policy states that the attribute will survice system or server restart. Only useable with 
+	 * This policy states that the attribute will survive system or server restart. Only usable with
 	 * Serializable attributes. <b>This feature isn't yet implemented</b>
 	 */
 	public int POLICY_PERSISTENT = 4;
 	/**
 	 * If set this policy defines that after the specified expire period the attribute will be reseted and not visible 
-	 * to the caller. The attribute itself will not be deleted until explicitely overwritten or removed, so don't use this
+	 * to the caller. The attribute itself will not be deleted until explicitly overwritten or removed, so don't use this
 	 * policy on timer-bound attributes, since that can lead to unexpected behaviour. However, you shouldn't put timer-bound
 	 * attributes in the session either way.
 	 */
@@ -42,14 +43,14 @@ public interface APISession {
 	
 	/**
 	 * This policy ensures that instead of making a new AttributeWrapper, the old one will be reused (if available).
-	 * This is important if you want to keep some wrapper attributes like autoexpire. If you put an attribute with an 
-	 * autoexpire policy on but without the reuse_wrapper policy, the autoexpiring will be reset on each setAttribute call.
-	 * If you want to keep a 'global' autoexpiring.
+	 * This is important if you want to keep some wrapper attributes like auto-expire. If you put an attribute with an
+	 * auto-expire policy on but without the reuse_wrapper policy, the auto-expiring will be reset on each setAttribute call.
+	 * If you want to keep a 'global' auto-expiring.
 	 */
 	public int POLICY_REUSE_WRAPPER = 16;
 	
 	/**
-	 * This policy enables the attribute to survive the session clean-up on logout.
+	 * This policy enables the attribute to survive the session clean-up on logOut.
 	 */
 	public int POLICY_SURVIVE_LOGOUT = 32;
 	
@@ -80,10 +81,10 @@ public interface APISession {
 	
 	/**
 	 * Adds an attribute with given key, policy, value and expiration time.
-	 * @param key
-	 * @param policy
-	 * @param value
-	 * @param expiresWhen
+	 * @param key the name under which the attribute is stored.
+	 * @param policy the policy to be applied to the attribute. See POLICY_ constants for details.
+	 * @param value the value to store in the session.
+	 * @param expiresWhen expiration time
 	 */
 	void setAttribute(String key, int policy, Object value, long expiresWhen);
 
@@ -101,54 +102,55 @@ public interface APISession {
 	
 	/**
 	 * Returns the session id.
-	 * @return
+	 * @return id
 	 */
 	String getId();
 	/**
-	 * Returns the ip adress.
-	 * @return
+	 * Returns the ip address.
+	 * @return ip address
 	 */
 	String getIpAddress();
 	/**
-	 * Sets the ip adress which is associated with this session.
-	 * @param anIpAddress
+	 * Sets the ip address which is associated with this session.
+	 * @param anIpAddress user ip
 	 */
 	void setIpAddress(String anIpAddress);
 	
 	/**
 	 * Returns the user agent string submitted by the browser.
-	 * @return
+	 * @return  user agent
 	 */
 	String getUserAgent();
 	/**
 	 * Sets the user agent string for this session. Called by APIFilter.
-	 * @param anUserAgent
+	 * @param anUserAgent user agent
 	 */
 	void setUserAgent(String anUserAgent);
 	
 	/**
-	 * Called whenever the user performs an explicit logout
+	 * Called whenever the user performs an explicit logOut.
 	 */
 	void cleanupOnLogout();
 	
 	/**
 	 * Returns the id of the currently logged in user.
-	 * @return
+	 * @return current user id
 	 */
 	String getCurrentUserId(); 
 	/**
 	 * Returns the id of the current CMS editor if applicable.
-	 * @return
+	 * @return current cms editor id
 	 */
 	String getCurrentEditorId();
 	
 	/**
 	 * Returns the locale associated with this session. Used to restore the server given locale between the requests in case we don't use browser supplied locale.
-	 * @return
+	 * @return  locale
 	 */
 	Locale getLocale();
 	/**
 	 * Sets the locale.
+	 * @param toSet locale
 	 */
 	void setLocale(Locale toSet);
 }

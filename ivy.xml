@@ -22,7 +22,8 @@
         <dependency org="anotheria.net" name="ano-util"  rev="latest" transitive="true" changing="true"/>
         <dependency org="anotheria.net" name="ano-prise" rev="latest" transitive="true" changing="true"/>
         <dependency org="anotheria.net" name="ano-net"   rev="latest" transitive="true" changing="true"/>
-        
+        <dependency org="anotheria.net" name="distributeme"   rev="latest" transitive="true" changing="true"/>
+
         <!-- Needed by unit tests: -->
         <dependency org="org" name="junit" rev="stable" transitive="false"/>
         
