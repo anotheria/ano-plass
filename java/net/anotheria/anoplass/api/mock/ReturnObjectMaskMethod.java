@@ -1,19 +1,33 @@
 package net.anotheria.anoplass.api.mock;
 
-import java.lang.reflect.Method;
-
 import net.anotheria.anoplass.api.API;
 import net.anotheria.anoplass.api.APIException;
 
-public class ReturnObjectMaskMethod<T extends API> implements APIMaskMethod<T>{
-	
+import java.lang.reflect.Method;
+
+/**
+ * Return object mask method.
+ *
+ * @param <T> - masked API type {@link API}
+ */
+public class ReturnObjectMaskMethod<T extends API> implements APIMaskMethod<T> {
+	/**
+	 * ReturnObjectMaskMethod 'returnValue'.
+	 */
 	private Object returnValue;
-	
-	public ReturnObjectMaskMethod(Object anObject){
+
+	/**
+	 * Constructor.
+	 *
+	 * @param anObject {@link Object}
+	 */
+	public ReturnObjectMaskMethod(Object anObject) {
 		returnValue = anObject;
 	}
-	
-	public Object invoke(Method method, Object[] args, T maskedAPI) throws APIException{
+
+	@Override
+	public Object invoke(Method method, Object[] args, T maskedAPI) throws APIException {
 		return returnValue;
 	}
 }
+

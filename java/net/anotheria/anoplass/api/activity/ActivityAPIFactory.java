@@ -7,11 +7,13 @@ import net.anotheria.anoplass.api.APIFactory;
  * @author lrosenberg
  *
  */
-public class ActivityAPIFactory implements APIFactory<ActivityAPI>{
+public class ActivityAPIFactory implements APIFactory<ActivityAPI> {
 
-	@Override public ActivityAPI createAPI() {
+	@Override
+	public ActivityAPI createAPI() {
 		return new ActivityAPIImpl();
 	}
 
 }
+
  

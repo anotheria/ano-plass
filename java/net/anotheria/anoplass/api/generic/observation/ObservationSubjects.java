@@ -1,11 +1,11 @@
 package net.anotheria.anoplass.api.generic.observation;
 
 /**
- * Defines generic Observation Subjects
+ * Defines generic Observation Subjects.
  * @author denis
  *
  */
-public class ObservationSubjects {
+public final class ObservationSubjects {
 	/**
 	 * User logs in into the system.
 	 */
@@ -15,5 +15,12 @@ public class ObservationSubjects {
 	 * User logs out.
 	 */
 	public static final String LOGOUT = "logout";
+
+	/**
+	 * Private constructor.
+	 */
+	private ObservationSubjects(){
+		throw new IllegalAccessError("Can't be instantiated.");
+	}
 	
 }

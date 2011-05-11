@@ -145,7 +145,7 @@ public class APISessionManager {
 				setQueueSize(distributionConfig.getApiSessionEventSenderQueueSize()).
 				setProcessorChannels(distributionConfig.getApiSessionEventSenderQueueProcessingChannelsAmount()).
 				setProcessingLog(MULTI_PROCESSOR_LOGGER).
-				attachMoskitoLoggers("APISessionManager : APISession-Distribution events processor", "APISession", "distribution").
+				attachMoskitoLoggers("APISessionManager : APISession-Distribution events processor", "storage", "default").
 				build(API_SESSION_QUEUED_MULTIPROCESSOR_NAME, new SessionWorker());
 		processor.start();
 	}
@@ -236,6 +236,7 @@ public class APISessionManager {
 			session.setReferenceId(referenceId);
 			sessions.put(session.getId(), session);
 			referenceIds.put(referenceId, session.getId());
+			distributedSessionLastCallTime.put(session.getId(), System.currentTimeMillis());
 			log.debug("session restored, id=" + session.getId());
 			return restored;
 		} catch (APISessionDistributionException e) {
@@ -315,9 +316,12 @@ public class APISessionManager {
 		//Checking last distributed session call time
 		//send keep alive call to distribution service if required
 		if (distributionConfig.isDistributionEnabled() && session != null) {
-			long lastCall = distributedSessionLastCallTime.get(id);
-			if ((System.currentTimeMillis() - lastCall) >= distributionConfig.getDistributedSessionKeepAliveCallInterval())
+			Long lastCall = distributedSessionLastCallTime.get(id);
+			lastCall = lastCall == null ? System.currentTimeMillis() : lastCall;
+			if ((System.currentTimeMillis() - lastCall) >= distributionConfig.getDistributedSessionKeepAliveCallInterval()) {
 				callback.keepAliveCall(id);
+				distributedSessionLastCallTime.put(session.getId(), System.currentTimeMillis());
+			}
 
 		}
 		return session;

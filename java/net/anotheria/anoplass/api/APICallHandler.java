@@ -1,5 +1,8 @@
 package net.anotheria.anoplass.api;
 
+import net.anotheria.anoplass.api.generic.security.*;
+import org.apache.log4j.Logger;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,21 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
-
-import net.anotheria.anoplass.api.generic.security.EnsurePermitted;
-import net.anotheria.anoplass.api.generic.security.InterceptIfNotPermitted;
-import net.anotheria.anoplass.api.generic.security.SecurityAPI;
-import net.anotheria.anoplass.api.generic.security.SecurityInvocationHandler;
-import net.anotheria.anoplass.api.generic.security.SecurityObject;
-
 /**
- * Invocation handler used to proxy APIImpls from the caller. 
- * @author lrosenberg
+ * Invocation handler used to proxy APIImpls from the caller.
  *
  * @param <T> an api.
+ * @author lrosenberg
  */
-public class APICallHandler<T extends API> implements InvocationHandler{
+public class APICallHandler<T extends API> implements InvocationHandler {
 
 	/**
 	 * Instance of the target api implementation.
@@ -40,105 +35,106 @@ public class APICallHandler<T extends API> implements InvocationHandler{
 	 * Logger.
 	 */
 	private static Logger log = Logger.getLogger(APICallHandler.class);
-	
+
 	/**
-	 * Creates a new handler for the given implementation. 
+	 * Creates a new handler for the given implementation.
+	 *
 	 * @param impl
 	 */
-	APICallHandler(T impl){
+	APICallHandler(T impl) {
 		target = impl;
 		methodMap = new ConcurrentHashMap<Method, APICallHandler.MethodInfo>();
-		
-		if (!(impl instanceof SecurityAPI)){
-			try{
+
+		if (!(impl instanceof SecurityAPI)) {
+			try {
 				securityAPI = APIFinder.findAPI(SecurityAPI.class);
-			}catch(NoAPIFactoryException e){
+			} catch (NoAPIFactoryException e) {
 			}
 		}
 	}
-	
+
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		MethodInfo info = getMethodInfo(method);
-		
-		if (info.ensurePermitted()){
-			if (securityAPI==null){
-				log.warn("invoke(..., "+method+", ...), can't find security api, probably misconfigured, security checks are disabled!");
-			}else{
+
+		if (info.ensurePermitted()) {
+			if (securityAPI == null) {
+				log.warn("invoke(..., " + method + ", ...), can't find security api, probably misconfigured, security checks are disabled!");
+			} else {
 				securityAPI.ensureIsAllowedTo(info.ensurePermittedAnn.action(), createSecuritySubject(), createSecurityObject());
 			}
 		}
-		
-		if (info.interceptIfNotPermitted()){
+
+		if (info.interceptIfNotPermitted()) {
 			//System.out.println("Intercept not permitted "+method);
 			//first check whether the action is permitted or not
-			if (securityAPI==null){
-				log.warn("invoke(..., "+method+", ...), can't find security api, probably misconfigured, security checks are disabled!");
-			}else{
+			if (securityAPI == null) {
+				log.warn("invoke(..., " + method + ", ...), can't find security api, probably misconfigured, security checks are disabled!");
+			} else {
 				boolean permitted = securityAPI.isAllowedTo(info.interceptIfNotPermittedAnn.action(), createSecuritySubject(), createSecurityObject());
 				//System.out.println("Permitted: "+permitted);
-				if (!permitted){
+				if (!permitted) {
 					Object interceptedValue = info.securityHandler.getInterceptedValue(method, args, target);
 					//System.out.println("\t intercepted "+interceptedValue);
 					return interceptedValue;
 				}
 			}
 		}
-		
-		try{
+
+		try {
 			return method.invoke(target, args);
-		}catch(InvocationTargetException t){
+		} catch (InvocationTargetException t) {
 			throw t.getCause();
 		}
 	}
-	
-	private SecurityObject createSecuritySubject(){
-		return new SecurityObject();
-	}
-	
-	private SecurityObject createSecurityObject(){
+
+	private SecurityObject createSecuritySubject() {
 		return new SecurityObject();
 	}
 
-	private MethodInfo getMethodInfo(Method m){
+	private SecurityObject createSecurityObject() {
+		return new SecurityObject();
+	}
+
+	private MethodInfo getMethodInfo(Method m) {
 		MethodInfo fromCache = methodMap.get(m);
-		if (fromCache!=null){
+		if (fromCache != null) {
 			return fromCache;
 		}
-		
+
 		MethodInfo info = new MethodInfo(m);
 		info.ensurePermittedAnn = m.getAnnotation(EnsurePermitted.class);
 		info.interceptIfNotPermittedAnn = m.getAnnotation(InterceptIfNotPermitted.class);
-		try{
+		try {
 			if (info.interceptIfNotPermitted())
 				info.securityHandler = info.interceptIfNotPermittedAnn.handler().newInstance();
-		}catch(InstantiationException e){
-			log.error("getMethodInfo("+m+")",e );
-			throw new IllegalStateException("Configured security handler can't be instantiated "+info.interceptIfNotPermittedAnn.handler(), e);
-		}catch(IllegalAccessException e){
-			log.error("getMethodInfo("+m+")",e );
-			throw new IllegalStateException("Configured security handler can't be instantiated "+info.interceptIfNotPermittedAnn.handler(), e);
+		} catch (InstantiationException e) {
+			log.error("getMethodInfo(" + m + ")", e);
+			throw new IllegalStateException("Configured security handler can't be instantiated " + info.interceptIfNotPermittedAnn.handler(), e);
+		} catch (IllegalAccessException e) {
+			log.error("getMethodInfo(" + m + ")", e);
+			throw new IllegalStateException("Configured security handler can't be instantiated " + info.interceptIfNotPermittedAnn.handler(), e);
 		}
 		methodMap.put(m, info);
 		return info;
-			
+
 	}
-	
-	static<T extends API> T createProxy(Class<T> identifier, Class<? extends API>[] interfaces, T impl){
+
+	static <T extends API> T createProxy(Class<T> identifier, Class<? extends API>[] interfaces, T impl) {
 
 		APICallHandler<T> handler = new APICallHandler<T>(impl);
 		@SuppressWarnings("unchecked")
-		T ret = (T)Proxy.newProxyInstance(identifier.getClassLoader(), interfaces, handler);
+		T ret = (T) Proxy.newProxyInstance(identifier.getClassLoader(), interfaces, handler);
 
 		return ret;
 	}
-	
+
 	/**
 	 * Helper class for MethodInfoCaching.
-	 * @author lrosenberg
 	 *
+	 * @author lrosenberg
 	 */
-	static class MethodInfo{
+	static class MethodInfo {
 		/**
 		 * Instance counter for all instances.
 		 */
@@ -163,22 +159,23 @@ public class APICallHandler<T extends API> implements InvocationHandler{
 		 * Configured SecurityInvocationHandler in the annotation.
 		 */
 		SecurityInvocationHandler securityHandler;
-		
+
 		public MethodInfo(Method aMethod) {
 			instanceNumber = instanceCounter.incrementAndGet();
 			method = aMethod;
 		}
-		
-		@Override public String toString(){
-			return "MethodInfo "+method+" "+instanceNumber+" ensurePermitted: "+ensurePermitted() + ", interceptIfNotPermitted: "+
-			interceptIfNotPermitted();
+
+		@Override
+		public String toString() {
+			return "MethodInfo " + method + " " + instanceNumber + " ensurePermitted: " + ensurePermitted() + ", interceptIfNotPermitted: " +
+					interceptIfNotPermitted();
 		}
-		
-		boolean ensurePermitted(){
-			return ensurePermittedAnn!=null;
+
+		boolean ensurePermitted() {
+			return ensurePermittedAnn != null;
 		}
-		
-		boolean interceptIfNotPermitted(){
+
+		boolean interceptIfNotPermitted() {
 			return interceptIfNotPermittedAnn != null;
 		}
 	}

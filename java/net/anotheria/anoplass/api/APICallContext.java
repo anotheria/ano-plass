@@ -1,13 +1,13 @@
 package net.anotheria.anoplass.api;
 
+import net.anotheria.anoplass.api.session.APISession;
+import net.anotheria.anoplass.api.validation.ValidationError;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import net.anotheria.anoplass.api.session.APISession;
-import net.anotheria.anoplass.api.validation.ValidationError;
 
 
 /**

@@ -23,7 +23,7 @@ public final class APISessionDistributionHelper {
 	/**
 	 * Log4j instance.
 	 */
-	private static Logger LOG = Logger.getLogger(APISessionDistributionHelper.class);
+	private static final Logger LOG = Logger.getLogger(APISessionDistributionHelper.class);
 
 	/**
 	 * Set method for SessionDistributor service.

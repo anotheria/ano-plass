@@ -7,8 +7,9 @@ import net.anotheria.anoplass.api.APIFactory;
  * @author lrosenberg
  *
  */
-public class ObservationAPIFactory implements APIFactory<ObservationAPI>{
-	@Override public ObservationAPI createAPI() {
+public class ObservationAPIFactory implements APIFactory<ObservationAPI> {
+	@Override
+	public ObservationAPI createAPI() {
 		return new ObservationAPIImpl();
 	}
 }

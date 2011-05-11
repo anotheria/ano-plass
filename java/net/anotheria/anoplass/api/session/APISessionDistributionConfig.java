@@ -13,7 +13,7 @@ import org.configureme.annotations.ConfigureMe;
  */
 
 @ConfigureMe(name = "ano-plass-api-session-distribution")
-public class APISessionDistributionConfig {
+public final class APISessionDistributionConfig {
 
 	/**
 	 * Default apiSession event channel queue size.
@@ -33,6 +33,14 @@ public class APISessionDistributionConfig {
 	 */
 	protected static final long DEFAULT_SESSION_DISTRIBUTOR_EVENT_RECEIVER_Q_SLEEP = 300;
 	/**
+	 * Default value for distributedSessionIdCookie name.
+	 */
+	private static final String DEFAULT_SESSION_ID_COOKIE_NAE = "a_s_id";
+	/**
+	 * Default value for distributedSessionId URL parameter name.
+	 */
+	private static final String DEFAULT_DISTRIBUTED_SESSION_ID_PARAM_NAME = "asDiSeName";
+	/**
 	 * APISessionDistributionConfig 'distributionEnabled'.
 	 */
 	@Configure
@@ -43,6 +51,14 @@ public class APISessionDistributionConfig {
 	 */
 	@Configure
 	private String sessionIdCookieName;
+
+	/**
+	 * APISessionDistributionConfig distributedSessionParameterName.
+	 * Represent URL parameter  name under which APISessionId
+	 * can be found.
+	 */
+	@Configure
+	private String distributedSessionParameterName;
 
 	/**
 	 * APISessionDistributionConfig event queue size.
@@ -85,7 +101,7 @@ public class APISessionDistributionConfig {
 	/**
 	 * APISessionDistributionConfig  'INSTANCE'.
 	 */
-	private static APISessionDistributionConfig CONFIG_INSTANCE;
+	private static APISessionDistributionConfig configuration;
 
 	/**
 	 * Get instance method.
@@ -93,16 +109,16 @@ public class APISessionDistributionConfig {
 	 * @return {@link APISessionDistributionConfig}
 	 */
 	public static synchronized APISessionDistributionConfig getInstance() {
-		if (CONFIG_INSTANCE == null) {
-			CONFIG_INSTANCE = new APISessionDistributionConfig();
+		if (configuration == null) {
+			configuration = new APISessionDistributionConfig();
 			try {
-				ConfigurationManager.INSTANCE.configure(CONFIG_INSTANCE);
+				ConfigurationManager.INSTANCE.configure(configuration);
 			} catch (Exception e) {
 				Logger.getLogger(APISessionDistributionConfig.class).error("Configuration failure.", e);
 			}
 
 		}
-		return CONFIG_INSTANCE;
+		return configuration;
 
 	}
 
@@ -112,7 +128,8 @@ public class APISessionDistributionConfig {
 	private APISessionDistributionConfig() {
 		//Default value
 		this.distributionEnabled = false;
-		this.sessionIdCookieName = "a_s_id";
+		this.sessionIdCookieName = DEFAULT_SESSION_ID_COOKIE_NAE;
+		this.distributedSessionParameterName = DEFAULT_DISTRIBUTED_SESSION_ID_PARAM_NAME;
 		this.apiSessionEventSenderQueueSize = DEFAULT_API_SESSION_EVENT_SENDER_CHANNEL_Q_SIZE;
 		this.apiSessionEventSenderQueueSleepTime = DEFAULT_API_SESSION_EVENT_SENDER_CHANNEL_Q_SLEEP_TIME;
 		this.apiSessionEventSenderQueueProcessingChannelsAmount = 10;
@@ -136,6 +153,14 @@ public class APISessionDistributionConfig {
 
 	public void setSessionIdCookieName(String aSessionIdCookieName) {
 		this.sessionIdCookieName = aSessionIdCookieName;
+	}
+
+	public String getDistributedSessionParameterName() {
+		return distributedSessionParameterName;
+	}
+
+	public void setDistributedSessionParameterName(String distributedSessionParameterName) {
+		this.distributedSessionParameterName = distributedSessionParameterName;
 	}
 
 	public int getApiSessionEventSenderQueueSize() {

@@ -5,7 +5,7 @@ package net.anotheria.anoplass.api.session;
  * @author lrosenberg
  *
  */
-public class PolicyHelper {
+public final class PolicyHelper {
 	/**
 	 * Returns true if the policy autoExpire is set in this integer value.
 	 * @param policy int param
@@ -30,5 +30,12 @@ public class PolicyHelper {
 	 */
 	public static boolean isDistributed(int policy){
 		return isPolicySet(policy, APISession.POLICY_DISTRIBUTED);
+	}
+
+	/**
+	 * Private constructor.
+	 */
+	private PolicyHelper(){
+		throw new IllegalAccessError("Can't be instantiated");
 	}
 }
