@@ -56,7 +56,7 @@ public class APISessionImpl implements APISession, Serializable {
 	 * APISessionCallBack instance.
 	 * NULL - when distribution is disabled!!!
 	 */
-	private APISessionCallBack sessionCallBack;
+	private transient APISessionCallBack sessionCallBack;
 	/**
 	 * A scope which only exists between two executions (like flush).
 	 */
