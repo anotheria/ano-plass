@@ -8,6 +8,12 @@ import org.junit.Test;
 
 import java.util.List;
 
+
+/**
+ *
+ * Please  Note  that current test implementation is integration test, so please don't worry if some  test  will be executed with errors, cause
+ * most of them can be based on small sleep time .. etc.
+ */
 public class SessionDistributionTest {
 
 	private static int createCall = 0;
@@ -77,7 +83,7 @@ public class SessionDistributionTest {
 			//Local!
 			session.setAttribute("123123123", APISession.POLICY_LOCAL, "test");
 
-			Thread.sleep(250);
+			Thread.sleep(500);
 
 			Assert.assertEquals("Should be 1 call for create", 1, createCall);
 			Assert.assertEquals("Should be 1 call for updateUser", 1, updateUserCall);
@@ -91,7 +97,7 @@ public class SessionDistributionTest {
 
 			//creating keep alive call
 			manager.getSession(session.getId());
-			Thread.sleep(250);
+			Thread.sleep(500);
 			Assert.assertEquals("Should be 1 call for keep alive", 1, keepAliveCall);
 
 
@@ -111,7 +117,7 @@ public class SessionDistributionTest {
 			//remove attribute !!
 
 			session.removeAttribute("h3llka_attribute");
-			Thread.sleep(100);
+			Thread.sleep(500);
 			Assert.assertEquals("Should be 1 remove attribute call", 1, removeAttributeCall);
 
 			Assert.assertEquals(1, manager.getSessionCount());
@@ -222,7 +228,7 @@ public class SessionDistributionTest {
 
 			String id = service.createDistributedSession("123");
 			//waiting for clean!
-			Thread.sleep(120);
+			Thread.sleep(500);
 			try {
 				APISessionManager.getInstance().restoreSession(id, "h3llka");
 				Assert.fail("Fail here!");
