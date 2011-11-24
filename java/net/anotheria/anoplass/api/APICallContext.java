@@ -23,7 +23,6 @@ public class APICallContext {
 	 */
 	public static final Locale DEFAULT_LOCALE = new Locale("en", "GB");
 
-
 	/**
 	 * Currently assigned locale.
 	 */
@@ -306,6 +305,13 @@ public class APICallContext {
 	 */
 	public static APICallContext getCallContext(){
 		return apiCallContext.get();
+	}
+	
+	/**
+	 * Removes the thread local instance of the api call context, in order to prevent webapp redeployment leaks.
+	 */
+	public static void remove(){
+		apiCallContext.remove();
 	}
 
 }
