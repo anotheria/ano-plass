@@ -97,6 +97,12 @@ public final class APISessionDistributionConfig {
 	 */
 	@Configure
 	private long distributedSessionKeepAliveCallInterval;
+	
+	/**
+	 * Domain which should be used to set the session id cookie.
+	 */
+	@Configure
+	private String sessionIdCookieDomain;
 
 	/**
 	 * APISessionDistributionConfig  'INSTANCE'.
@@ -209,5 +215,13 @@ public final class APISessionDistributionConfig {
 
 	public void setDistributedSessionKeepAliveCallInterval(long aDistributedSessionKeepAliveCallInterval) {
 		this.distributedSessionKeepAliveCallInterval = aDistributedSessionKeepAliveCallInterval;
+	}
+
+	public String getSessionIdCookieDomain() {
+		return sessionIdCookieDomain;
+	}
+
+	public void setSessionIdCookieDomain(String sessionIdCookieDomain) {
+		this.sessionIdCookieDomain = sessionIdCookieDomain;
 	}
 }
