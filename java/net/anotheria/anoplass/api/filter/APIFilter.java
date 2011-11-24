@@ -109,7 +109,11 @@ public class APIFilter implements Filter {
 
 
 		saveCookie(HttpServletResponse.class.cast(sRes), req, session);
-		chain.doFilter(sReq, sRes);
+		try{
+			chain.doFilter(sReq, sRes);
+		}finally{
+			APICallContext.remove();
+		}
 	}
 
 
@@ -177,6 +181,9 @@ public class APIFilter implements Filter {
 		Cookie distributedSessionCookie = new Cookie(configuration.getSessionIdCookieName(), sessionId);
 		distributedSessionCookie.setPath("/");
 		distributedSessionCookie.setMaxAge(-1);
+		if (configuration.getSessionIdCookieDomain()!=null){
+			distributedSessionCookie.setDomain(configuration.getSessionIdCookieDomain());
+		}
 		sres.addCookie(distributedSessionCookie);
 	}
 
