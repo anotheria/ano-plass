@@ -109,11 +109,7 @@ public class APIFilter implements Filter {
 
 
 		saveCookie(HttpServletResponse.class.cast(sRes), req, session);
-		try{
-			chain.doFilter(sReq, sRes);
-		}finally{
-			APICallContext.remove();
-		}
+		chain.doFilter(sReq, sRes);
 	}
 
 
