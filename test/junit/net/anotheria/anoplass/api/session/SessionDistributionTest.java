@@ -10,7 +10,6 @@ import java.util.List;
 
 
 /**
- *
  * Please  Note  that current test implementation is integration test, so please don't worry if some  test  will be executed with errors, cause
  * most of them can be based on small sleep time .. etc.
  */
@@ -215,6 +214,7 @@ public class SessionDistributionTest {
 	}
 
 
+	@SuppressWarnings({"NullableProblems"})
 	@Test
 	public void testErrorsAndExceptions() {
 
@@ -230,19 +230,18 @@ public class SessionDistributionTest {
 			//waiting for clean!
 			Thread.sleep(500);
 			try {
-				APISessionManager.getInstance().restoreSession(id, "h3llka");
-				Assert.fail("Fail here!");
+				Assert.assertNull("Can't be restored!!!", APISessionManager.getInstance().restoreSession(id, "h3llka"));
+				Assert.fail("Should not happen!!!  There is no such session!!!!");
 			} catch (APISessionRestoreException e) {
-				// go here!!
 			}
 
 			//Badly configured service!!!
 			APISessionDistributionHelper.setSessionDistributorService(null);
 			try {
-				APISessionManager.getInstance().createSession("123");
-				Assert.fail("Fail here!");
+				Assert.assertNotNull(APISessionManager.getInstance().createSession("123"));
+				Assert.assertFalse(APISessionDistributionHelper.isSessionDistributorServiceConfigured());
 			} catch (Exception e) {
-				Assert.assertTrue("Runtime!", e instanceof RuntimeException);
+				Assert.fail("Should not happen! " + e.getMessage());
 			}
 
 
@@ -281,6 +280,7 @@ public class SessionDistributionTest {
 			// Templates.
 		}
 
+		@SuppressWarnings({"DefaultFileTemplate"})
 		@Override
 		public List<String> getDistributedSessionNames() throws SessionDistributorServiceException {
 			return super.getDistributedSessionNames();	//To change body of overridden methods use File | Settings | File Templates.

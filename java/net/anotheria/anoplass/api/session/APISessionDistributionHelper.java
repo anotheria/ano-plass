@@ -45,7 +45,10 @@ public final class APISessionDistributionHelper {
 	 *          on errors from backend service
 	 */
 	public static APISession restoreSession(String distributedSessionName, String callServiced) throws APISessionDistributionException {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured()) {
+			LOG.warn("There is nothing to restore! SD - service is not configured! Relying on defaults.");
+			return null;
+		}
 
 		DistributedSessionVO distributedSession;
 		try {
@@ -81,7 +84,8 @@ public final class APISessionDistributionHelper {
 	 * @param attributeToAdd attributeWrapper
 	 */
 	public static void addAttributeToDistributedSession(String sessionName, AttributeWrapper attributeToAdd) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 
 		if (!PolicyHelper.isDistributed(attributeToAdd.getPolicy()))
 			return;
@@ -107,7 +111,8 @@ public final class APISessionDistributionHelper {
 	 * @param attributeName name of attribute to be removed
 	 */
 	public static void removeAttributeFromDistributedSession(String sessionName, String attributeName) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 		try {
 			distributorService.removeDistributedAttribute(sessionName, attributeName);
 		} catch (NoSuchDistributedSessionException e) {
@@ -124,7 +129,8 @@ public final class APISessionDistributionHelper {
 	 * @param userId	  user id
 	 */
 	public static void updateDistributedSessionUserId(String sessionName, String userId) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 		try {
 			distributorService.updateSessionUserId(sessionName, userId);
 		} catch (NoSuchDistributedSessionException e) {
@@ -141,7 +147,8 @@ public final class APISessionDistributionHelper {
 	 * @param editor	  editor id
 	 */
 	public static void updateDistributedSessionEditorId(String sessionName, String editor) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 		try {
 			distributorService.updateSessionEditorId(sessionName, editor);
 		} catch (NoSuchDistributedSessionException e) {
@@ -158,7 +165,8 @@ public final class APISessionDistributionHelper {
 	 * @param sessionName session id
 	 */
 	public static void keepSessionAliveCall(String sessionName) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 		try {
 			distributorService.keepDistributedSessionAlive(sessionName);
 		} catch (NoSuchDistributedSessionException e) {
@@ -180,7 +188,10 @@ public final class APISessionDistributionHelper {
 	 *          on distribution exception.
 	 */
 	public static String createSession(String aSessionId) throws APISessionDistributionException {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured()) {
+			LOG.warn("Distributed session can't be created! SD - not configured! Relying on defaults!");
+			return null;
+		}
 		try {
 			return distributorService.createDistributedSession(aSessionId);
 		} catch (SessionDistributorServiceException e) {
@@ -194,7 +205,8 @@ public final class APISessionDistributionHelper {
 	 * @param aPISessionId id of session to remove
 	 */
 	public static void removeDistributedSession(String aPISessionId) {
-		isDistributorServiceProperlyConfigured();
+		if (!isSessionDistributorServiceConfigured())
+			return;
 		try {
 			distributorService.deleteDistributedSession(aPISessionId);
 			LOG.debug("DistributedSession " + aPISessionId + " removed.");
@@ -207,11 +219,16 @@ public final class APISessionDistributionHelper {
 	}
 
 	/**
-	 * Throws exception if session distribution is not configured!
+	 * Return true if SessionDistributorService is configured and ready for work, false otherwise.
+	 *
+	 * @return true if SD is configured, false otherwise
 	 */
-	private static void isDistributorServiceProperlyConfigured() {
-		if (distributorService == null)
-			throw new IllegalStateException("No SessionDistributorService configured. Please set a SessionDistributorService.");
+	protected static boolean isSessionDistributorServiceConfigured() {
+		if (distributorService == null) {
+			LOG.warn("SessionDistributorService is not configured! Working in local mode. Please configure SD - properly.");
+			return false;
+		}
+		return true;
 	}
 
 	/**

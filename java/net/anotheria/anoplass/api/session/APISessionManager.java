@@ -112,7 +112,8 @@ public class APISessionManager {
 	 * Init integration.
 	 */
 	private void configureIntegration() {
-		if (!distributionConfig.isDistributionEnabled())
+		//Don't configure if not required :)
+		if (!distributionConfig.isDistributionEnabled() || !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 			return;
 		// init for last call time map
 		distributedSessionLastCallTime = new ConcurrentHashMap<String, Long>();
@@ -182,7 +183,6 @@ public class APISessionManager {
 
 		}
 
-
 		target.setCurrentEditorId(source.getCurrentEditorId());
 		target.setCurrentUserId(source.getCurrentUserId());
 
@@ -208,8 +208,8 @@ public class APISessionManager {
 		referenceIds.put(referenceId, session.getId());
 		log.debug("createSession, id=" + session.getId());
 
-		//Populating call back only if distribution is enabled!
-		if (distributionConfig.isDistributionEnabled()) {
+		//Populating call back only if distribution is enabled - and properly configured!
+		if (distributionConfig.isDistributionEnabled() && APISessionDistributionHelper.isSessionDistributorServiceConfigured()) {
 			//populate distribution call time if required
 			distributedSessionLastCallTime.put(session.getId(), System.currentTimeMillis());
 			APISessionImpl.class.cast(session).setSessionCallBack(callback);
@@ -229,16 +229,23 @@ public class APISessionManager {
 	public APISession restoreSession(String sessionId, String referenceId) throws APISessionRestoreException {
 		if (!distributionConfig.isDistributionEnabled())
 			return null;
+		//Additional check! to prevent possible errors!!
+		if (!APISessionDistributionHelper.isSessionDistributorServiceConfigured())
+			return null;
 		try {
 			APISession restored = APISessionDistributionHelper.restoreSession(sessionId, serviceId);
-			APISessionImpl session = APISessionImpl.class.cast(restored);
-			session.setSessionCallBack(callback);
-			session.setReferenceId(referenceId);
-			sessions.put(session.getId(), session);
-			referenceIds.put(referenceId, session.getId());
-			distributedSessionLastCallTime.put(session.getId(), System.currentTimeMillis());
-			log.debug("session restored, id=" + session.getId());
-			return restored;
+			//checking - that Restored is Really APISessionImpl - and is not NULL (in case if Distributor service is not configured properly)
+			if (restored instanceof APISessionImpl) {
+				APISessionImpl session = APISessionImpl.class.cast(restored);
+				session.setSessionCallBack(callback);
+				session.setReferenceId(referenceId);
+				sessions.put(session.getId(), session);
+				referenceIds.put(referenceId, session.getId());
+				distributedSessionLastCallTime.put(session.getId(), System.currentTimeMillis());
+				log.debug("session restored, id=" + session.getId());
+				return restored;
+			}
+			return null;
 		} catch (APISessionDistributionException e) {
 			log.error("session restore failed session[" + sessionId + "]", e);
 			throw new APISessionRestoreException(sessionId, e);
@@ -262,7 +269,7 @@ public class APISessionManager {
 	}
 
 	/**
-	 * If session distribution is enabled  - then before APISession creation, Distributed session will be created.
+	 * If session distribution is enabled (and properly configured)  - then before APISession creation, Distributed session will be created.
 	 * Current method creates such session and returns it's id.
 	 *
 	 * @param sessionId proposed distributed session id
@@ -270,7 +277,7 @@ public class APISessionManager {
 	 * @throws APISessionCreationException on distributed session creation errors
 	 */
 	private String createAndGetAssociatedDistributedSessionId(String sessionId) throws APISessionCreationException {
-		if (distributionConfig.isDistributionEnabled())
+		if (distributionConfig.isDistributionEnabled() && APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 			try {
 				sessionId = APISessionDistributionHelper.createSession(sessionId);
 			} catch (APISessionDistributionException e) {
@@ -315,7 +322,7 @@ public class APISessionManager {
 
 		//Checking last distributed session call time
 		//send keep alive call to distribution service if required
-		if (distributionConfig.isDistributionEnabled() && session != null) {
+		if (distributionConfig.isDistributionEnabled() && session != null && APISessionDistributionHelper.isSessionDistributorServiceConfigured()) {
 			Long lastCall = distributedSessionLastCallTime.get(id);
 			lastCall = lastCall == null ? System.currentTimeMillis() : lastCall;
 			if ((System.currentTimeMillis() - lastCall) >= distributionConfig.getDistributedSessionKeepAliveCallInterval()) {
@@ -375,6 +382,7 @@ public class APISessionManager {
 		//remove distributed session call time  if enabled
 		if (distributionConfig.isDistributionEnabled())
 			distributedSessionLastCallTime.remove(session.getId());
+
 		referenceIds.remove(referenceId);
 
 		// send Destroy session event
@@ -409,12 +417,12 @@ public class APISessionManager {
 	}
 
 	/**
-	 * Remove distributed session by sessionId, only if sessionDistribution is enabled.
+	 * Remove distributed session by sessionId, only if sessionDistribution is enabled adn configured.
 	 *
 	 * @param sessionId id of distributed session
 	 */
 	private void destroyDistributedSession(String sessionId) {
-		if (!distributionConfig.isDistributionEnabled())
+		if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 			return;
 		APISessionDistributionHelper.removeDistributedSession(sessionId);
 	}
@@ -459,7 +467,7 @@ public class APISessionManager {
 
 		@Override
 		public void attributeSet(String sessionId, AttributeWrapper aWrapper) {
-			if (!distributionConfig.isDistributionEnabled())
+			if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 				return;
 
 			if (processor == null) {
@@ -487,7 +495,7 @@ public class APISessionManager {
 
 		@Override
 		public void attributeRemoved(String sessionId, String attributeName) {
-			if (!distributionConfig.isDistributionEnabled())
+			if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 				return;
 			if (processor == null) {
 				log.error("Session distribution is enabled but processor is not configured! ");
@@ -508,7 +516,7 @@ public class APISessionManager {
 
 		@Override
 		public void currentUserIdChanged(String sessionId, String userId) {
-			if (!distributionConfig.isDistributionEnabled())
+			if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 				return;
 			if (processor == null) {
 				log.error("Session distribution is enabled but processor is not configured! ");
@@ -529,7 +537,7 @@ public class APISessionManager {
 
 		@Override
 		public void editorIdChanged(String sessionId, String editorId) {
-			if (!distributionConfig.isDistributionEnabled())
+			if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 				return;
 			if (processor == null) {
 				log.error("Session distribution is enabled but processor is not configured! ");
@@ -550,7 +558,7 @@ public class APISessionManager {
 
 		@Override
 		public void keepAliveCall(String sessionId) {
-			if (!distributionConfig.isDistributionEnabled())
+			if (!distributionConfig.isDistributionEnabled() && !APISessionDistributionHelper.isSessionDistributorServiceConfigured())
 				return;
 			if (processor == null) {
 				log.error("Session distribution is enabled but processor is not configured! ");
@@ -743,27 +751,33 @@ public class APISessionManager {
 			switch (workingElement.getType()) {
 				case ATTRIBUTE_ADD:
 					APISessionDistributionHelper.addAttributeToDistributedSession(workingElement.getApiSessionId(), workingElement.getWrapper());
-					log.debug("ATTRIBUTE_ADD" + workingElement);
+					if (log.isDebugEnabled())
+						log.debug("ATTRIBUTE_ADD" + workingElement);
 					return;
 				case ATTRIBUTE_REMOVE:
 					APISessionDistributionHelper.removeAttributeFromDistributedSession(workingElement.getApiSessionId(), workingElement.getAttributeName());
-					log.debug("ATTRIBUTE_REMOVE" + workingElement);
+					if (log.isDebugEnabled())
+						log.debug("ATTRIBUTE_REMOVE" + workingElement);
 					return;
 				case USER_ID_SET:
 					APISessionDistributionHelper.updateDistributedSessionUserId(workingElement.getApiSessionId(), workingElement.getUserId());
-					log.debug("USER_ID_SET" + workingElement);
+					if (log.isDebugEnabled())
+						log.debug("USER_ID_SET" + workingElement);
 					return;
 				case EDITOR_ID_SET:
 					APISessionDistributionHelper.updateDistributedSessionEditorId(workingElement.getApiSessionId(), workingElement.getEditorId());
-					log.debug("EDITOR_ID_SET" + workingElement);
+					if (log.isDebugEnabled())
+						log.debug("EDITOR_ID_SET" + workingElement);
 					return;
 				case KEEP_ALIVE_CALL:
 					//simplest call which will update session timeout time in SessionDistributorService
 					APISessionDistributionHelper.keepSessionAliveCall(workingElement.getApiSessionId());
-					log.debug("KEEP_ALIVE_CALL" + workingElement);
+					if (log.isDebugEnabled())
+						log.debug("KEEP_ALIVE_CALL" + workingElement);
 					return;
 			}
-			log.debug("element process completed");
+			if (log.isDebugEnabled())
+				log.debug("element process completed");
 
 		}
 	}
