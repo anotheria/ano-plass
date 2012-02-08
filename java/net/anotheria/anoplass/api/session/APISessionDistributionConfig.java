@@ -97,7 +97,7 @@ public final class APISessionDistributionConfig {
 	 */
 	@Configure
 	private long distributedSessionKeepAliveCallInterval;
-	
+
 	/**
 	 * Domain which should be used to set the session id cookie.
 	 */
@@ -142,6 +142,7 @@ public final class APISessionDistributionConfig {
 		this.sessionDistributorEventReceiverQueueSize = DEFAULT_SESSION_DISTRIBUTOR_EVENT_RECEIVER_Q_SIZE;
 		this.sessionDistributorEventReceiverQueueSleepTime = DEFAULT_SESSION_DISTRIBUTOR_EVENT_RECEIVER_Q_SLEEP;
 		this.distributedSessionKeepAliveCallInterval = TimeUnit.MINUTE.getMillis() * 5; // 5 minutes
+		this.sessionIdCookieDomain = "";
 	}
 
 
