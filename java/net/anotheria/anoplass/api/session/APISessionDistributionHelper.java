@@ -53,11 +53,11 @@ public final class APISessionDistributionHelper {
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("restoreDistributedSession " + distributedSessionName + "failed", e);
 			throw new APISessionDistributionException(e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") failed. [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") failed. [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 			//Continue work in local mode!
 			return null;
 		}
@@ -105,11 +105,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("session with id " + sessionName + " not found!", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " addDistributedAttribute.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 	}
 
@@ -128,11 +128,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " removeDistributedAttribute.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 	}
 
@@ -151,11 +151,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionUserId.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 	}
 
@@ -174,11 +174,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 	}
 
@@ -197,11 +197,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("keepSessionAliveCall(" + sessionName + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("keepSessionAliveCall(" + sessionName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 	}
 
@@ -225,11 +225,11 @@ public final class APISessionDistributionHelper {
 			return distributorService.createDistributedSession(aSessionId);
 		} catch (SessionDistributorServiceException e) {
 			throw new APISessionDistributionException(e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("keepSessionAliveCall(" + aSessionId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("keepSessionAliveCall(" + aSessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 			//Defaults! Continue local work!
 			return aSessionId;
 		}
@@ -250,11 +250,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + aPISessionId + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + aPISessionId + " remove failed.", e);
-		} catch (DistributemeRuntimeException DMeR) {
+		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("removeDistributedSession(" + aPISessionId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			LOG.warn("removeDistributedSession(" + aPISessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(DMeR);
+				LOG.debug(dMeR);
 		}
 
 	}
