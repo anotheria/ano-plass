@@ -1,12 +1,9 @@
 package net.anotheria.anoplass.api.session;
 
-import net.anotheria.anoprise.sessiondistributor.DistributedSessionAttribute;
-import net.anotheria.anoprise.sessiondistributor.DistributedSessionVO;
-import net.anotheria.anoprise.sessiondistributor.NoSuchDistributedSessionException;
-import net.anotheria.anoprise.sessiondistributor.SessionDistributorService;
-import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
+import net.anotheria.anoprise.sessiondistributor.*;
 import net.anotheria.net.util.ByteArraySerializer;
 import org.apache.log4j.Logger;
+import org.distributeme.core.exception.DistributemeRuntimeException;
 
 import java.io.IOException;
 
@@ -56,6 +53,13 @@ public final class APISessionDistributionHelper {
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("restoreDistributedSession " + distributedSessionName + "failed", e);
 			throw new APISessionDistributionException(e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") failed. [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
+			//Continue work in local mode!
+			return null;
 		}
 
 
@@ -101,6 +105,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("session with id " + sessionName + " not found!", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " addDistributedAttribute.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 	}
 
@@ -119,6 +128,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " removeDistributedAttribute.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 	}
 
@@ -137,6 +151,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionUserId.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 	}
 
@@ -155,6 +174,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 	}
 
@@ -173,6 +197,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + sessionName + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("keepSessionAliveCall(" + sessionName + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 	}
 
@@ -196,6 +225,13 @@ public final class APISessionDistributionHelper {
 			return distributorService.createDistributedSession(aSessionId);
 		} catch (SessionDistributorServiceException e) {
 			throw new APISessionDistributionException(e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("keepSessionAliveCall(" + aSessionId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
+			//Defaults! Continue local work!
+			return aSessionId;
 		}
 	}
 
@@ -214,6 +250,11 @@ public final class APISessionDistributionHelper {
 			LOG.error("DistributedSession " + aPISessionId + " not found.", e);
 		} catch (SessionDistributorServiceException e) {
 			LOG.error("DistributedSession " + aPISessionId + " remove failed.", e);
+		} catch (DistributemeRuntimeException DMeR) {
+			//transport layer runtime!!
+			LOG.warn("removeDistributedSession(" + aPISessionId + ") failed [" + DMeR.getClass().getName() + "] " + DMeR.getMessage());
+			if (LOG.isDebugEnabled())
+				LOG.debug(DMeR);
 		}
 
 	}
