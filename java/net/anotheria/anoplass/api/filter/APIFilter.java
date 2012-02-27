@@ -195,6 +195,8 @@ public class APIFilter implements Filter {
 		APISession apiSession;
 		try {
 			apiSession = APISessionManager.getInstance().createSessionCopy(copySessionParameter, session.getId());
+			if (apiSession == null)
+				return;
 		} catch (APISessionCreationException e) {
 			LOG.error("copySession(" + req + ", " + copySessionParameter + ")", e);
 			throw new ServletException("Creating remoteSession failed." + e.getMessage(), e);
@@ -311,6 +313,8 @@ public class APIFilter implements Filter {
 	private APISession restoreSession(String distributedSessionId, HttpSession session) {
 		try {
 			APISession apiSession = APISessionManager.getInstance().restoreSession(distributedSessionId, session.getId());
+			if(apiSession==null)
+				return null;
 			session.setAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME, apiSession.getId());
 			if (APIConfig.associateSessions())
 				session.setAttribute(API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME, apiSession);

@@ -51,7 +51,7 @@ public final class APISessionDistributionHelper {
 		try {
 			distributedSession = distributorService.restoreDistributedSession(distributedSessionName, callServiced);
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("restoreDistributedSession " + distributedSessionName + "failed", e);
+			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ")failed. Cause " + e.getMessage());
 			throw new APISessionDistributionException(e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
@@ -73,7 +73,7 @@ public final class APISessionDistributionHelper {
 				AttributeWrapper wrapper = (AttributeWrapper) ByteArraySerializer.deserializeObject(attribute.getData());
 				sessionImpl.setAttributeWrapper(wrapper);
 			} catch (IOException e) {
-				LOG.error("exception occurred attempting to deSerialize this attribute: " + attribute, e);
+				LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") FAILED. exception occurred attempting to deSerialize this attribute: " + attribute, e);
 			}
 		}
 		return sessionImpl;
@@ -100,11 +100,11 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.addDistributedAttribute(sessionName, new DistributedSessionAttribute(attributeToAdd.getKey(), ByteArraySerializer.serializeObject(attributeToAdd)));
 		} catch (IOException e) {
-			LOG.error("exception occurred attempting to serialize this attribute: " + attributeToAdd, e);
+			LOG.error("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed.", e);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("session with id " + sessionName + " not found!", e);
+			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed. Cause" + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + sessionName + " addDistributedAttribute.", e);
+			LOG.error("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
@@ -125,9 +125,9 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.removeDistributedAttribute(sessionName, attributeName);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("DistributedSession " + sessionName + " not found.", e);
+			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + sessionName + " removeDistributedAttribute.", e);
+			LOG.error("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
@@ -148,9 +148,9 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.updateSessionUserId(sessionName, userId);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("DistributedSession " + sessionName + " not found.", e);
+			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + sessionName + " updateSessionUserId.", e);
+			LOG.error("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
@@ -171,9 +171,9 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.updateSessionEditorId(sessionName, editor);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("DistributedSession " + sessionName + " not found.", e);
+			LOG.warn("updateDistributedSessionEditorId( " + sessionName + "," + editor + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+			LOG.error("updateDistributedSessionEditorId( " + sessionName + "," + editor + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
@@ -194,9 +194,9 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.keepDistributedSessionAlive(sessionName);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("DistributedSession " + sessionName + " not found.", e);
+			LOG.warn("keepSessionAliveCall( " + sessionName + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + sessionName + " updateSessionEditorId.", e);
+			LOG.error("keepSessionAliveCall( " + sessionName + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("keepSessionAliveCall(" + sessionName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
@@ -227,7 +227,7 @@ public final class APISessionDistributionHelper {
 			throw new APISessionDistributionException(e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("keepSessionAliveCall(" + aSessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("createSession(" + aSessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug(dMeR);
 			//Defaults! Continue local work!
@@ -245,11 +245,12 @@ public final class APISessionDistributionHelper {
 			return;
 		try {
 			distributorService.deleteDistributedSession(aPISessionId);
-			LOG.debug("DistributedSession " + aPISessionId + " removed.");
+			if (LOG.isDebugEnabled())
+				LOG.debug("DistributedSession " + aPISessionId + " removed.");
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.error("DistributedSession " + aPISessionId + " not found.", e);
+			LOG.warn("removeDistributedSession( " + aPISessionId + ") failed. Cause" + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("DistributedSession " + aPISessionId + " remove failed.", e);
+			LOG.error("removeDistributedSession( " + aPISessionId + ") failed", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
 			LOG.warn("removeDistributedSession(" + aPISessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
