@@ -116,8 +116,8 @@ public class APIFilter implements Filter {
 	/**
 	 * Add or update cookie wit distributed session id, only if Distribution is enabled.
 	 *
-	 * @param res	 {@link HttpServletRequest
-	 * @param req	 {@link HttpServletResponse}
+	 * @param res	 {@link HttpServletResponse}
+	 * @param req	 {@link HttpServletRequest}
 	 * @param session {@link APISession}
 	 */
 	private void saveCookie(HttpServletResponse res, HttpServletRequest req, APISession session) {
@@ -177,9 +177,8 @@ public class APIFilter implements Filter {
 		Cookie distributedSessionCookie = new Cookie(configuration.getSessionIdCookieName(), sessionId);
 		distributedSessionCookie.setPath("/");
 		distributedSessionCookie.setMaxAge(-1);
-		if (configuration.getSessionIdCookieDomain()!=null){
+		if (!StringUtils.isEmpty(configuration.getSessionIdCookieDomain()))
 			distributedSessionCookie.setDomain(configuration.getSessionIdCookieDomain());
-		}
 		sres.addCookie(distributedSessionCookie);
 	}
 
