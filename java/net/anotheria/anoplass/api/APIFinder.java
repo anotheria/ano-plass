@@ -281,8 +281,4 @@ public class APIFinder {
     public static void enableSecurity(){
     	securityEnabled = true;
     }
-    
-    
-
-
 }
