@@ -90,6 +90,10 @@ public class APISessionImpl implements APISession, Serializable {
 		return wrapper == null ? null : wrapper.getValue();
 	}
 
+    public AttributeWrapper getAttributeWrapper(String key){
+        return attributes.get(key);
+    }
+
 	@Override
 	public String getId() {
 		return id;

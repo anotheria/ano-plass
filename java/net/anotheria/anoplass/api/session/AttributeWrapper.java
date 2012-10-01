@@ -83,8 +83,16 @@ public class AttributeWrapper implements Serializable {
 	public boolean isExpiring(){
 		return (policy & APISession.POLICY_AUTOEXPIRE) != 0;
 	}
-	
-	/**
+
+    public long getExpiryTimestamp() {
+        return expiryTimestamp;
+    }
+
+    public void setExpiryTimestamp(long expiryTimestamp) {
+        this.expiryTimestamp = expiryTimestamp;
+    }
+
+    /**
 	 * Returns true if the attribute is expired. Only attributes with policy autoexpire can expire.
 	 * @return
 	 */
