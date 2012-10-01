@@ -4,9 +4,7 @@ import org.apache.log4j.Logger;
 
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -130,6 +128,11 @@ public class APISessionImpl implements APISession, Serializable {
 		//calling remove Attribute
 		if (canDistribute(wrapper))
 			sessionCallBack.attributeRemoved(getId(), key);
+	}
+
+	@Override
+	public List<String> getAttributeNames() {
+		return new ArrayList<String>(attributes.keySet());
 	}
 
 	@Override

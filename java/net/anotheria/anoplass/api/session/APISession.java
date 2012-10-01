@@ -2,6 +2,7 @@ package net.anotheria.anoplass.api.session;
 
 import net.anotheria.util.TimeUnit;
 
+import java.util.List;
 import java.util.Locale;
 
 
@@ -12,7 +13,6 @@ import java.util.Locale;
  *
  */
 public interface APISession {
-	
 	/**
 	 * Default expiration period for attributes with policy auto-expire.
 	 */
@@ -99,7 +99,14 @@ public interface APISession {
 	 * @param key the attribute name(key) to remove
 	 */
 	void removeAttribute(String key);
-	
+
+	/**
+	 * Return attribute names collection.
+	 *
+	 * @return {@link String} collection
+	 */
+	List<String> getAttributeNames();
+
 	/**
 	 * Returns the session id.
 	 * @return id
