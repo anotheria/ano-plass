@@ -36,7 +36,7 @@ public final class APISessionDistributionHelper {
 	 * Restores previously distributed session.
 	 *
 	 * @param distributedSessionName the name of the distributed session.
-	 * @param callServiced		   id of caller service
+	 * @param callServiced           id of caller service
 	 * @return {@link APISession}
 	 * @throws APISessionDistributionException
 	 *          on errors from backend service
@@ -84,7 +84,7 @@ public final class APISessionDistributionHelper {
 	 * Add attribute to Distributed session.
 	 * If incoming attribute policy  - is not DISTRIBUTED or attribute is not serializable - nothing will be done!
 	 *
-	 * @param sessionName	name of the  distributed session
+	 * @param sessionName    name of the  distributed session
 	 * @param attributeToAdd attributeWrapper
 	 */
 	public static void addAttributeToDistributedSession(String sessionName, AttributeWrapper attributeToAdd) {
@@ -140,7 +140,7 @@ public final class APISessionDistributionHelper {
 	 * Update distributed session userId.
 	 *
 	 * @param sessionName name of session
-	 * @param userId	  user id
+	 * @param userId      user id
 	 */
 	public static void updateDistributedSessionUserId(String sessionName, String userId) {
 		if (!isSessionDistributorServiceConfigured())
@@ -163,7 +163,7 @@ public final class APISessionDistributionHelper {
 	 * Update distributed session editorId.
 	 *
 	 * @param sessionName name of session (id)
-	 * @param editor	  editor id
+	 * @param editor      editor id
 	 */
 	public static void updateDistributedSessionEditorId(String sessionName, String editor) {
 		if (!isSessionDistributorServiceConfigured())
@@ -223,6 +223,10 @@ public final class APISessionDistributionHelper {
 		}
 		try {
 			return distributorService.createDistributedSession(aSessionId);
+		} catch (SessionsCountLimitReachedSessionDistributorServiceException sclRSDsE) {
+			LOG.warn("createSession(" + aSessionId + ") failed [" + sclRSDsE.getClass().getName() + "]-  Returning same Id without remote session creation!" + sclRSDsE.getMessage());
+			//Defaults! Continue local work!
+			return aSessionId;
 		} catch (SessionDistributorServiceException e) {
 			throw new APISessionDistributionException(e);
 		} catch (DistributemeRuntimeException dMeR) {

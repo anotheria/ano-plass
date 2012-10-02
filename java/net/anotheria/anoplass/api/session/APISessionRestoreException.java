@@ -17,9 +17,19 @@ public class APISessionRestoreException extends APISessionManagerException {
 	 * Constructor.
 	 *
 	 * @param sessionId id of session
-	 * @param cause	 exception
+	 * @param cause     exception
 	 */
 	public APISessionRestoreException(String sessionId, Throwable cause) {
 		super("Distributed APISession[" + sessionId + "] restore failed.", cause);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param sessionId APISessionId
+	 * @param message   cause message
+	 */
+	public APISessionRestoreException(String sessionId, String message) {
+		super("Distributed APISession[" + sessionId + "] restore failed. Cause " + message);
 	}
 }

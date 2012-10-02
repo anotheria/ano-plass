@@ -1,23 +1,18 @@
 package net.anotheria.anoplass.api.filter;
 
-import net.anotheria.anoplass.api.APICallContext;
-import net.anotheria.anoplass.api.APIConfig;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.activity.ActivityAPI;
 import net.anotheria.anoplass.api.session.APISession;
 import net.anotheria.anoplass.api.session.APISessionCreationException;
 import net.anotheria.anoplass.api.session.APISessionDistributionConfig;
 import net.anotheria.anoplass.api.session.APISessionManager;
-import net.anotheria.anoplass.api.session.APISessionRestoreException;
 import net.anotheria.util.StringUtils;
+import net.anotheria.util.concurrency.IdBasedLock;
+import net.anotheria.util.concurrency.IdBasedLockManager;
+import net.anotheria.util.concurrency.SafeIdBasedLockManager;
 import org.apache.log4j.Logger;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +59,10 @@ public class APIFilter implements Filter {
 	 * Lo4j logger.
 	 */
 	private static final Logger LOG = Logger.getLogger(APIFilter.class);
+	/**
+	 * Id based lock manager instance.
+	 */
+	private IdBasedLockManager lockManager;
 
 	/**
 	 * APISessionDistributionConfig instance.
@@ -83,16 +82,6 @@ public class APIFilter implements Filter {
 			return;
 
 		HttpServletRequest req = (HttpServletRequest) sReq;
-
-		String copySessionParam = req.getParameter(PARAM_COPY_SESSION);
-		if (copySessionParam != null && copySessionParam.length() > 0)
-			copySession(req, copySessionParam);
-
-		//Checking if sessionId present in URL! If so - trying to init such session
-		//If distribution is disabled - method will be ignored....
-		String distributedSessionId = req.getParameter(configuration.getDistributedSessionParameterName());
-		if (!StringUtils.isEmpty(distributedSessionId))
-			restoreDistributedSession(distributedSessionId, req);
 
 		//init process  for APISession!!!
 		APISession session = initSession(req);
@@ -116,8 +105,8 @@ public class APIFilter implements Filter {
 	/**
 	 * Add or update cookie wit distributed session id, only if Distribution is enabled.
 	 *
-	 * @param res	 {@link HttpServletResponse}
-	 * @param req	 {@link HttpServletRequest}
+	 * @param res     {@link HttpServletResponse}
+	 * @param req     {@link HttpServletRequest}
 	 * @param session {@link APISession}
 	 */
 	private void saveCookie(HttpServletResponse res, HttpServletRequest req, APISession session) {
@@ -138,39 +127,10 @@ public class APIFilter implements Filter {
 		}
 	}
 
-
-	/**
-	 * Method restore distributed session, using URL parameter under which sessionId comes.
-	 * This method is  actual in cases when cookie is unreachable (different domains, etc). It has higher priority
-	 * that restoring by cookie. Etc.
-	 *
-	 * @param distributedSessionId id of distributed session
-	 * @param req				  {@link HttpServletRequest}
-	 */
-	private void restoreDistributedSession(String distributedSessionId, HttpServletRequest req) {
-		//skipping  if Distribution is disabled!!!
-		if (!configuration.isDistributionEnabled())
-			return;
-
-		HttpSession httpSession = req.getSession(true);
-
-		//check first whether we already have restored this session in the past.
-		String apiSessionId = String.class.cast(httpSession.getAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME));
-		if (!StringUtils.isEmpty(apiSessionId) && apiSessionId.equals(distributedSessionId)) {
-			LOG.debug("Session was already restored, skipping.");
-			return;
-		}
-
-		if (restoreSession(distributedSessionId, httpSession) != null) {
-			LOG.debug("APISession successfully restored APISession[" + distributedSessionId + "]");
-		}
-
-	}
-
 	/**
 	 * Add sessionId Cookie to response.
 	 *
-	 * @param sres	  {@link HttpServletResponse}
+	 * @param sres      {@link HttpServletResponse}
 	 * @param sessionId session id
 	 */
 	private void addSessionIdCookieToResponse(HttpServletResponse sres, String sessionId) {
@@ -182,149 +142,66 @@ public class APIFilter implements Filter {
 		sres.addCookie(distributedSessionCookie);
 	}
 
-	/**
-	 * Create session copy.
-	 *
-	 * @param req				  {@link HttpServletRequest}
-	 * @param copySessionParameter source session id
-	 * @throws ServletException on remote session create error
-	 */
-	private void copySession(HttpServletRequest req, String copySessionParameter) throws ServletException {
-		HttpSession session = req.getSession(true);
-		APISession apiSession;
-		try {
-			apiSession = APISessionManager.getInstance().createSessionCopy(copySessionParameter, session.getId());
-			if (apiSession == null)
-				return;
-		} catch (APISessionCreationException e) {
-			LOG.error("copySession(" + req + ", " + copySessionParameter + ")", e);
-			throw new ServletException("Creating remoteSession failed." + e.getMessage(), e);
-		}
-		session.setAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME, apiSession.getId());
-		if (APIConfig.associateSessions())
-			session.setAttribute(API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME, apiSession);
-	}
-
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		activityAPI = APIFinder.findAPI(ActivityAPI.class);
 		configuration = APISessionDistributionConfig.getInstance();
+		lockManager = new SafeIdBasedLockManager();
 	}
 
 	/**
 	 * Initializes the APISession.
-	 * There are few options available.
-	 * - HttpSession contains APISession id - if APISession found in SessionManager - simply populating data and that's all, otherwise
-	 * checking for  API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME parameter existence ( if APIConfig.associateSessions() enabled ), if session are paired - simply populating session,
-	 * and last case -  trying to restore session, if restore failed or  distribution is disabled -  we creating new APISession.
-	 * - HttpSession not contains APISession id -
-	 * trying to restore distributed session (if distribution is enabled and cookie with sessionId exists), if restore failed for some reason,
-	 * create new session.
+	 * Simply obtain using {@link APISessionManager} instance.
+	 * <p/>
+	 * <p/>
 	 *
 	 * @param req {@link javax.servlet.http.HttpServletRequest}}
 	 * @return {@link APISession}
 	 * @throws javax.servlet.ServletException on errors
 	 */
 	protected APISession initSession(HttpServletRequest req) throws ServletException {
-		APICallContext.getCallContext().reset();
 
-		//ok, wir erstellen erstmal per request ne neue session, spaeter optimieren (ein problem z.b. fuer lb abfragen).
-		//durch das "unroot" sollte es eben nicht mehr so sein, dass pro request "unnnoeitg eine session" erzeugt wird.
-		HttpSession session = req.getSession(true);
-		String apiSessionId = session == null ? null : (String) session.getAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME);
+		final HttpSession session = req.getSession(true);
+		if (session == null)
+			throw new ServletException("Could not obtain HttpSession!");
 
-		APISession apiSession;
-		if (apiSessionId == null) {
-			//check if cookies exist
-			String distributedSessionId = getDistributedSessionIdFromCookies(req);
-			//try to restore distributed session - if possible. if not - create new APISession
-			apiSession = !StringUtils.isEmpty(distributedSessionId) ? restoreSession(distributedSessionId, session) : createAPISession(session);
-
-			//create new session - if  distributed one not found or distribution is disabled
-			apiSession = apiSession == null ? createAPISession(session) : apiSession;
-
-			populatePropertiesToAPISession(apiSession, req, session);
-			return apiSession;
-		}
-
-		apiSession = APISessionManager.getInstance().getSession(apiSessionId);
-		//session found case
-		if (apiSession != null) {
-			populatePropertiesToAPISession(apiSession, req, session);
-			return apiSession;
-		}
-
-		//session not found case
-		APISession apiSessionFromHttpSession = (APISession) session.getAttribute(API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME);
-		if (apiSessionFromHttpSession != null)
-			apiSession = apiSessionFromHttpSession;
-		else {
-			//check if cookies exist
-			String distributedSessionId = getDistributedSessionIdFromCookies(req);
-			//try to restore distributed session - if possible. if not - create new APISession
-			apiSession = !StringUtils.isEmpty(distributedSessionId) ? restoreSession(distributedSessionId, session) : createAPISession(session);
-
-			//create new session - if  distributed one not found or distribution is disabled
-			apiSession = apiSession == null ? createAPISession(session) : apiSession;
-		}
-		populatePropertiesToAPISession(apiSession, req, session);
-		return apiSession;
-
-	}
-
-	/**
-	 * Populates properties to APISession and CallContext.
-	 *
-	 * @param apiSession {@link APISession}
-	 * @param req		{@link HttpServletRequest}
-	 * @param session	{@link HttpSession}
-	 */
-	private void populatePropertiesToAPISession(APISession apiSession, HttpServletRequest req, HttpSession session) {
-		APICallContext currentContext = APICallContext.getCallContext();
-
-		apiSession.setIpAddress(req.getRemoteAddr());
-		apiSession.setUserAgent(req.getHeader(USER_AGENT_HEADER_CONSTANT));
-		currentContext.setCurrentSession(apiSession);
-
-		if (apiSession.getLocale() == null) {
-			currentContext.setCurrentLocale(req.getLocale());
-		} else {
-			currentContext.setCurrentLocale(apiSession.getLocale());
-		}
-		currentContext.setCurrentUserId(apiSession.getCurrentUserId());
-
-		//setting proper editor id - if so.
-		Object editorId = session != null && session.getAttribute(CURRENT_USER_ID) != null ? String.class.cast(session.getAttribute(CURRENT_USER_ID)) : null;
-		if (editorId != null && editorId instanceof String && !(String.class.cast(editorId).isEmpty())) {
-			currentContext.setCurrentEditorId(String.class.cast(editorId));
-		}
-	}
-
-	/**
-	 * Restores a previously distributed session.
-	 * If no session found null will be returned.
-	 *
-	 * @param distributedSessionId id of distributed api session
-	 * @param session			  {@link HttpSession}
-	 * @return {@link APISession}
-	 */
-	private APISession restoreSession(String distributedSessionId, HttpSession session) {
+		IdBasedLock lock = lockManager.obtainLock(session.getId());
+		lock.lock();
 		try {
-			APISession apiSession = APISessionManager.getInstance().restoreSession(distributedSessionId, session.getId());
-			if(apiSession==null)
-				return null;
+			// preparing required data for call
+			Object apiSessionIdObject = session.getAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME);
+			String apiSessionId = String.class.isInstance(apiSessionIdObject) ? String.class.cast(apiSessionIdObject) : null;
+			final String dSessionIdFromCookies = getDistributedSessionIdFromCookies(req);
+			final String dSessionIdFromRequest = req.getParameter(configuration.getDistributedSessionParameterName());
+			final String userAgent = req.getHeader(USER_AGENT_HEADER_CONSTANT);
+			final String editorId = (session.getAttribute(CURRENT_USER_ID) instanceof String) ? String.class.cast(session.getAttribute(CURRENT_USER_ID)) : null;
+			//debug info
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("apiSessionId : " + apiSessionId);
+				LOG.debug("dSessionIdFromCookies : " + dSessionIdFromCookies);
+				LOG.debug("dSessionIdFromRequest : " + dSessionIdFromRequest);
+				LOG.debug("userAgent : " + userAgent);
+				LOG.debug("editorId : " + editorId);
+			}
+
+			//calling obtain session
+			APISession apiSession = APISessionManager.getInstance().obtainSession(session.getId(), apiSessionId, dSessionIdFromCookies,
+					dSessionIdFromRequest, req.getRemoteAddr(), userAgent, req.getLocale(), editorId);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("APISession - successfully obtained!");
+			}
+
 			session.setAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME, apiSession.getId());
-			if (APIConfig.associateSessions())
-				session.setAttribute(API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME, apiSession);
 			return apiSession;
-		} catch (APISessionRestoreException e) {
-			LOG.warn("restoreSession(" + distributedSessionId + "," + session + ")", e);
-			return null;
+		} catch (APISessionCreationException e) {
+			LOG.error("obtainSession(" + session + ")", e);
+			throw new ServletException("APISession obtain failed! " + e.getMessage(), e);
+		} finally {
+			lock.unlock();
 		}
 
 	}
-
 
 	/**
 	 * Search for sessionId in cookies.
@@ -355,28 +232,6 @@ public class APIFilter implements Filter {
 			if (curr.getName().equals(configuration.getSessionIdCookieName()))
 				sessionIdCookie = curr;
 		return sessionIdCookie;
-	}
-
-
-	/**
-	 * Creates a new APISession.
-	 *
-	 * @param session {@link HttpSession}
-	 * @return {@link APISession}
-	 * @throws javax.servlet.ServletException on distributed session create failure
-	 */
-	private APISession createAPISession(HttpSession session) throws ServletException {
-		try {
-			APISession apiSession = APISessionManager.getInstance().createSession(session.getId());
-			session.setAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME, apiSession.getId());
-			if (APIConfig.associateSessions())
-				session.setAttribute(API_SESSION_HTTP_SESSION_ATTRIBUTE_NAME, apiSession);
-			return apiSession;
-		} catch (APISessionCreationException e) {
-			LOG.error("createAPISession(" + session + ")", e);
-			throw new ServletException("Creating remoteSession failed." + e.getMessage(), e);
-		}
-
 	}
 
 }

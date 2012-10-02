@@ -3,6 +3,7 @@ package net.anotheria.anoplass.api.session;
 import junit.framework.Assert;
 import net.anotheria.anoplass.api.APICallContext;
 import net.anotheria.anoprise.sessiondistributor.*;
+import net.anotheria.util.IdCodeGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Please  Note  that current test implementation is integration test, so please don't worry if some  test  will be executed with errors, cause
  * most of them can be based on small sleep time .. etc.
  */
-public class SessionDistributionTest {
+public class APISessionManagerSingleAndSessionDistributionTest {
 
 	private static int createCall = 0;
 	private static int deleteCall = 0;
@@ -181,11 +182,9 @@ public class SessionDistributionTest {
 
 			try {
 				APISessionImpl restoredSession = APISessionImpl.class.cast(manager.restoreSession(session.getId(), referenceId));
-				Assert.assertNull("Should be null", restoredSession);
-				Assert.assertEquals("Should be 0 call for restore session", 0, restoreCall);
-
+				Assert.fail("Should fail here!");
 			} catch (APISessionRestoreException e) {
-				Assert.fail("Should not happen!!!");
+				// distribution is turned OFF!!!
 			}
 
 			//remove attribute !!
@@ -254,6 +253,203 @@ public class SessionDistributionTest {
 
 	}
 
+	/**
+	 * Obtain session --- from Distributed session - using request parameter!
+	 */
+	@Test
+	public void testObtainSessionCase1() {
+		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
+		String referenceId = "h3llkaTest_obtainCase1";
+
+		final String distributedSessionId = createRemoteSession();
+
+		APISessionManager manager = APISessionManager.getInstance();
+
+
+		//so session does not exists!   let's  restore!!!
+		APISession session = null;
+		try {
+			restoreCall = 0;
+			session = manager.obtainSession(referenceId, null, null, distributedSessionId, "", "", null, "");
+			Assert.assertNotNull(session);
+			Assert.assertEquals(session.getId(), distributedSessionId);
+			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 1  restore call", restoreCall, 1);
+
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+
+		// now  let's try to  obtain  same  session  once again!!! AS session  already restored  there should not be restore call's
+		try {
+			restoreCall = 0;
+			session = manager.obtainSession(referenceId, session.getId(), null, distributedSessionId, "", "", null, "");
+			Assert.assertNotNull(session);
+			Assert.assertEquals(session.getId(), distributedSessionId);
+			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+
+		// now  let's try to  obtain  same  session  once again!!! with disabled Distribution!
+		try {
+			APISessionDistributionConfig.getInstance().setDistributionEnabled(false);
+			restoreCall = 0;
+			APISession session2 = manager.obtainSession(referenceId, "", null, distributedSessionId, "", "", null, "");
+			Assert.assertNotNull(session2);
+			Assert.assertFalse(" False -  cause  new  session was  created!!!!", session2.getId().equals(distributedSessionId));
+			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
+
+	}
+
+
+	/**
+	 * Restore session using - SesionId from Cookies.
+	 */
+	@Test
+	public void testObtainSession2() {
+		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
+		String referenceId = "h3llkaTest_obtainCase2";
+
+		final String distributedSessionIdFromCookies = createRemoteSession();
+
+		APISessionManager manager = APISessionManager.getInstance();
+
+
+		//so session does not exists!   let's  restore!!!
+		APISession session = null;
+		try {
+			restoreCall = 0;
+			session = manager.obtainSession(referenceId, null, distributedSessionIdFromCookies, null, "", "", null, "");
+			Assert.assertNotNull(session);
+			Assert.assertEquals(session.getId(), distributedSessionIdFromCookies);
+			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 1  restore call", restoreCall, 1);
+
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+		// now  let's try to  obtain  same  session  once again!!! AS session  already restored  there should not be restore call's
+		try {
+			restoreCall = 0;
+			session = manager.obtainSession(referenceId, session.getId(), distributedSessionIdFromCookies, null, "", "", null, "");
+			Assert.assertNotNull(session);
+			Assert.assertEquals(session.getId(), distributedSessionIdFromCookies);
+			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+		// now  let's try to  obtain  same  session  once again!!! with disabled Distribution!
+		try {
+			APISessionDistributionConfig.getInstance().setDistributionEnabled(false);
+			restoreCall = 0;
+			APISession session2 = manager.obtainSession(referenceId, "", distributedSessionIdFromCookies, null, "", "", null, "");
+			Assert.assertNotNull(session2);
+			Assert.assertFalse(" False -  cause  new  session was  created!!!!", session2.getId().equals(distributedSessionIdFromCookies));
+			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+
+			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
+	}
+
+
+	/**
+	 * Simply creating and obtaining  new API session. With disabled and enabled dist.
+	 */
+	@Test
+	public void obtainSessionByCreationNewOneTest() {
+		String referenceId = "h3llka_reference_simpleCretion";
+
+		APISessionManager manager = APISessionManager.getInstance();
+		//so session does not exists!   let's  restore!!!
+		APISession session = null;
+		//disable distribution!  does not required here!
+		APISessionDistributionConfig.getInstance().setDistributionEnabled(false);
+
+		try {
+			session = manager.obtainSession(referenceId, null, "", "", "", "", null, "");
+			Assert.assertNotNull(session);
+			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+
+		//obtain now!
+
+
+		try {
+			APISession session2 = manager.obtainSession(referenceId, session.getId(), "", "", "", "", null, "");
+			Assert.assertNotNull(session2);
+			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+			Assert.assertEquals(session, session2);
+		} catch (APISessionCreationException e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+
+	/**
+	 * Creates  distributed session.
+	 *
+	 * @return
+	 */
+	private String createRemoteSession() {
+		try {
+			return service.createDistributedSession(IdCodeGenerator.generateCode(20));
+		} catch (SessionDistributorServiceException e) {
+			Assert.fail("Should not happens! " + e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Obtain session --- from Distributed session - using cookies parameter!
+	 */
+	@Test
+	public void testObtainSessionCase2() {
+
+	}
+
+	/**
+	 * Obtain session --- using!  using cookies parameter!  - Distr disabled
+	 */
+	@Test
+	public void testObtainSessionCase21() {
+
+	}
+
+
+	/**
+	 * Obtain session. Create New one.
+	 */
+
+	/**
+	 * Obtain session. Already existing.
+	 */
+
 
 	/**
 	 * Wrapper for default  SessionDistributorServiceImpl, simply dor current test.
@@ -261,20 +457,20 @@ public class SessionDistributionTest {
 	private class DistributorServiceWrapper extends SessionDistributorServiceImpl {
 		@Override
 		public String createDistributedSession(String sessionId) throws SessionDistributorServiceException {
-			String result = super.createDistributedSession(sessionId);	//To change body of overridden methods use File | Settings | File Templates.
+			String result = super.createDistributedSession(sessionId);    //To change body of overridden methods use File | Settings | File Templates.
 			createCall++;
 			return result;
 		}
 
 		@Override
 		public void deleteDistributedSession(String name) throws SessionDistributorServiceException {
-			super.deleteDistributedSession(name);	//To change body of overridden methods use File | Settings | File Templates.
+			super.deleteDistributedSession(name);    //To change body of overridden methods use File | Settings | File Templates.
 			deleteCall++;
 		}
 
 		@Override
 		public DistributedSessionVO restoreDistributedSession(String name, String callerId) throws SessionDistributorServiceException {
-			DistributedSessionVO result = super.restoreDistributedSession(name, callerId);	//To change body of overridden methods use File | Settings | File
+			DistributedSessionVO result = super.restoreDistributedSession(name, callerId);    //To change body of overridden methods use File | Settings | File
 			restoreCall++;
 			return result;
 			// Templates.
@@ -283,36 +479,36 @@ public class SessionDistributionTest {
 		@SuppressWarnings({"DefaultFileTemplate"})
 		@Override
 		public List<String> getDistributedSessionNames() throws SessionDistributorServiceException {
-			return super.getDistributedSessionNames();	//To change body of overridden methods use File | Settings | File Templates.
+			return super.getDistributedSessionNames();    //To change body of overridden methods use File | Settings | File Templates.
 		}
 
 		@Override
 		public void updateSessionUserId(String sessionName, String userId) throws SessionDistributorServiceException {
-			super.updateSessionUserId(sessionName, userId);	//To change body of overridden methods use File | Settings | File Templates.
+			super.updateSessionUserId(sessionName, userId);    //To change body of overridden methods use File | Settings | File Templates.
 			updateUserCall++;
 		}
 
 		@Override
 		public void updateSessionEditorId(String sessionName, String editorId) throws SessionDistributorServiceException {
-			super.updateSessionEditorId(sessionName, editorId);	//To change body of overridden methods use File | Settings | File Templates.
+			super.updateSessionEditorId(sessionName, editorId);    //To change body of overridden methods use File | Settings | File Templates.
 			updateEditorCall++;
 		}
 
 		@Override
 		public void addDistributedAttribute(String sessionName, DistributedSessionAttribute attribute) throws SessionDistributorServiceException {
-			super.addDistributedAttribute(sessionName, attribute);	//To change body of overridden methods use File | Settings | File Templates.
+			super.addDistributedAttribute(sessionName, attribute);    //To change body of overridden methods use File | Settings | File Templates.
 			addAttributeCall++;
 		}
 
 		@Override
 		public void removeDistributedAttribute(String sessionName, String attributeName) throws SessionDistributorServiceException {
-			super.removeDistributedAttribute(sessionName, attributeName);	//To change body of overridden methods use File | Settings | File Templates.
+			super.removeDistributedAttribute(sessionName, attributeName);    //To change body of overridden methods use File | Settings | File Templates.
 			removeAttributeCall++;
 		}
 
 		@Override
 		public void keepDistributedSessionAlive(String sessionName) throws SessionDistributorServiceException {
-			super.keepDistributedSessionAlive(sessionName);	//To change body of overridden methods use File | Settings | File Templates.
+			super.keepDistributedSessionAlive(sessionName);    //To change body of overridden methods use File | Settings | File Templates.
 			keepAliveCall++;
 		}
 	}
