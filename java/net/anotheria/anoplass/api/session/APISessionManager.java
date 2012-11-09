@@ -16,7 +16,7 @@ import net.anotheria.anoprise.sessiondistributor.events.SessionDistributorEvent;
 import net.anotheria.anoprise.sessiondistributor.events.SessionRestoreEvent;
 import net.anotheria.util.IdCodeGenerator;
 import net.anotheria.util.StringUtils;
-import net.java.dev.moskito.util.storage.Storage;
+import net.java.dev.moskito.core.util.storage.Storage;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
