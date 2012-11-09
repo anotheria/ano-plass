@@ -7,6 +7,8 @@ import net.anotheria.util.IdCodeGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 
@@ -62,6 +64,27 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		APISessionDistributionHelper.setSessionDistributorService(service);
 		APICallContext.getCallContext().reset();
 
+		//Reiniting integration!  To run  each tes method  separately!
+		try {
+			Method method = null;
+			for (Method m : APISessionManager.class.getDeclaredMethods()) {
+				if (m.getName().equals("configureIntegration")) {
+					method = m;
+					break;
+				}
+			}
+
+			if (method != null) {
+				method.setAccessible(true);
+				method.invoke(APISessionManager.getInstance());
+			}
+		} catch (InvocationTargetException e) {
+			Assert.fail(e.getMessage());
+		} catch (IllegalAccessException e) {
+			Assert.fail(e.getMessage());
+		}
+
+
 	}
 
 	@Test
@@ -69,7 +92,16 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		String referenceId = "h3llkaTest";
 
 		APISessionManager manager = APISessionManager.getInstance();
+
+
+		for (String sessionId : manager.getSessionIds()) {
+			manager.destroyAPISessionBySessionId(sessionId);
+		}
+
 		try {
+
+			Assert.assertTrue("There are SOME sessions!!! count=[" + manager.getSessionCount() + "]", manager.getSessionCount() == 0);
+
 			//created session
 			APISessionImpl session = APISessionImpl.class.cast(manager.createSession(referenceId));
 
@@ -484,7 +516,11 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 		@Override
 		public void updateSessionUserId(String sessionName, String userId) throws SessionDistributorServiceException {
-			super.updateSessionUserId(sessionName, userId);    //To change body of overridden methods use File | Settings | File Templates.
+			try {
+				super.updateSessionUserId(sessionName, userId);    //To change body of overridden methods use File | Settings | File Templates.
+			} catch (Exception e) {
+				//ignore
+			}
 			updateUserCall++;
 		}
 
