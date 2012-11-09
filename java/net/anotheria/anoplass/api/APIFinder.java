@@ -20,7 +20,7 @@ import java.util.Map;
  * @author lrosenberg
  *
  */
-public class APIFinder {
+public final class APIFinder {
 	
 	/**
 	 * Storage for API instances.
@@ -64,8 +64,6 @@ public class APIFinder {
 	 * 
 	 * @param identifier string clazz name
 	 * @return api
-	 * @throws NoAPIFactoryException if factory for api creation not founded
-	 * @throws APIInitException on API init failure
 	 */
 	@SuppressWarnings("unchecked")
 	public static API findAPI(String identifier) throws APIException {
@@ -81,10 +79,8 @@ public class APIFinder {
 	 * @param <T> the API class.
 	 * @param identifier T.class.
 	 * @return an implementation of T.
-	 * @throws NoAPIFactoryException when factory not founded for some API
-	 * @throws APIInitException on API init failure
 	 */
-	public static<T  extends API> T findAPI(Class<T> identifier) {
+	public static <T  extends API> T findAPI(Class<T> identifier) {
 		log.debug("find api: "+identifier);
 		@SuppressWarnings("unchecked")
 		T loaded = (T) apis.get(identifier);
@@ -120,7 +116,7 @@ public class APIFinder {
 	 * @return created API
 	 * @throws NoAPIFactoryException if factory for API creation not founded
 	 */
-	private synchronized static<T extends API> T createAPI(Class<T> identifier) throws NoAPIFactoryException {
+	private static synchronized <T extends API> T createAPI(Class<T> identifier) throws NoAPIFactoryException {
 		@SuppressWarnings("unchecked")
 		APIFactory<T> factory = (APIFactory<T>)factories.get(identifier);
 		if (factory==null){
@@ -281,4 +277,6 @@ public class APIFinder {
     public static void enableSecurity(){
     	securityEnabled = true;
     }
+
+	private APIFinder(){ /* disable constructor */}
 }
