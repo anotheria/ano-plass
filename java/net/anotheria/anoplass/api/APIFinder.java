@@ -4,10 +4,10 @@ import net.anotheria.anoplass.api.mock.APIMaskImpl;
 import net.anotheria.anoplass.api.mock.APIMockImpl;
 import net.anotheria.anoplass.api.mock.MaskMethodRegistry;
 import net.anotheria.anoplass.api.mock.MockMethodRegistry;
-import net.java.dev.moskito.core.dynamic.MoskitoInvokationProxy;
-import net.java.dev.moskito.core.predefined.ServiceStatsCallHandler;
-import net.java.dev.moskito.core.predefined.ServiceStatsCallHandlerWithCallSysout;
-import net.java.dev.moskito.core.predefined.ServiceStatsFactory;
+import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
+import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
+import net.anotheria.moskito.core.predefined.ServiceStatsCallHandlerWithCallSysout;
+import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;

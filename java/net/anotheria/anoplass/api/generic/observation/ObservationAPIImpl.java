@@ -2,7 +2,7 @@ package net.anotheria.anoplass.api.generic.observation;
 
 import net.anotheria.anoplass.api.APIInitException;
 import net.anotheria.anoplass.api.AbstractAPIImpl;
-import net.java.dev.moskito.core.util.storage.Storage;
+import net.anotheria.moskito.core.util.storage.Storage;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
