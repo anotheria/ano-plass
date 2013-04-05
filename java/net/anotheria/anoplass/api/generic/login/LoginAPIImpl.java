@@ -20,7 +20,7 @@ import net.anotheria.util.StringUtils;
  *
  */
 public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
-	
+
 	/**
 	 * Login preprocessors. Each of them get called before each login. Can cancel a login.
 	 */
@@ -41,16 +41,16 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	 * Link to the ObservationAPI. Used to announce changes in user logged in state.
 	 */
 	private ObservationAPI observationAPI;
-	
+
 	@Override public void init() throws APIInitException {
 		super.init();
-		
+
 		loginPreProcessors = new CopyOnWriteArrayList<LoginPreProcessor>();
 		loginPostProcessors = new CopyOnWriteArrayList<LoginPostProcessor>();
-		
+
 		logoutPreProcessors = new CopyOnWriteArrayList<LogoutPreProcessor>();
 		logoutPostProcessors = new CopyOnWriteArrayList<LogoutPostProcessor>();
-		
+
 		addLogoutPostprocessor(new SessionCleanupOnLogoutProcessor());
 		observationAPI = APIFinder.findAPI(ObservationAPI.class);
 
@@ -61,7 +61,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	 */
 	@Override public void addLoginPostprocessor(LoginPostProcessor postProcessor) {
 		loginPostProcessors.add(postProcessor);
-		
+
 	}
 
 	/**
@@ -69,13 +69,13 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	 */
 	@Override public void addLoginPreprocessor(LoginPreProcessor preProcessor) {
 		loginPreProcessors.add(preProcessor);
-		
+
 	}
 
 	@Override public void logInUser(String userId) throws APIException {
 		logInUser(userId, false);
 	}
-	
+
 	@Override public void stealthLogInUser(String userId) throws APIException {
 		logInUser(userId, true);
 	}
@@ -83,10 +83,10 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	private void logInUser(String userId, boolean stealth) throws APIException {
 		if (!stealth)
 			callLoginPreprocessors(userId);
-		
+
 		((APISessionImpl)getSession()).setCurrentUserId(userId);
 		getCallContext().setCurrentUserId(userId);
-		
+
 		if (!stealth)
 			callLoginPostprocessors(userId);
 
@@ -98,24 +98,29 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 		try{
 			String userId = getCallContext().getCurrentUserId();
 			callLogoutPreprocessors(userId);
-			
+
+
 			((APISessionImpl)getSession()).setCurrentUserId(null);
 			getCallContext().setCurrentUserId(null);
-			
+
 			callLogoutPostprocessors(userId);
-			
+
 			observationAPI.fireSubjectUpdateForCurrentUser(ObservationSubjects.LOGOUT, this.getClass().getName());
-		}catch(NoLoggedInUserException ignored){
+
+            //firing additional event with user id... case after  login we won't ever find out who was logged out.
+            if (!StringUtils.isEmpty(userId))
+                observationAPI.fireSubjectUpdateForUser(ObservationSubjects.LOGOUT, this.getClass().getName(), userId);
+        }catch(NoLoggedInUserException ignored){
 			log.trace("user not logged in",ignored);
 		}
 	}
-	
+
 	@Override public String getLogedUserId() throws NoLoggedInUserException {
 		if(!isLogedIn())
 			throw new NoLoggedInUserException("No loged in users!");
 		return getCallContext().getCurrentUserId();
 	}
-	
+
 	@Override public boolean isLogedIn() {
 		//try{
 			return !StringUtils.isEmpty(getCallContext().getCurrentUserId());
@@ -130,9 +135,9 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 
 	@Override public void addLogoutPreprocessor(LogoutPreProcessor preProcessor) {
 		logoutPreProcessors.add(preProcessor);
-		
+
 	}
-	
+
 	//////////
 	/**
 	 * Calls all login preprocessors.
@@ -150,7 +155,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 			}
 		}
 	}
-	
+
 	/**
 	 * Calls all login postprocessors.
 	 * @param userId
@@ -194,10 +199,10 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 				log.error("Exception in logoutpostprocessor: "+p,e);
 			}
 		}
-		
+
 	}
 
-	
-	
+
+
 
 }

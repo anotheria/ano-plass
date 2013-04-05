@@ -12,7 +12,12 @@ import net.anotheria.util.concurrency.IdBasedLockManager;
 import net.anotheria.util.concurrency.SafeIdBasedLockManager;
 import org.apache.log4j.Logger;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +67,7 @@ public class APIFilter implements Filter {
 	/**
 	 * Id based lock manager instance.
 	 */
-	private IdBasedLockManager lockManager;
+	private IdBasedLockManager<String> lockManager;
 
 	/**
 	 * APISessionDistributionConfig instance.
@@ -147,7 +152,7 @@ public class APIFilter implements Filter {
 	public void init(FilterConfig config) throws ServletException {
 		activityAPI = APIFinder.findAPI(ActivityAPI.class);
 		configuration = APISessionDistributionConfig.getInstance();
-		lockManager = new SafeIdBasedLockManager();
+		lockManager = new SafeIdBasedLockManager<String>();
 	}
 
 	/**
@@ -166,7 +171,7 @@ public class APIFilter implements Filter {
 		if (session == null)
 			throw new ServletException("Could not obtain HttpSession!");
 
-		IdBasedLock lock = lockManager.obtainLock(session.getId());
+		IdBasedLock<String> lock = lockManager.obtainLock(session.getId());
 		lock.lock();
 		try {
 			// preparing required data for call
