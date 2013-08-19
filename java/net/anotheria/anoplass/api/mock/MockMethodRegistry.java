@@ -1,12 +1,13 @@
 package net.anotheria.anoplass.api.mock;
 
+import net.anotheria.anoplass.api.API;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.anotheria.anoplass.api.API;
-
-import org.apache.log4j.Logger;
 /**
  * A registry for mocking methods.
  * @author another
@@ -16,7 +17,7 @@ public class MockMethodRegistry {
 	/**
 	 * Logger.
 	 */
-	private static Logger log = Logger.getLogger(MockMethodRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(MockMethodRegistry.class);
 	/**
 	 * MockMethodRegistry 'methods'. Actually holder for Mocked methods.
 	 */
@@ -54,7 +55,7 @@ public class MockMethodRegistry {
 			Method init = API.class.getMethod("init");
 			addMockMethod(init, new NoopMockMethod());
 		}catch(NoSuchMethodException e){
-			log.fatal("Someone changed the api signature!",e );
+			log.error("Someone changed the api signature!", e);
 		}
 
 	}

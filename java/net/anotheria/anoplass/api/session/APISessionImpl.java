@@ -1,10 +1,16 @@
 package net.anotheria.anoplass.api.session;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -69,7 +75,7 @@ public class APISessionImpl implements APISession, Serializable {
 	 * Static init block.
 	 */
 	static {
-		log = Logger.getLogger(APISessionImpl.class);
+		log = LoggerFactory.getLogger(APISessionImpl.class);
 	}
 
 	/**

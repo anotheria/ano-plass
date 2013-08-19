@@ -1,15 +1,19 @@
 package net.anotheria.anoplass.api.listener;
 
+import net.anotheria.anoplass.api.session.APISessionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import net.anotheria.anoplass.api.session.APISessionManager;
-
-import org.apache.log4j.Logger;
 
 public class APISessionListener implements HttpSessionListener{
 
-	private static Logger log = Logger.getLogger(APISessionListener.class);
+    /**
+     * {@link Logger} logger.
+     */
+	private static Logger log = LoggerFactory.getLogger(APISessionListener.class);
 
 	public void sessionCreated(HttpSessionEvent event) {
 		

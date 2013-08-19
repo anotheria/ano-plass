@@ -8,7 +8,8 @@ import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandlerWithCallSysout;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public final class APIFinder {
 	private static Logger log;
 	
 	static{
-		log = Logger.getLogger(APIFinder.class);
+		log = LoggerFactory.getLogger(APIFinder.class);
 		//BasicConfigurator.configure();
 		init();
 	}

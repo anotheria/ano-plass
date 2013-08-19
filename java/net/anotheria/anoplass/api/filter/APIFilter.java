@@ -10,7 +10,8 @@ import net.anotheria.util.StringUtils;
 import net.anotheria.util.concurrency.IdBasedLock;
 import net.anotheria.util.concurrency.IdBasedLockManager;
 import net.anotheria.util.concurrency.SafeIdBasedLockManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -63,7 +64,7 @@ public class APIFilter implements Filter {
 	/**
 	 * Lo4j logger.
 	 */
-	private static final Logger LOG = Logger.getLogger(APIFilter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(APIFilter.class);
 	/**
 	 * Id based lock manager instance.
 	 */

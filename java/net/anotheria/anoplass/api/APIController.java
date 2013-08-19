@@ -1,8 +1,10 @@
 package net.anotheria.anoplass.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 
 /**
  * APIController. Just help  to manage init && deInit on  app startUp or shutdown.
@@ -12,12 +14,12 @@ public class APIController {
 	/**
 	 * Logger.
 	 */
-	private static Logger	log;
+	private static Logger log;
 	/**
 	 * Logger init.
 	 */
 	static {
-		log = Logger.getLogger(APIController.class);
+		log = LoggerFactory.getLogger(APIController.class);
 	}
 
 	/**

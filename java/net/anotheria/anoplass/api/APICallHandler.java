@@ -1,7 +1,12 @@
 package net.anotheria.anoplass.api;
 
-import net.anotheria.anoplass.api.generic.security.*;
-import org.apache.log4j.Logger;
+import net.anotheria.anoplass.api.generic.security.EnsurePermitted;
+import net.anotheria.anoplass.api.generic.security.InterceptIfNotPermitted;
+import net.anotheria.anoplass.api.generic.security.SecurityAPI;
+import net.anotheria.anoplass.api.generic.security.SecurityInvocationHandler;
+import net.anotheria.anoplass.api.generic.security.SecurityObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -34,7 +39,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 	/**
 	 * Logger.
 	 */
-	private static Logger log = Logger.getLogger(APICallHandler.class);
+	private static Logger log = LoggerFactory.getLogger(APICallHandler.class);
 
 	/**
 	 * Creates a new handler for the given implementation.

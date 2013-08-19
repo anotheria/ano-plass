@@ -1,13 +1,14 @@
 package net.anotheria.anoplass.api.mock;
 
+import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import net.anotheria.anoplass.api.API;
-import net.anotheria.anoplass.api.APIException;
-
-import org.apache.log4j.Logger;
 /**
  * This is an api implementation for on the fly api construction for mocking.
  * For each method called on this object it performs a lookup in the MockAPIRegistry for the corresponding method impl. This object is used to construct an api on the fly. 
@@ -21,7 +22,7 @@ public class APIMockImpl<T extends API> implements API, InvocationHandler{
 	/**
 	 * Logger.
 	 */
-	private static Logger log = Logger.getLogger(APIMockImpl.class);
+	private static Logger log = LoggerFactory.getLogger(APIMockImpl.class);
 	/**
 	 * Creates a new mocked api.
 	 * @param aMockedClazz

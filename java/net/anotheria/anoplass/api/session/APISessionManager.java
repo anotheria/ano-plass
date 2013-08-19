@@ -17,7 +17,8 @@ import net.anotheria.anoprise.sessiondistributor.events.SessionRestoreEvent;
 import net.anotheria.moskito.core.util.storage.Storage;
 import net.anotheria.util.IdCodeGenerator;
 import net.anotheria.util.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class APISessionManager {
 	/**
 	 * {@link Logger} for queuedMultiProcessor.
 	 */
-	private static final Logger MULTI_PROCESSOR_LOGGER = Logger.getLogger("APISessionManager_MultiProcessor_LOGGER");
+	private static final Logger MULTI_PROCESSOR_LOGGER = LoggerFactory.getLogger("APISessionManager_MultiProcessor_LOGGER");
 	/**
 	 * Singleton instance of the manager.
 	 */
@@ -72,7 +73,7 @@ public class APISessionManager {
 	/**
 	 * Logger.
 	 */
-	protected Logger log = Logger.getLogger(this.getClass());
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * APISessionManager 'distributionConfig'.
@@ -724,7 +725,7 @@ public class APISessionManager {
 		/**
 		 * Logger.
 		 */
-		private final Logger log = Logger.getLogger(SessionDistributorConsumer.class);
+		private final Logger log = LoggerFactory.getLogger(SessionDistributorConsumer.class);
 
 		@Override
 		public void push(Event event) {

@@ -1,10 +1,10 @@
 package net.anotheria.anoplass.api.session;
 
 import net.anotheria.util.TimeUnit;
-import org.apache.log4j.Logger;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
+import org.slf4j.LoggerFactory;
 
 /**
  * APISessionDistribution config.
@@ -120,7 +120,7 @@ public final class APISessionDistributionConfig {
 			try {
 				ConfigurationManager.INSTANCE.configure(configuration);
 			} catch (Exception e) {
-				Logger.getLogger(APISessionDistributionConfig.class).error("Configuration failure.", e);
+                LoggerFactory.getLogger(APISessionDistributionConfig.class).error("Configuration failure.", e);
 			}
 
 		}

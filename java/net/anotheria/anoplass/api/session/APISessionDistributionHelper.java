@@ -1,9 +1,15 @@
 package net.anotheria.anoplass.api.session;
 
-import net.anotheria.anoprise.sessiondistributor.*;
+import net.anotheria.anoprise.sessiondistributor.DistributedSessionAttribute;
+import net.anotheria.anoprise.sessiondistributor.DistributedSessionVO;
+import net.anotheria.anoprise.sessiondistributor.NoSuchDistributedSessionException;
+import net.anotheria.anoprise.sessiondistributor.SessionDistributorService;
+import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
+import net.anotheria.anoprise.sessiondistributor.SessionsCountLimitReachedSessionDistributorServiceException;
 import net.anotheria.net.util.ByteArraySerializer;
-import org.apache.log4j.Logger;
 import org.distributeme.core.exception.DistributemeRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -18,9 +24,9 @@ public final class APISessionDistributionHelper {
 	 */
 	private static SessionDistributorService distributorService;
 	/**
-	 * Log4j instance.
+	 * {@link Logger}.
 	 */
-	private static final Logger LOG = Logger.getLogger(APISessionDistributionHelper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(APISessionDistributionHelper.class);
 
 	/**
 	 * Set method for SessionDistributor service.
@@ -57,7 +63,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") failed. [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("", dMeR);
 			//Continue work in local mode!
 			return null;
 		}
@@ -109,7 +115,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("",dMeR);
 		}
 	}
 
@@ -132,7 +138,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("",dMeR);
 		}
 	}
 
@@ -155,7 +161,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("",dMeR);
 		}
 	}
 
@@ -178,7 +184,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("",dMeR);
 		}
 	}
 
@@ -201,7 +207,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("keepSessionAliveCall(" + sessionName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("",dMeR);
 		}
 	}
 
@@ -233,7 +239,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("createSession(" + aSessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("", dMeR);
 			//Defaults! Continue local work!
 			return aSessionId;
 		}
@@ -259,7 +265,7 @@ public final class APISessionDistributionHelper {
 			//transport layer runtime!!
 			LOG.warn("removeDistributedSession(" + aPISessionId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
-				LOG.debug(dMeR);
+				LOG.debug("", dMeR);
 		}
 
 	}

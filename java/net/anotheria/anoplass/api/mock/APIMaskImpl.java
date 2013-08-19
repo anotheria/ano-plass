@@ -1,15 +1,16 @@
 package net.anotheria.anoplass.api.mock;
 
+import net.anotheria.anoplass.api.API;
+import net.anotheria.anoplass.api.APIFinder;
+import net.anotheria.anoplass.api.APIInitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import net.anotheria.anoplass.api.API;
-import net.anotheria.anoplass.api.APIFinder;
-import net.anotheria.anoplass.api.APIInitException;
-
-import org.apache.log4j.Logger;
 
 /**
  * This is a masking api implementation which is used as wrapper to an underlying api implementation and allows masking of methods.
@@ -29,7 +30,7 @@ public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 	/**
 	 * Logger.
 	 */
-	private static Logger log = Logger.getLogger(APIMockImpl.class);
+	private static Logger log = LoggerFactory.getLogger(APIMockImpl.class);
 	/**
 	 * Created a new masked api.
 	 * @param aMaskedInstance

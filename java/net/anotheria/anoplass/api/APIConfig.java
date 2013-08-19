@@ -1,19 +1,19 @@
 package net.anotheria.anoplass.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.anotheria.anoplass.api.activity.ActivityAPI;
 import net.anotheria.anoplass.api.activity.ActivityAPIFactory;
 import net.anotheria.anoplass.api.generic.login.LoginAPI;
 import net.anotheria.anoplass.api.generic.login.LoginAPIFactory;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
 import net.anotheria.anoplass.api.generic.observation.ObservationAPIFactory;
-
-import org.apache.log4j.Logger;
 import org.configureme.ConfigurationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * APIConfig.
@@ -46,7 +46,10 @@ public class APIConfig {
 	 */
 	private static APIConfigurable configurable;
 
-	private static Logger log = Logger.getLogger(APIConfig.class);
+    /**
+     * {@link Logger} logger.
+     */
+	private static Logger log = LoggerFactory.getLogger(APIConfig.class);
 	
 	/**
 	 * Initialisation.

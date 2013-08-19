@@ -1,6 +1,8 @@
 package net.anotheria.anoplass.api.generic.observation;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Debugging utility which simply logs out all events it receives.
  * @author lrosenberg
@@ -23,7 +25,7 @@ public class DebugObserver implements Observer{
 	 * @param event event for debugging.
 	 */
 	private void debugOutEvent(String method, SubjectUpdateEvent event){
-		Logger log = Logger.getLogger(this.getClass());
+		Logger log = LoggerFactory.getLogger(this.getClass());
 		log.debug("Subject Fired: "+method+", event: "+event);
 	}
 	

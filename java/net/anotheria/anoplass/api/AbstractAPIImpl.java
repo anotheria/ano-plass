@@ -1,13 +1,14 @@
 package net.anotheria.anoplass.api;
 
-import java.util.Locale;
-
 import net.anotheria.anoplass.api.session.APISession;
 import net.anotheria.anoplass.api.session.PolicyHelper;
 import net.anotheria.anoplass.api.validation.ValidationError;
 import net.anotheria.anoplass.api.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
+import java.util.Locale;
+
 
 /**
  * A base class for API implementation which provides basic functionality. One of the things this class is providing are the so-called 'private' attributes.
@@ -49,7 +50,7 @@ public abstract class AbstractAPIImpl implements API{
 	 * Protected constructor.
 	 */
 	protected AbstractAPIImpl(){
-		log = Logger.getLogger(this.getClass());
+		log = LoggerFactory.getLogger(this.getClass());
 		apiConfig = new APIConfig();
 	}
 
