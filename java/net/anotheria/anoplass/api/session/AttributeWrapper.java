@@ -81,7 +81,11 @@ public class AttributeWrapper implements Serializable {
 	}
 	
 	public boolean isExpiring(){
-		return (policy & APISession.POLICY_AUTOEXPIRE) != 0;
+		return (policy & APISession.POLICY_AUTOEXPIRE) == APISession.POLICY_AUTOEXPIRE;
+	}
+
+	public boolean isFlashing(){
+		return (policy & APISession.POLICY_FLASH) == APISession.POLICY_FLASH;
 	}
 
     public long getExpiryTimestamp() {

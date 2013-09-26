@@ -119,6 +119,8 @@ public final class APISessionDistributionConfig {
 			configuration = new APISessionDistributionConfig();
 			try {
 				ConfigurationManager.INSTANCE.configure(configuration);
+			}catch(IllegalArgumentException e){
+				LoggerFactory.getLogger(APISessionDistributionConfig.class).warn("SessionDistribution is not configured, check ano-plass-api-session-distribution.json");
 			} catch (Exception e) {
                 LoggerFactory.getLogger(APISessionDistributionConfig.class).error("Configuration failure.", e);
 			}

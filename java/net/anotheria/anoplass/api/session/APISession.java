@@ -57,7 +57,12 @@ public interface APISession {
 	/**
 	 * Those attributes are persistent in cookies.
 	 */
-	public int POLICE_COOKIE_PERSISTENT = 64;
+	public int POLICY_COOKIE_PERSISTENT = 64;
+
+	/**
+	 * Flashing attributes are used exactly one time, after first usage they disappear from session.
+	 */
+	public int POLICY_FLASH = 128;
 	
 		/**
 	 * Default attribute policy.

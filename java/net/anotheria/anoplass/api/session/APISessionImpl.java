@@ -93,6 +93,9 @@ public class APISessionImpl implements APISession, Serializable {
 	@Override
 	public Object getAttribute(String key) {
 		AttributeWrapper wrapper = attributes.get(key);
+		if (wrapper!=null && wrapper.isFlashing()){
+			removeAttribute(key);
+		}
 		return wrapper == null ? null : wrapper.getValue();
 	}
 
