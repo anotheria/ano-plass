@@ -132,4 +132,9 @@ public class APIConfig {
 	public static boolean associateSessions(){
 		return configurable.isAssociateSessions();
 	}
+
+	public static boolean enableAPIMonitoring(){
+		return configurable.isEnableApiMonitoring();
+	}
+
 }

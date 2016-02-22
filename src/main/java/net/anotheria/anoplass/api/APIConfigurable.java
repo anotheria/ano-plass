@@ -16,7 +16,12 @@ public class APIConfigurable {
 	/**
 	 * If false the sessions won't be tied to http sessions.
 	 */
-	@Configure private boolean associateSessions = false;  
+	@Configure private boolean associateSessions = false;
+
+	/**
+	 * If api's should be monitored. Default true.
+	 */
+	@Configure private boolean enableApiMonitoring = true;
 	
 	/**
 	 * Constructor.
@@ -40,4 +45,11 @@ public class APIConfigurable {
 		this.associateSessions = associateSessions;
 	}
 
+	public boolean isEnableApiMonitoring() {
+		return enableApiMonitoring;
+	}
+
+	public void setEnableApiMonitoring(boolean enableApiMonitoring) {
+		this.enableApiMonitoring = enableApiMonitoring;
+	}
 }

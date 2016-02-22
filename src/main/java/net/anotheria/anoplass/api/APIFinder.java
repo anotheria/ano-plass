@@ -140,7 +140,8 @@ public final class APIFinder {
 		}//masking end
 		
 		
-		//newAPI.init();
+		if (!APIConfig.enableAPIMonitoring())
+			return newAPI;
 		
 		Class<? extends API>[] interfaces = null;
 		try{
