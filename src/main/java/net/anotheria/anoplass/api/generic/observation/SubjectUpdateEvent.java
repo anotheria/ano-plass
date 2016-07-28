@@ -87,9 +87,9 @@ public class SubjectUpdateEvent {
 
 	@Override
 	public String toString() {
-		StringBuilder b = new StringBuilder("S: ").append(getSubject()).append(", O: ").append(getOriginator());
+        StringBuilder b = new StringBuilder("S: ").append(subject).append(", O: ").append(originator);
 		b.append(", U: ").append(targetUserId == null ? "current" : targetUserId);
-		b.append(", T: ").append(getTimestamp()).append(", D: ").append(new Date(getTimestamp()));
+        b.append(", T: ").append(timestamp).append(", D: ").append(new Date(timestamp));
 		return b.toString();
 	}
 

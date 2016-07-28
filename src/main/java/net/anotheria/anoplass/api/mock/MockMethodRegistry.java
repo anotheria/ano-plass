@@ -21,7 +21,7 @@ public class MockMethodRegistry {
 	/**
 	 * MockMethodRegistry 'methods'. Actually holder for Mocked methods.
 	 */
-	private static Map<Method, APIMockMethod> methods = new ConcurrentHashMap<Method, APIMockMethod>();
+	private static Map<Method, APIMockMethod> methods = new ConcurrentHashMap<>();
 	/**
 	 * init.
 	 */

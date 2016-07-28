@@ -39,7 +39,6 @@ public class APIMockImpl<T extends API> implements API, InvocationHandler{
 	public void init() {
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T createAPIProxy(){
 		return (T)Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{mockedClazz}, this);
 	}

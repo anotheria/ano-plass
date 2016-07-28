@@ -62,7 +62,7 @@ public class PagingControl {
 		currentPage = aCurrentPage;
 		elementsPerPage = anElementsPerPage;
 		numberOfElements = aNumberOfElements;
-		elements = new ArrayList<PagingElement>();
+		elements = new ArrayList<>();
 		moreHitsAvailable = aMoreHitsAvailable;
 		setup();
 	}
@@ -80,11 +80,11 @@ public class PagingControl {
 		int numberOfPages = getNumberOfPages();
 		for (int i=1; i<=numberOfPages; i++){
 			if (i==currentPage){
-				elements.add(new PagingCurrentPage(""+i));
+				elements.add(new PagingCurrentPage(String.valueOf(i)));
 			}else{
 				boolean addLink = numberOfPages <= 7 ? true : addLink(i, currentPage, numberOfPages);
 				if (addLink)
-					elements.add(new PagingLink(""+i, i));
+					elements.add(new PagingLink(String.valueOf(i), i));
 				if (!addLink){
 					if (!elements.get(elements.size()-1).isSeparator())
 						elements.add(new Separator());

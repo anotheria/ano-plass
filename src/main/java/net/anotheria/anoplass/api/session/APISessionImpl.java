@@ -85,8 +85,8 @@ public class APISessionImpl implements APISession, Serializable {
 	 */
 	APISessionImpl(String anId) {
 		id = anId;
-		attributes = new ConcurrentHashMap<String, AttributeWrapper>();
-		actionScope = new ConcurrentHashMap<String, Object>();
+		attributes = new ConcurrentHashMap<>();
+		actionScope = new ConcurrentHashMap<>();
 	}
 
 
@@ -113,8 +113,9 @@ public class APISessionImpl implements APISession, Serializable {
 		AttributeWrapper wrapper = new AttributeWrapper(key, value, policy);
 		attributes.put(key, wrapper);
 		//calling SetAttribute
-		if (canDistribute(wrapper))
-			sessionCallBack.attributeSet(getId(), wrapper);
+		if (canDistribute(wrapper)) {
+            sessionCallBack.attributeSet(id, wrapper);
+        }
 
 	}
 
@@ -124,8 +125,9 @@ public class APISessionImpl implements APISession, Serializable {
 		AttributeWrapper wrapper = new AttributeWrapper(key, value, policy, expiresWhen);
 		attributes.put(key, wrapper);
 		//calling SetAttribute
-		if (canDistribute(wrapper))
-			sessionCallBack.attributeSet(getId(), wrapper);
+		if (canDistribute(wrapper)) {
+            sessionCallBack.attributeSet(id, wrapper);
+        }
 
 	}
 
@@ -139,13 +141,14 @@ public class APISessionImpl implements APISession, Serializable {
 		AttributeWrapper wrapper = attributes.get(key);
 		attributes.remove(key);
 		//calling remove Attribute
-		if (canDistribute(wrapper))
-			sessionCallBack.attributeRemoved(getId(), key);
+		if (canDistribute(wrapper)) {
+            sessionCallBack.attributeRemoved(id, key);
+        }
 	}
 
 	@Override
 	public List<String> getAttributeNames() {
-		return new ArrayList<String>(attributes.keySet());
+		return new ArrayList<>(attributes.keySet());
 	}
 
 	@Override
@@ -194,8 +197,9 @@ public class APISessionImpl implements APISession, Serializable {
 			if (!PolicyHelper.isPolicySet(w.getPolicy(), POLICY_SURVIVE_LOGOUT)) {
 				attributes.remove(w.getKey());
 				//remove attributes
-				if (canDistribute(w))
-					sessionCallBack.attributeRemoved(getId(), w.getKey());
+				if (canDistribute(w)) {
+                    sessionCallBack.attributeRemoved(id, w.getKey());
+                }
 			}
 		}
 	}
@@ -224,7 +228,7 @@ public class APISessionImpl implements APISession, Serializable {
 	 * @param out {@link PrintStream}
 	 */
 	public void dumpSession(PrintStream out) {
-		out.println("API Session with id: " + getId() + ", Attributes: " + attributes);
+        out.println("API Session with id: " + id + ", Attributes: " + attributes);
 		for (AttributeWrapper a : attributes.values())
 			System.out.println(a.getKey() + " = " + a.getValue());
 	}
@@ -235,7 +239,7 @@ public class APISessionImpl implements APISession, Serializable {
 	 * @param log {@link Logger}
 	 */
 	public void dumpSession(Logger log) {
-		log.debug("API Session with id: " + getId() + ", Attributes: " + attributes);
+        log.debug("API Session with id: " + id + ", Attributes: " + attributes);
 	}
 
 
@@ -267,8 +271,9 @@ public class APISessionImpl implements APISession, Serializable {
 		boolean isDifferent = isChanged(currentUserId, aCurrentUserId);
 		this.currentUserId = aCurrentUserId;
 		//current userId changed
-		if (sessionCallBack != null && isDifferent)
-			sessionCallBack.currentUserIdChanged(getId(), currentUserId);
+		if (sessionCallBack != null && isDifferent) {
+            sessionCallBack.currentUserIdChanged(id, currentUserId);
+        }
 
 	}
 
@@ -286,8 +291,9 @@ public class APISessionImpl implements APISession, Serializable {
 		boolean isDifferent = isChanged(currentEditorId, aCurrentEditorId);
 		this.currentEditorId = aCurrentEditorId;
 		//current editorId changed
-		if (sessionCallBack != null && isDifferent)
-			sessionCallBack.editorIdChanged(getId(), currentEditorId);
+		if (sessionCallBack != null && isDifferent) {
+            sessionCallBack.editorIdChanged(id, currentEditorId);
+        }
 	}
 
 	/**
@@ -360,7 +366,7 @@ public class APISessionImpl implements APISession, Serializable {
 	 * sending events on {@link APISession} changes.
 	 * Used only when distribution is enabled!
 	 */
-	protected static interface APISessionCallBack {
+	protected interface APISessionCallBack {
 		/**
 		 * Attribute added to session.
 		 *

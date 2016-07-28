@@ -45,11 +45,11 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	@Override public void init() throws APIInitException {
 		super.init();
 
-		loginPreProcessors = new CopyOnWriteArrayList<LoginPreProcessor>();
-		loginPostProcessors = new CopyOnWriteArrayList<LoginPostProcessor>();
+		loginPreProcessors = new CopyOnWriteArrayList<>();
+		loginPostProcessors = new CopyOnWriteArrayList<>();
 
-		logoutPreProcessors = new CopyOnWriteArrayList<LogoutPreProcessor>();
-		logoutPostProcessors = new CopyOnWriteArrayList<LogoutPostProcessor>();
+		logoutPreProcessors = new CopyOnWriteArrayList<>();
+		logoutPostProcessors = new CopyOnWriteArrayList<>();
 
 		addLogoutPostprocessor(new SessionCleanupOnLogoutProcessor());
 		observationAPI = APIFinder.findAPI(ObservationAPI.class);
@@ -142,7 +142,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	/**
 	 * Calls all login preprocessors.
 	 * @param userId user id
-	 * @throws net.anotheria.anoplass.api.APIException on errors
+	 * @throws APIException on errors
 	 */
 	private void callLoginPreprocessors(String userId) throws APIException{
 		for (LoginPreProcessor p : loginPreProcessors){

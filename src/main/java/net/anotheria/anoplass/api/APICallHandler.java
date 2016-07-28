@@ -48,7 +48,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 	 */
 	APICallHandler(T impl) {
 		target = impl;
-		methodMap = new ConcurrentHashMap<Method, APICallHandler.MethodInfo>();
+		methodMap = new ConcurrentHashMap<>();
 
 		if (!(impl instanceof SecurityAPI)) {
 			try {
@@ -113,11 +113,8 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 		try {
 			if (info.interceptIfNotPermitted())
 				info.securityHandler = info.interceptIfNotPermittedAnn.handler().newInstance();
-		} catch (InstantiationException e) {
-			log.error("getMethodInfo(" + m + ")", e);
-			throw new IllegalStateException("Configured security handler can't be instantiated " + info.interceptIfNotPermittedAnn.handler(), e);
-		} catch (IllegalAccessException e) {
-			log.error("getMethodInfo(" + m + ")", e);
+		} catch (InstantiationException | IllegalAccessException e) {
+			log.error("getMethodInfo(" + m + ')', e);
 			throw new IllegalStateException("Configured security handler can't be instantiated " + info.interceptIfNotPermittedAnn.handler(), e);
 		}
 		methodMap.put(m, info);
@@ -127,8 +124,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 
 	static <T extends API> T createProxy(Class<T> identifier, Class<? extends API>[] interfaces, T impl) {
 
-		APICallHandler<T> handler = new APICallHandler<T>(impl);
-		@SuppressWarnings("unchecked")
+		InvocationHandler handler = new APICallHandler<>(impl);
 		T ret = (T) Proxy.newProxyInstance(identifier.getClassLoader(), interfaces, handler);
 
 		return ret;
@@ -172,7 +168,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 
 		@Override
 		public String toString() {
-			return "MethodInfo " + method + " " + instanceNumber + " ensurePermitted: " + ensurePermitted() + ", interceptIfNotPermitted: " +
+			return "MethodInfo " + method + ' ' + instanceNumber + " ensurePermitted: " + ensurePermitted() + ", interceptIfNotPermitted: " +
 					interceptIfNotPermitted();
 		}
 

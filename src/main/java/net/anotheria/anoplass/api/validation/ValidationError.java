@@ -62,6 +62,6 @@ public class ValidationError {
 	}
 	
 	@Override public String toString(){
-		return "Field : "+getField()+", Key: "+getCmsKey()+", Message: "+getMessage();
+        return "Field : "+ field +", Key: "+ cmsKey +", Message: "+ message;
 	}
 }

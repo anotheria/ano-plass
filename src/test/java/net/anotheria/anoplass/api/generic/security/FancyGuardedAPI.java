@@ -13,7 +13,7 @@ public interface FancyGuardedAPI extends API{
 	@InterceptIfNotPermitted(action="foo", handler=ReverseResultString.class)
 	String sayHello();
 	
-	public static class MultiplyIntegerByTwo implements SecurityInvocationHandler{
+	class MultiplyIntegerByTwo implements SecurityInvocationHandler{
 
 		@Override
 		public <T extends API> Object getInterceptedValue(Method method,
@@ -23,7 +23,7 @@ public interface FancyGuardedAPI extends API{
 		}
 	}
 	
-	public static class ReverseResultString implements SecurityInvocationHandler{
+	class ReverseResultString implements SecurityInvocationHandler{
 
 		@Override
 		public <T extends API> Object getInterceptedValue(Method method,

@@ -28,14 +28,14 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	@Override public void fireSubjectUpdateForCurrentUser(String subject, String originator) {
 		log.debug("Firing update event for current user, originator: "+originator+" and subject: "+subject);
 		List<Observer> observers = subjects.get(subject);
-		if (observers == null || observers.size() == 0)
+		if (observers == null || observers.isEmpty())
 			return;
 		SubjectUpdateEvent event = new SubjectUpdateEvent(subject, originator);
 		for (Observer anObserver : observers){
 			try{
 				anObserver.notifySubjectUpdatedForCurrentUser(event);
 			}catch(Exception e){
-				log.warn("(Uncaught exception in observer: "+anObserver+" .notifySubjectUpdatedForCurrentUser("+event+")",e);
+				log.warn("(Uncaught exception in observer: "+anObserver+" .notifySubjectUpdatedForCurrentUser("+event+ ')',e);
 			}
 		}
 	}
@@ -43,14 +43,14 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	@Override public void fireSubjectUpdateForUser(String subject, String originator, String userId) {
 		log.debug("Firing update event for user "+userId+", originator: "+originator+" and subject: "+subject);
 		List<Observer> observers = subjects.get(subject);
-		if (observers == null || observers.size() == 0)
+		if (observers == null || observers.isEmpty())
 			return;
 		SubjectUpdateEvent event = new SubjectUpdateEvent(subject, originator, userId);
 		for (Observer anObserver : observers){
 			try{
 				anObserver.notifySubjectUpdatedForUser(event);
 			}catch(Exception e){
-				log.warn("(Uncaught exception in observer: "+anObserver+" .notifySubjectUpdatedForCurrentUser("+event+")",e);
+				log.warn("(Uncaught exception in observer: "+anObserver+" .notifySubjectUpdatedForCurrentUser("+event+ ')',e);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	private void unRegisterObserver(Observer observer, String subject) {
 		log.debug("Unregistering observer: "+observer+", for subject: "+subject);
 		List<Observer> observers = subjects.get(subject);
-		if (observers==null || observers.size() == 0)
+		if (observers==null || observers.isEmpty())
 			return;
 		observers.remove(observer);
 	}
@@ -90,7 +90,7 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 			synchronized (subjects) {
 				observers = subjects.get(subject);
 				if (observers==null){
-					observers = new CopyOnWriteArrayList<Observer>();
+					observers = new CopyOnWriteArrayList<>();
 					subjects.put(subject, observers);
 				}
 			}

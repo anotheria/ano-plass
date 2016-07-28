@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 public class MaskMethodRegistry {
-	private static Map<Method, APIMaskMethod<?>> methods = new ConcurrentHashMap<Method, APIMaskMethod<?>>();
+	private static Map<Method, APIMaskMethod<?>> methods = new ConcurrentHashMap<>();
 	/**
 	 * Adds a mask method.
 	 * @param m
@@ -29,6 +29,6 @@ public class MaskMethodRegistry {
 	}
 	
 	public static void reset(){
-		methods = new ConcurrentHashMap<Method, APIMaskMethod<?>>();
+		methods = new ConcurrentHashMap<>();
 	}
 }
