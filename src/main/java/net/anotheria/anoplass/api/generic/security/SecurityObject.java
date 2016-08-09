@@ -8,7 +8,7 @@ public class SecurityObject {
 	private Map<String, Object> attributes;
 
 	public SecurityObject(){
-		attributes = new HashMap<String, Object>();
+		attributes = new HashMap<>();
 	}
 	
 	public SecurityObject(String anId){

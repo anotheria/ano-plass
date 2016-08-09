@@ -57,7 +57,7 @@ public class APIConfig {
 	static {
 		servicePolicy = SERVICE_POLICY_DEFAULT;
 
-		aliasMap = new HashMap<Class<? extends API>, List<Class<? extends API>>>();
+		aliasMap = new HashMap<>();
 		// addAlias(ITargetingAPI.class, ITargetingTestingAPI.class);
 
 		configurable = new APIConfigurable();
@@ -68,12 +68,11 @@ public class APIConfig {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private static void addAlias(Class<? extends API> interfaceClass,
 			Class<? extends API> aliasClass) {
 		List<Class<? extends API>> aliases = aliasMap.get(interfaceClass);
 		if (aliases == null) {
-			aliases = new ArrayList<Class<? extends API>>();
+			aliases = new ArrayList<>();
 			aliasMap.put(interfaceClass, aliases);
 		}
 		aliases.add(aliasClass);
@@ -95,7 +94,7 @@ public class APIConfig {
 	 */
 	public static Map<Class<? extends API>, APIFactory<? extends API>> getFactories() {
 
-		Map<Class<? extends API>, APIFactory<? extends API>> ret = new HashMap<Class<? extends API>, APIFactory<? extends API>>();
+		Map<Class<? extends API>, APIFactory<? extends API>> ret = new HashMap<>();
 
 		ret.put(ActivityAPI.class, new ActivityAPIFactory());
 		ret.put(LoginAPI.class, new LoginAPIFactory());

@@ -4,6 +4,7 @@ import net.anotheria.anoplass.api.session.APISession;
 import net.anotheria.anoplass.api.validation.ValidationError;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +41,7 @@ public class APICallContext {
 	/**
 	 * A context wide scope. It exists only as long as the request lasts. 
 	 */
-	private Map<String, Object> scope = new HashMap<String, Object>();
+	private Map<String, Object> scope = new HashMap<>();
 	/**
 	 * Currently assigned userId if there is a logged in user.
 	 */
@@ -101,10 +102,10 @@ public class APICallContext {
 		currentLocale = DEFAULT_LOCALE;
 		currentServerName = "";
 		currentSession = null;
-		scope = new HashMap<String, Object>();
+		scope = new HashMap<>();
 		currentUserId = null;
 		currentEditorId = null;
-		validationErrors = new ArrayList<ValidationError>();
+		validationErrors = new ArrayList<>();
 	}
 
 	/**
@@ -169,8 +170,8 @@ public class APICallContext {
 	
 	
 	@Override public String toString(){
-		return "User: " +
-			(isMember() ? getCurrentUserId() : "guest")+
+        return "User: " +
+			(isMember() ? currentUserId : "guest")+
 			" session: "+currentSession+", locale: "+currentLocale+ ", serverName: "+currentServerName+
 			", scope contains "+scope.size()+" elements.";
 	}
@@ -211,7 +212,7 @@ public class APICallContext {
 	 * Adds some validation errors to the context.
 	 * @param errors a list of errors to add.
 	 */
-	public void addValidationErrors(List<ValidationError> errors){
+	public void addValidationErrors(Collection<ValidationError> errors){
 		validationErrors.addAll(errors);
 	}
 	
@@ -236,14 +237,14 @@ public class APICallContext {
 	 * @return boolean param
 	 */
 	public boolean hasValidationErrors(){
-		return validationErrors.size()>0;
+		return !validationErrors.isEmpty();
 	}
 
 	/**
 	 * Removes validationErrors.
 	 */
 	public void resetValidationErrors(){
-		validationErrors = new ArrayList<ValidationError>();
+		validationErrors = new ArrayList<>();
 	}
 
 	/**
@@ -273,10 +274,10 @@ public class APICallContext {
 		currentLocale = anotherContext.currentLocale;
 		currentSession = anotherContext.currentSession;
 		currentServerName = anotherContext.currentServerName;
-		scope = new HashMap<String, Object>(); scope.putAll(anotherContext.scope);
+		scope = new HashMap<>(); scope.putAll(anotherContext.scope);
 		currentUserId = anotherContext.currentUserId;
 		currentEditorId = anotherContext.currentEditorId;
-		validationErrors = new ArrayList<ValidationError>(); validationErrors.addAll(anotherContext.validationErrors);
+		validationErrors = new ArrayList<>(); validationErrors.addAll(anotherContext.validationErrors);
 	}
 	
 	

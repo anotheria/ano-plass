@@ -51,7 +51,6 @@ public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 		maskedInstance.init();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T createAPIProxy(){
 		return (T)Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{maskedClazz}, this);
 	}
@@ -83,7 +82,6 @@ public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 		if (log.isDebugEnabled())
 			log.debug("Called method: "+method+" in "+maskedClazz.getName());
 		
-		@SuppressWarnings("unchecked")
 		APIMaskMethod<T> meth = (APIMaskMethod<T>)MaskMethodRegistry.getMaskMethod(method);
 		if (meth==null){
 			//method not masked

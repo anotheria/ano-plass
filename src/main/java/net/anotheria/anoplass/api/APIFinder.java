@@ -66,7 +66,6 @@ public final class APIFinder {
 	 * @param identifier string clazz name
 	 * @return api
 	 */
-	@SuppressWarnings("unchecked")
 	public static API findAPI(String identifier) throws APIException {
 		try{
 			return findAPI((Class<? extends API>)Class.forName(identifier));
@@ -83,13 +82,11 @@ public final class APIFinder {
 	 */
 	public static <T  extends API> T findAPI(Class<T> identifier) {
 		log.debug("find api: "+identifier);
-		@SuppressWarnings("unchecked")
 		T loaded = (T) apis.get(identifier);
 		log.debug(" loaded: "+loaded);
 		if (loaded != null)
 			return loaded;
 		synchronized (apis) {
-			@SuppressWarnings("unchecked")
 			T doubleChecked = (T)apis.get(identifier);
 			log.debug("\t doubleChecked: "+doubleChecked);
 			if (doubleChecked!=null)
@@ -118,11 +115,10 @@ public final class APIFinder {
 	 * @throws NoAPIFactoryException if factory for API creation not founded
 	 */
 	private static synchronized <T extends API> T createAPI(Class<T> identifier) throws NoAPIFactoryException {
-		@SuppressWarnings("unchecked")
 		APIFactory<T> factory = (APIFactory<T>)factories.get(identifier);
 		if (factory==null){
 			//if no factory is configured but mocking is enabled we create a mock-api on the fly.
-			if (isMockingEnabled())
+            if (mockingEnabled)
 				return createMockAPI(identifier);
 			throw new NoAPIFactoryException(identifier.getName());
 		}
@@ -134,8 +130,8 @@ public final class APIFinder {
 		log.debug("\tcreated new instance: "+newAPI);
 		
 		//masking
-		if (isMaskingEnabled()){
-			APIMaskImpl<T> maskedAPI = new APIMaskImpl<T>(newAPI, identifier);
+        if (maskingEnabled){
+			APIMaskImpl<T> maskedAPI = new APIMaskImpl<>(newAPI, identifier);
 			newAPI = maskedAPI.createAPIProxy();
 		}//masking end
 		
@@ -146,15 +142,13 @@ public final class APIFinder {
 		Class<? extends API>[] interfaces = null;
 		try{
 			List<Class<? extends API>> aliases = APIConfig.getAliases(identifier);
-			if (aliases!=null && aliases.size()>0){
-				@SuppressWarnings("unchecked") 
+			if (aliases!=null && !aliases.isEmpty()){
 				Class<? extends API>[] interfacesWithAliases = (Class<? extends API>[]) new Class[aliases.size()+2];
 				interfaces = interfacesWithAliases;
 				int i = 2;
 				for (Class<? extends API> a : aliases)
 					interfaces[i++] = a;
 			}else{
-				@SuppressWarnings("unchecked") 
 				Class<? extends API>[] interfacesWithoutAliases = (Class<? extends API>[]) new Class[2];
 				interfaces = interfacesWithoutAliases;
 			}
@@ -171,18 +165,18 @@ public final class APIFinder {
 				"default",
 				interfaces
 			);
-			@SuppressWarnings("unchecked")T ret = (T) proxy.createProxy(); 
+			T ret = (T) proxy.createProxy();
 			return APICallHandler.createProxy(identifier, interfaces, ret);
 		}catch(Throwable t){
 			log.debug("THROWABLE creating "+identifier,t);			
 			return APICallHandler.createProxy(identifier, interfaces, newAPI);
 		}finally{
-			log.debug("------ END creation API "+identifier+"\n");
+			log.debug("------ END creation API "+identifier+ '\n');
 		}
 	}
 	
 	private static void init(){
-		apis = new HashMap<Class<? extends API>, API>();
+		apis = new HashMap<>();
 		//das ist die stelle zum customizen
 		factories = APIConfig.getFactories();
 	}
@@ -206,7 +200,7 @@ public final class APIFinder {
 	}
 
 	private static<T extends API> T createMockAPI(Class<T> identifier){
-		APIMockImpl<T> mock = new APIMockImpl<T>(identifier);
+		APIMockImpl<T> mock = new APIMockImpl<>(identifier);
 		return mock.createAPIProxy();
 	
 	}
@@ -248,7 +242,7 @@ public final class APIFinder {
 	 * @return boolean value
 	 */
 	public static boolean isInTestingMode(){
-		return isMockingEnabled() || isMaskingEnabled();
+        return mockingEnabled || maskingEnabled;
 	}
 
     /**

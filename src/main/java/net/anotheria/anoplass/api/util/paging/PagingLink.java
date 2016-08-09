@@ -20,7 +20,7 @@ public class PagingLink extends PagingElement{
 	 */
 	public PagingLink(String aCaption, int pageNumber){
 		caption = aCaption;
-		pagingParameter = ""+pageNumber;
+		pagingParameter = String.valueOf(pageNumber);
 	}
 
 	@Override

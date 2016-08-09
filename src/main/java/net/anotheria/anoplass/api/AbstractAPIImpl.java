@@ -27,7 +27,7 @@ public abstract class AbstractAPIImpl implements API{
 	/**
 	 * The attribute prefix which is used on all attributes put via setAttributeInSession... methods to prevent name collision.
 	 */
-	private final String ATTRIBUTE_PREFIX = getClass().getName()+".";
+	private final String ATTRIBUTE_PREFIX = getClass().getName()+ '.';
 	/**
 	 * Instance of the config.
 	 */
@@ -138,7 +138,7 @@ public abstract class AbstractAPIImpl implements API{
 	 * @return attribute name
 	 */
 	protected String getPrivateAttributeName(String name){
-		return new StringBuilder(getSessionAttributePrefix()).append(name).toString();
+        return ATTRIBUTE_PREFIX + name;
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public abstract class AbstractAPIImpl implements API{
 	 */
 	protected String getLoggedInUserId() throws NoLoggedInUserException{
 		String userId = getCurrentUserId();
-		if (userId==null || userId.length()==0){
+		if (userId==null || userId.isEmpty()){
 			throw new NoLoggedInUserException("No logged in user.");
 		}
 		return userId;
@@ -231,7 +231,7 @@ public abstract class AbstractAPIImpl implements API{
 	}
 	/**
 	 * Used to abort execution if validation is unsuccessful.
-	 * @throws net.anotheria.anoplass.api.validation.ValidationException when validation error occurs
+	 * @throws ValidationException when validation error occurs
 	 */
 	protected void checkValidationAndThrowException() throws ValidationException {
 		if (APICallContext.getCallContext().hasValidationErrors())

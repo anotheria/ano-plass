@@ -106,7 +106,7 @@ public class AttributeWrapper implements Serializable {
 	
 	@Override
 	public String toString(){
-		return new StringBuilder("Key: ").append(getKey()).append(", Value: ").append(getValue()).append(", Policy: ").append(getPolicy()).toString();
+        return "Key: " + key + ", Value: " + getValue() + ", Policy: " + policy;
 	}
 
 	/**

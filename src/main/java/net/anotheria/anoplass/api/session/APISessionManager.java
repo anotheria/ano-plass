@@ -17,6 +17,7 @@ import net.anotheria.anoprise.sessiondistributor.events.SessionRestoreEvent;
 import net.anotheria.moskito.core.util.storage.Storage;
 import net.anotheria.util.IdCodeGenerator;
 import net.anotheria.util.StringUtils;
+import org.distributeme.support.eventservice.generated.EventServiceRMIBridgeServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +103,7 @@ public class APISessionManager {
 	private APISessionManager() {
 		sessions = Storage.createConcurrentHashMapStorage("sessions");
 		referenceIds = Storage.createConcurrentHashMapStorage("session-refIds");
-		listeners = new CopyOnWriteArrayList<APISessionManagerListener>();
+		listeners = new CopyOnWriteArrayList<>();
 		distributionConfig = APISessionDistributionConfig.getInstance();
 		callback = new APISessionCallBackImpl();
 		serviceId = "APISessionManager_" + IdCodeGenerator.generateCode(SERVICE_ID_LENGTH);
@@ -115,7 +116,7 @@ public class APISessionManager {
 	 */
 	private void configureIntegration() {
 		// init for last call time map
-		distributedSessionLastCallTime = new ConcurrentHashMap<String, Long>();
+		distributedSessionLastCallTime = new ConcurrentHashMap<>();
 
 		//Don't configure if not required :)
 		if (!distributionConfig.isDistributionEnabled())
@@ -127,8 +128,8 @@ public class APISessionManager {
 		log.info("APISessionManager SessionDistributorConsumer INITIALIZATION: STARTED");
 		try {
 			//Initing EventServiceBridge!  Start
-			org.distributeme.support.eventservice.generated.EventServiceRMIBridgeServer.init();
-			org.distributeme.support.eventservice.generated.EventServiceRMIBridgeServer.createServiceAndRegisterLocally();
+			EventServiceRMIBridgeServer.init();
+			EventServiceRMIBridgeServer.createServiceAndRegisterLocally();
 			//Initing EventServiceBridge!  END
 
 			EventService eventService = EventServiceFactory.createEventService();
@@ -362,7 +363,7 @@ public class APISessionManager {
 
 
 		} catch (APISessionDistributionException e) {
-			log.error("session restore failed session[" + sessionId + "]", e);
+			log.error("session restore failed session[" + sessionId + ']', e);
 			throw new APISessionRestoreException(sessionId, e);
 		}
 
@@ -408,7 +409,7 @@ public class APISessionManager {
 	 * @return {@link ArrayList<String> }
 	 */
 	public ArrayList<String> getReferenceIds() {
-		ArrayList<String> ret = new ArrayList<String>(referenceIds.size());
+		ArrayList<String> ret = new ArrayList<>(referenceIds.size());
 		for (String id : referenceIds.keySet())
 			ret.add(id);
 		return ret;
@@ -420,7 +421,7 @@ public class APISessionManager {
 	 * @return {@link ArrayList<String> }
 	 */
 	public ArrayList<String> getSessionIds() {
-		ArrayList<String> ret = new ArrayList<String>(sessions.size());
+		ArrayList<String> ret = new ArrayList<>(sessions.size());
 		for (String id : sessions.keySet())
 			ret.add(id);
 		return ret;
@@ -571,7 +572,7 @@ public class APISessionManager {
 	private void removeRestoredSession(String aSessionId, String aCallServiceId) {
 		if (serviceId.equals(aCallServiceId)) {
 			if (log.isDebugEnabled())
-				log.debug("Do nothing ! we are at host which just restored session[" + aSessionId + "]");
+				log.debug("Do nothing ! we are at host which just restored session[" + aSessionId + ']');
 			return;
 		}
 		APISession session = sessions.remove(aSessionId);
@@ -871,16 +872,15 @@ public class APISessionManager {
 
 		@Override
 		public String toString() {
-			final StringBuilder sb = new StringBuilder();
-			sb.append("APISessionEvent");
-			sb.append("{apiSessionId='").append(apiSessionId).append('\'');
-			sb.append(", type=").append(type);
-			sb.append(", userId='").append(userId).append('\'');
-			sb.append(", editorId='").append(editorId).append('\'');
-			sb.append(", attributeName='").append(attributeName).append('\'');
-			sb.append(", wrapper=").append(wrapper);
-			sb.append('}');
-			return sb.toString();
+            String sb = "APISessionEvent" +
+                    "{apiSessionId='" + apiSessionId + '\'' +
+                    ", type=" + type +
+                    ", userId='" + userId + '\'' +
+                    ", editorId='" + editorId + '\'' +
+                    ", attributeName='" + attributeName + '\'' +
+                    ", wrapper=" + wrapper +
+                    '}';
+            return sb;
 		}
 	}
 

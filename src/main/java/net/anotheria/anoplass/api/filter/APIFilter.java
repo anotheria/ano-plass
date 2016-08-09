@@ -153,7 +153,7 @@ public class APIFilter implements Filter {
 	public void init(FilterConfig config) throws ServletException {
 		activityAPI = APIFinder.findAPI(ActivityAPI.class);
 		configuration = APISessionDistributionConfig.getInstance();
-		lockManager = new SafeIdBasedLockManager<String>();
+		lockManager = new SafeIdBasedLockManager<>();
 	}
 
 	/**
@@ -162,9 +162,9 @@ public class APIFilter implements Filter {
 	 * <p/>
 	 * <p/>
 	 *
-	 * @param req {@link javax.servlet.http.HttpServletRequest}}
+	 * @param req {@link HttpServletRequest}}
 	 * @return {@link APISession}
-	 * @throws javax.servlet.ServletException on errors
+	 * @throws ServletException on errors
 	 */
 	protected APISession initSession(HttpServletRequest req) throws ServletException {
 
@@ -201,7 +201,7 @@ public class APIFilter implements Filter {
 			session.setAttribute(API_SESSION_ID_HTTP_SESSION_ATTRIBUTE_NAME, apiSession.getId());
 			return apiSession;
 		} catch (APISessionCreationException e) {
-			LOG.error("obtainSession(" + session + ")", e);
+			LOG.error("obtainSession(" + session + ')', e);
 			throw new ServletException("APISession obtain failed! " + e.getMessage(), e);
 		} finally {
 			lock.unlock();

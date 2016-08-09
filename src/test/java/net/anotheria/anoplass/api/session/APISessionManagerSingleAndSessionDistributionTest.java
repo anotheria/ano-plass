@@ -126,11 +126,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			Assert.assertEquals("Should be 1 call for updateUser", 1, updateUserCall);
 			Assert.assertEquals("Should be 1 call for updateEditor", 1, updateEditorCall);
 			Assert.assertEquals("Should be 1 call for create attribute", 1, addAttributeCall);
-			try {
-				Assert.assertEquals("Should be 1 session in SessionDistributor", 1, service.getDistributedSessionNames().size());
-			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Can't happen here!");
-			}
+			Assert.assertEquals("Should be 1 session in SessionDistributor", 1, service.getDistributedSessionNames().size());
 
 			//creating keep alive call
 			manager.getSession(session.getId());
@@ -160,11 +156,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			Assert.assertEquals(1, manager.getSessionCount());
 
 			manager.destroyAPISessionByReferenceId(referenceId);
-			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
-			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Should not happen!!!");
-			}
+			Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
 			Assert.assertEquals("Should be 1 call for delete session", 1, deleteCall);
 
 
@@ -203,11 +195,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			Assert.assertEquals("Should be 0 call for updateUser", 0, updateUserCall);
 			Assert.assertEquals("Should be 0 call for updateEditor", 0, updateEditorCall);
 			Assert.assertEquals("Should be 0 call for create attribute", 0, addAttributeCall);
-			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
-			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Can't happen here!");
-			}
+			Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
 
 			//creating keep alive call
 			manager.getSession(session.getId());
@@ -233,11 +221,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 			manager.destroyAPISessionBySessionId(session.getId());
 			Thread.sleep(500);
-			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
-			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Should not happen!!!");
-			}
+			Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
 			Assert.assertEquals("Should be 0 call for delete session", 0, deleteCall);
 
 
@@ -250,7 +234,6 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 	}
 
 
-	@SuppressWarnings({"NullableProblems"})
 	@Test
 	public void testErrorsAndExceptions() {
 
@@ -513,9 +496,8 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			// Templates.
 		}
 
-		@SuppressWarnings({"DefaultFileTemplate"})
 		@Override
-		public List<String> getDistributedSessionNames() throws SessionDistributorServiceException {
+		public List<String> getDistributedSessionNames() {
 			return super.getDistributedSessionNames();    //To change body of overridden methods use File | Settings | File Templates.
 		}
 
@@ -556,7 +538,6 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 
 	public static class UnserializeableAttribute {
-		@SuppressWarnings("unused")
 		private String unused;
 	}
 }

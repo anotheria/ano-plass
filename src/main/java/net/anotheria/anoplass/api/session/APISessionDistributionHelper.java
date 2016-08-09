@@ -57,11 +57,11 @@ public final class APISessionDistributionHelper {
 		try {
 			distributedSession = distributorService.restoreDistributedSession(distributedSessionName, callServiced);
 		} catch (SessionDistributorServiceException e) {
-			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ")failed. Cause " + e.getMessage());
+			LOG.warn("restoreSession(" + distributedSessionName + ',' + callServiced + ")failed. Cause " + e.getMessage());
 			throw new APISessionDistributionException(e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") failed. [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("restoreSession(" + distributedSessionName + ',' + callServiced + ") failed. [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug("", dMeR);
 			//Continue work in local mode!
@@ -79,7 +79,7 @@ public final class APISessionDistributionHelper {
 				AttributeWrapper wrapper = (AttributeWrapper) ByteArraySerializer.deserializeObject(attribute.getData());
 				sessionImpl.setAttributeWrapper(wrapper);
 			} catch (IOException e) {
-				LOG.warn("restoreSession(" + distributedSessionName + "," + callServiced + ") FAILED. exception occurred attempting to deSerialize this attribute: " + attribute, e);
+				LOG.warn("restoreSession(" + distributedSessionName + ',' + callServiced + ") FAILED. exception occurred attempting to deSerialize this attribute: " + attribute, e);
 			}
 		}
 		return sessionImpl;
@@ -106,14 +106,14 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.addDistributedAttribute(sessionName, new DistributedSessionAttribute(attributeToAdd.getKey(), ByteArraySerializer.serializeObject(attributeToAdd)));
 		} catch (IOException e) {
-			LOG.error("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed.", e);
+			LOG.error("addAttributeToDistributedSession(" + sessionName + ',' + attributeToAdd + ") failed.", e);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed. Cause" + e.getMessage());
+			LOG.warn("addAttributeToDistributedSession(" + sessionName + ',' + attributeToAdd + ") failed. Cause" + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed.", e);
+			LOG.error("addAttributeToDistributedSession(" + sessionName + ',' + attributeToAdd + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("addAttributeToDistributedSession(" + sessionName + "," + attributeToAdd + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("addAttributeToDistributedSession(" + sessionName + ',' + attributeToAdd + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug("",dMeR);
 		}
@@ -131,12 +131,12 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.removeDistributedAttribute(sessionName, attributeName);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed. Cause " + e.getMessage());
+			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + ',' + attributeName + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed.", e);
+			LOG.error("removeAttributeFromDistributedSession(" + sessionName + ',' + attributeName + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + "," + attributeName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("removeAttributeFromDistributedSession(" + sessionName + ',' + attributeName + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug("",dMeR);
 		}
@@ -154,12 +154,12 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.updateSessionUserId(sessionName, userId);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed. Cause " + e.getMessage());
+			LOG.warn("updateDistributedSessionUserId(" + sessionName + ',' + userId + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed.", e);
+			LOG.error("updateDistributedSessionUserId(" + sessionName + ',' + userId + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("updateDistributedSessionUserId(" + sessionName + "," + userId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("updateDistributedSessionUserId(" + sessionName + ',' + userId + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug("",dMeR);
 		}
@@ -177,12 +177,12 @@ public final class APISessionDistributionHelper {
 		try {
 			distributorService.updateSessionEditorId(sessionName, editor);
 		} catch (NoSuchDistributedSessionException e) {
-			LOG.warn("updateDistributedSessionEditorId( " + sessionName + "," + editor + ") failed. Cause " + e.getMessage());
+			LOG.warn("updateDistributedSessionEditorId( " + sessionName + ',' + editor + ") failed. Cause " + e.getMessage());
 		} catch (SessionDistributorServiceException e) {
-			LOG.error("updateDistributedSessionEditorId( " + sessionName + "," + editor + ") failed.", e);
+			LOG.error("updateDistributedSessionEditorId( " + sessionName + ',' + editor + ") failed.", e);
 		} catch (DistributemeRuntimeException dMeR) {
 			//transport layer runtime!!
-			LOG.warn("updateDistributedSessionEditorId(" + sessionName + "," + editor + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
+			LOG.warn("updateDistributedSessionEditorId(" + sessionName + ',' + editor + ") failed [" + dMeR.getClass().getName() + "] " + dMeR.getMessage());
 			if (LOG.isDebugEnabled())
 				LOG.debug("",dMeR);
 		}

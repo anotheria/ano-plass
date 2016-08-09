@@ -28,7 +28,7 @@ public final class APISessionIdParameterHelper {
 	public static String createSessionIdParameterString() {
 		if (!config.isDistributionEnabled())
 			return "";
-		return config.getDistributedSessionParameterName() + "=" + APICallContext.getCallContext().getCurrentSession().getId();
+		return config.getDistributedSessionParameterName() + '=' + APICallContext.getCallContext().getCurrentSession().getId();
 	}
 
 	/**

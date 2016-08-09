@@ -16,30 +16,30 @@ public interface APISession {
 	/**
 	 * Default expiration period for attributes with policy auto-expire.
 	 */
-	public static final long DEFAULT_EXPIRE_PERIOD = TimeUnit.MINUTE.getMillis() * 5; // 5minutes
+    long DEFAULT_EXPIRE_PERIOD = TimeUnit.MINUTE.getMillis() * 5; // 5minutes
 	
 	/**
 	 * This policy states that the attribute is for local use only and shouldn't be distributed.
 	 */
-	public int POLICY_LOCAL = 1;
+    int POLICY_LOCAL = 1;
 	/**
 	 * This policy states that the attribute will be distributed to other servers. Only usable with 
 	 * Serializable attributes. <b>This feature isn't yet implemented</b>
 	 */
-	public int POLICY_DISTRIBUTED = 2;
+    int POLICY_DISTRIBUTED = 2;
 
 	/**
 	 * This policy states that the attribute will survive system or server restart. Only usable with
 	 * Serializable attributes. <b>This feature isn't yet implemented</b>
 	 */
-	public int POLICY_PERSISTENT = 4;
+    int POLICY_PERSISTENT = 4;
 	/**
 	 * If set this policy defines that after the specified expire period the attribute will be reseted and not visible 
 	 * to the caller. The attribute itself will not be deleted until explicitly overwritten or removed, so don't use this
 	 * policy on timer-bound attributes, since that can lead to unexpected behaviour. However, you shouldn't put timer-bound
 	 * attributes in the session either way.
 	 */
-	public int POLICY_AUTOEXPIRE = 8;
+    int POLICY_AUTOEXPIRE = 8;
 	
 	/**
 	 * This policy ensures that instead of making a new AttributeWrapper, the old one will be reused (if available).
@@ -47,27 +47,27 @@ public interface APISession {
 	 * auto-expire policy on but without the reuse_wrapper policy, the auto-expiring will be reset on each setAttribute call.
 	 * If you want to keep a 'global' auto-expiring.
 	 */
-	public int POLICY_REUSE_WRAPPER = 16;
+    int POLICY_REUSE_WRAPPER = 16;
 	
 	/**
 	 * This policy enables the attribute to survive the session clean-up on logOut.
 	 */
-	public int POLICY_SURVIVE_LOGOUT = 32;
+    int POLICY_SURVIVE_LOGOUT = 32;
 	
 	/**
 	 * Those attributes are persistent in cookies.
 	 */
-	public int POLICY_COOKIE_PERSISTENT = 64;
+    int POLICY_COOKIE_PERSISTENT = 64;
 
 	/**
 	 * Flashing attributes are used exactly one time, after first usage they disappear from session.
 	 */
-	public int POLICY_FLASH = 128;
+    int POLICY_FLASH = 128;
 	
 		/**
 	 * Default attribute policy.
 	 */
-	public int POLICY_DEFAULT = POLICY_LOCAL;
+        int POLICY_DEFAULT = POLICY_LOCAL;
 	
 	/**
 	 * Sets the object in the session under the given name under the usage of the default policy.
