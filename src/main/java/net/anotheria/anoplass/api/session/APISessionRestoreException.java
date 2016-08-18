@@ -4,8 +4,8 @@ package net.anotheria.anoplass.api.session;
  * APISession restore exception.
  *
  * @author h3ll
+ * @version $Id: $Id
  */
-
 public class APISessionRestoreException extends APISessionManagerException {
 	/**
 	 * Basic serial version uid.

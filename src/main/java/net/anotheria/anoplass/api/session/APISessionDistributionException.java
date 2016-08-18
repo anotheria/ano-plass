@@ -3,8 +3,9 @@ package net.anotheria.anoplass.api.session;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
 /**
  * Exception which is thrown by the APISessionDistributionHelper.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APISessionDistributionException extends Exception{
 	/**
@@ -24,7 +25,7 @@ public class APISessionDistributionException extends Exception{
 	/**
 	 * Constructor.
 	 *
-	 * @param cause {@link SessionDistributorServiceException}
+	 * @param cause {@link net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException}
 	 */
 	public APISessionDistributionException(SessionDistributorServiceException cause){
 		super("SessionDistributorService failed: "+cause.getMessage(), cause);

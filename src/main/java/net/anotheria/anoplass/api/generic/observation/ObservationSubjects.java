@@ -2,7 +2,9 @@ package net.anotheria.anoplass.api.generic.observation;
 
 /**
  * Defines generic Observation Subjects.
+ *
  * @author denis
+ * @version $Id: $Id
  */
 public final class ObservationSubjects {
     /**

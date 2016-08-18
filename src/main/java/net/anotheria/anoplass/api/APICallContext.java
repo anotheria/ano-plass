@@ -11,11 +11,12 @@ import java.util.Map;
 
 
 /**
- * A context in which the api is executed. The context is assigned to the Thread (as ThreadLocal) and therefore don't need to be synchronized. 
+ * A context in which the api is executed. The context is assigned to the Thread (as ThreadLocal) and therefore don't need to be synchronized.
  * However, the context is killed (or lost) as soon as the thread finishes execution.
  * Important: If you start a new thread it does NOT share the same context, and hence same session.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APICallContext {
 	/**
@@ -64,6 +65,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns the currentUserId if such concept is supported by the site.
+	 *
 	 * @return the userid used to log in in the site if required.
 	 */
 	public String getCurrentUserId() { 
@@ -72,6 +74,7 @@ public class APICallContext {
 
 	/**
 	 * Sets the currentUserId. This is a site-specific feature, the call context doesn't evaluate the userId.
+	 *
 	 * @param aCurrentUserId any string which is meaningful to the application.
 	 */
 	public void setCurrentUserId(String aCurrentUserId) {
@@ -79,7 +82,8 @@ public class APICallContext {
 	}
 
 	/**
-	 * Returns current editorId if any. 
+	 * Returns current editorId if any.
+	 *
 	 * @return string used as username by the editor if he logs in into the site.
 	 */
 	public String getCurrentEditorId() {
@@ -88,6 +92,7 @@ public class APICallContext {
 
 	/**
 	 * Sets the current editor id.
+	 *
 	 * @param aCurrentEditorId the username of the editor as in users.xml (for now).
 	 */
 	public void setCurrentEditorId(String aCurrentEditorId) {
@@ -109,6 +114,7 @@ public class APICallContext {
 
 	/**
 	 * Sets an attribute into internal scope.
+	 *
 	 * @param name name of the attribute.
 	 * @param value value of the attribute.
 	 */
@@ -118,6 +124,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns the attribute with given name from internal scope or null if no such atribute is present.
+	 *
 	 * @param name the name of the attribute.
 	 * @return attribute value object or null.
 	 */
@@ -127,6 +134,7 @@ public class APICallContext {
 	
 	/**
 	 * Removes an attribute from internal scope. If no such attribute is present, the call is ignored.
+	 *
 	 * @param name the name of the attribute to remove.
 	 */
 	public void removeAttribute(String name) {
@@ -135,6 +143,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns the currentLocale. If no currentLocale has been set, the DEFAULT_LOCALE is returned.
+	 *
 	 * @return the locale associated with this request.
 	 */
 	public Locale getCurrentLocale() {
@@ -143,6 +152,7 @@ public class APICallContext {
 
 	/**
 	 * Sets current locale. Usually performed by a locale resolution mechanism at the start of the request, for example a locale filter. Also updates the locale in session (if session exists).
+	 *
 	 * @param aCurrentLocale the locale to set.
 	 */
 	public void setCurrentLocale(Locale aCurrentLocale) {
@@ -153,6 +163,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns the currently assigned session.
+	 *
 	 * @return the assigned APISession.
 	 */
 	public APISession getCurrentSession() {
@@ -161,6 +172,7 @@ public class APICallContext {
 
 	/**
 	 * Sets the current session.
+	 *
 	 * @param aCurrentSession APISession instance
 	 */
 	public void setCurrentSession(APISession aCurrentSession) {
@@ -168,6 +180,7 @@ public class APICallContext {
 	}
 	
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "User: " +
 			(isMember() ? getCurrentUserId() : "guest")+
@@ -177,6 +190,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns true if there is no logged in user in this context.
+	 *
 	 * @return true for not logged in user, false otherwise.
 	 */
 	public boolean isGuest(){
@@ -185,6 +199,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns true if there is a logged in user in this context.
+	 *
 	 * @return true if a the currentUserId is not null.
 	 */
 	public boolean isMember(){
@@ -193,6 +208,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns true if there is an editorId in the session.
+	 *
 	 * @return true if the currentEditorId is not null.
 	 */
 	public boolean isEditor(){
@@ -201,6 +217,7 @@ public class APICallContext {
 	
 	/**
 	 * Adds a validationError to the context.
+	 *
 	 * @param error error to add.
 	 */
 	public void addValidationError(ValidationError error){
@@ -209,6 +226,7 @@ public class APICallContext {
 	
 	/**
 	 * Adds some validation errors to the context.
+	 *
 	 * @param errors a list of errors to add.
 	 */
 	public void addValidationErrors(List<ValidationError> errors){
@@ -217,6 +235,7 @@ public class APICallContext {
 	
 	/**
 	 * Returns the validation errors.
+	 *
 	 * @return list of ValidationError
 	 */
 	public List<ValidationError> getValidationErrors() {
@@ -225,6 +244,7 @@ public class APICallContext {
 
 	/**
 	 * Sets the list of validation errors, reseting previously set or added errors.
+	 *
 	 * @param someValidationErrors the validation errors to set.
 	 */
 	public void setValidationErrors(List<ValidationError> someValidationErrors) {
@@ -233,6 +253,7 @@ public class APICallContext {
 
 	/**
 	 * Returns true if there are validation errors.
+	 *
 	 * @return boolean param
 	 */
 	public boolean hasValidationErrors(){
@@ -300,7 +321,8 @@ public class APICallContext {
 	};
 	
 	/**
-	 * Returns the APICallContext assigned to this thread. 
+	 * Returns the APICallContext assigned to this thread.
+	 *
 	 * @return previously assigned or new ApiCallContext object.
 	 */
 	public static APICallContext getCallContext(){

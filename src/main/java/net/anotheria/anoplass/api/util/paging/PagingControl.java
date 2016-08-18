@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * PagingControl. 
+ * PagingControl.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class PagingControl {
 	/**
@@ -41,7 +44,7 @@ public class PagingControl {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param aCurrentPage current page number
 	 * @param anElementsPerPage elements per page
 	 * @param aNumberOfElements totalAmount of elements
@@ -67,6 +70,7 @@ public class PagingControl {
 		setup();
 	}
 		
+	/** {@inheritDoc} */
 	@Override
 	public String toString(){
 		return "currentPage:"+currentPage+", numberOfElements:"+numberOfElements+", elementsPerPage:"+elementsPerPage+ 
@@ -105,6 +109,7 @@ public class PagingControl {
 
 	/**
 	 * Return number of elements.
+	 *
 	 * @return int value
 	 */
 	public int getNumberOfElements(){
@@ -113,7 +118,7 @@ public class PagingControl {
 
 	/**
 	 * Returns number of pages.
-	 *  
+	 *
 	 * @return int value
 	 */
 	public int getNumberOfPages(){
@@ -123,12 +128,18 @@ public class PagingControl {
 		return numberOfPages;
 	}
 
+	/**
+	 * <p>Getter for the field <code>elements</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<PagingElement> getElements(){
 		return elements;
 	}
 
 	/**
 	 * True if there is some next page, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean hasNext(){
@@ -136,6 +147,7 @@ public class PagingControl {
 	}
 	/**
 	 * True if there is some next page, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean isHasNext(){
@@ -144,6 +156,7 @@ public class PagingControl {
 
 	/**
 	 * True if there is some previous page, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean hasPrevious(){
@@ -151,6 +164,7 @@ public class PagingControl {
 	}
 	/**
 	 * True if there is some previous page, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean isHasPrevious(){
@@ -158,6 +172,7 @@ public class PagingControl {
 	}
 
 	/**
+	 * <p>Getter for the field <code>elementsPerPage</code>.</p>
 	 *
 	 * @return size of page (quantity of item to be shown on page).
 	 */
@@ -166,6 +181,7 @@ public class PagingControl {
 	}
 	/**
 	 * True if current page is the last, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean isLast(){
@@ -174,6 +190,7 @@ public class PagingControl {
 
 	/**
 	 * True if current page is the first, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public boolean isFirst(){
@@ -181,24 +198,45 @@ public class PagingControl {
 	}
 
 	
+	/**
+	 * <p>Getter for the field <code>maxEntries</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getMaxEntries() {
 		return maxEntries;
 	}
 
+	/**
+	 * <p>Setter for the field <code>maxEntries</code>.</p>
+	 *
+	 * @param aMaxEntries a int.
+	 */
 	public void setMaxEntries(int aMaxEntries) {
 		maxEntries = aMaxEntries;
 	}
 
+	/**
+	 * <p>isMoreHitsAvailable.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isMoreHitsAvailable() {
 		return moreHitsAvailable;
 	}
 	
+	/**
+	 * <p>getCurrentPageNumber.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getCurrentPageNumber(){
 		return currentPage;
 	}
 
 	/**
 	 * Return next page number
+	 *
 	 * @return int value
 	 */
 	public int getNextPageNumber(){
@@ -206,6 +244,7 @@ public class PagingControl {
 	}
 	/**
 	 * Return previous page number
+	 *
 	 * @return int value
 	 */
 	public int getPreviousPageNumber(){

@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @param <T> an api.
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APICallHandler<T extends API> implements InvocationHandler {
 
@@ -58,6 +59,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		MethodInfo info = getMethodInfo(method);

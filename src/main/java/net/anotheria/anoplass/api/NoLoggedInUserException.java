@@ -2,11 +2,11 @@ package net.anotheria.anoplass.api;
 
 /**
  * Signals that an attempt to get Current User ID or any other data has failed cause no logged in User.
- * This exception will NOT BE be thrown anymore by the APISession.getCurrentUserId() and by the APICallContext.getCurrentUserId() and spread 
+ * This exception will NOT BE be thrown anymore by the APISession.getCurrentUserId() and by the APICallContext.getCurrentUserId() and spread
  * through the called APIs' "my" methods, but only by the getLoggedInUserId methdo in AbstractAPIImpl.
- *  
- * @author denis
  *
+ * @author denis
+ * @version $Id: $Id
  */
 public class NoLoggedInUserException extends APIException {
 
@@ -24,6 +24,7 @@ public class NoLoggedInUserException extends APIException {
 
 	/**
 	 * Constructor with message param.
+	 *
 	 * @param message message
 	 */
 	public NoLoggedInUserException(String message) {

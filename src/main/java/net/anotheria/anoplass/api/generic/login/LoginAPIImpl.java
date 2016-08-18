@@ -16,8 +16,9 @@ import net.anotheria.util.StringUtils;
 
 /**
  * An implementation for the login api.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 
@@ -42,6 +43,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	 */
 	private ObservationAPI observationAPI;
 
+	/** {@inheritDoc} */
 	@Override public void init() throws APIInitException {
 		super.init();
 
@@ -57,6 +59,8 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Adds a login postprocessor. Threadsafe.
 	 */
 	@Override public void addLoginPostprocessor(LoginPostProcessor postProcessor) {
@@ -65,6 +69,8 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Adds a login preprocessor. Threadsafe.
 	 */
 	@Override public void addLoginPreprocessor(LoginPreProcessor preProcessor) {
@@ -72,10 +78,12 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 
 	}
 
+	/** {@inheritDoc} */
 	@Override public void logInUser(String userId) throws APIException {
 		logInUser(userId, false);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void stealthLogInUser(String userId) throws APIException {
 		logInUser(userId, true);
 	}
@@ -94,6 +102,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 			observationAPI.fireSubjectUpdateForCurrentUser(ObservationSubjects.LOGIN, this.getClass().getName());
 	}
 
+	/** {@inheritDoc} */
 	@Override public void logoutMe() throws APIException {
 		try{
 			String userId = getCallContext().getCurrentUserId();
@@ -115,12 +124,14 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override public String getLogedUserId() throws NoLoggedInUserException {
 		if(!isLogedIn())
 			throw new NoLoggedInUserException("No loged in users!");
 		return getCallContext().getCurrentUserId();
 	}
 
+	/** {@inheritDoc} */
 	@Override public boolean isLogedIn() {
 		//try{
 			return !StringUtils.isEmpty(getCallContext().getCurrentUserId());
@@ -129,10 +140,12 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 		}*/
 	}
 
+	/** {@inheritDoc} */
 	@Override public void addLogoutPostprocessor(LogoutPostProcessor postProcessor) {
 		logoutPostProcessors.add(postProcessor);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void addLogoutPreprocessor(LogoutPreProcessor preProcessor) {
 		logoutPreProcessors.add(preProcessor);
 

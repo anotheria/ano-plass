@@ -8,7 +8,10 @@ import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
 import net.anotheria.anoplass.api.generic.observation.ObservationSubjects;
 
 /**
- * {@link ActivityAPI} implementation.
+ * {@link net.anotheria.anoplass.api.activity.ActivityAPI} implementation.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class ActivityAPIImpl extends AbstractAPIImpl implements ActivityAPI {
     /**
@@ -24,6 +27,7 @@ public class ActivityAPIImpl extends AbstractAPIImpl implements ActivityAPI {
      */
     private ObservationAPI observationAPI;
 
+    /** {@inheritDoc} */
     @Override
     public void init() throws APIInitException {
         loginAPI = APIFinder.findAPI(LoginAPI.class);
@@ -33,6 +37,7 @@ public class ActivityAPIImpl extends AbstractAPIImpl implements ActivityAPI {
     //this is just a test impl of a test api sofar.
     //In the future we will use this api to detect users inactivity.
 
+    /** {@inheritDoc} */
     @Override
     public void notifyMyActivity(String url) {
         setAttributeInSession(LAST_URL, url);

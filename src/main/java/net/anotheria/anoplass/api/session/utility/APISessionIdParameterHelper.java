@@ -9,8 +9,8 @@ import net.anotheria.util.UrlHelper;
  * APISession id parameter helper, utility class for creating DistributedSessionId parameter, and adding it to URL.
  *
  * @author h3ll
+ * @version $Id: $Id
  */
-
 public final class APISessionIdParameterHelper {
 
 	/**

@@ -2,8 +2,9 @@ package net.anotheria.anoplass.api.mock;
 
 /**
  * A mock method which always return a predefined integer value.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class ReturnIntegerMockMethod extends ReturnObjectMockMethod{
 	/**

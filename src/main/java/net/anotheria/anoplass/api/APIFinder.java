@@ -18,8 +18,9 @@ import java.util.Map;
 
 /**
  * The utility for API resolution.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class APIFinder {
 	
@@ -62,9 +63,10 @@ public final class APIFinder {
 
 	/**
 	 * Return API by Identifier.
-	 * 
+	 *
 	 * @param identifier string clazz name
 	 * @return api
+	 * @throws net.anotheria.anoplass.api.APIException if any.
 	 */
 	@SuppressWarnings("unchecked")
 	public static API findAPI(String identifier) throws APIException {
@@ -77,7 +79,7 @@ public final class APIFinder {
 	
 	/**
 	 * Returns the implementation for the given API interface clazz.
-	 * @param <T> the API class.
+	 *
 	 * @param identifier T.class.
 	 * @return an implementation of T.
 	 */
@@ -189,9 +191,9 @@ public final class APIFinder {
 
 	/**
 	 * Adds factory for resolving some API instance.
+	 *
 	 * @param apiClass class of API
 	 * @param factoryObject actually factory for creating api
-	 * @param <T> generic
 	 */
 	public static<T extends API> void addAPIFactory(Class<T> apiClass, APIFactory<T> factoryObject){
 		factories.put(apiClass, factoryObject);
@@ -214,13 +216,15 @@ public final class APIFinder {
 
 	/**
 	 * Returns true if masking is enabled, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public static boolean isMaskingEnabled() {
 		return maskingEnabled;
 	}
-    /**
+	/**
 	 * Allows enabling or disabling masking.
+	 *
 	 * @param aMaskingEnabled - boolean param
 	 */
 	public static void setMaskingEnabled(boolean aMaskingEnabled) {
@@ -229,14 +233,16 @@ public final class APIFinder {
 
 	/**
 	 * Returns true if mocking is enabled, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public static boolean isMockingEnabled() {
 		return mockingEnabled;
 	}
 
-	 /**
+	/**
 	 * Allows enabling or disabling mocking.
+	 *
 	 * @param aMockingEnabled - boolean param
 	 */
 	public static void setMockingEnabled(boolean aMockingEnabled) {
@@ -245,6 +251,7 @@ public final class APIFinder {
 	
 	/**
 	 * Returns true if either mocking or masking is enabled.
+	 *
 	 * @return boolean value
 	 */
 	public static boolean isInTestingMode(){
@@ -253,7 +260,7 @@ public final class APIFinder {
 
     /**
      * Only for cleaning  collections in jUnits!!!
-	 * Actually resets all configured stuff.
+     * Actually resets all configured stuff.
      */
     public static void cleanUp(){
         if(apis!=null)
@@ -268,14 +275,25 @@ public final class APIFinder {
 		factories = APIConfig.getFactories();
     }
     
+    /**
+     * <p>disableSecurity.</p>
+     */
     public static void disableSecurity(){
     	securityEnabled = false;
     }
     
+    /**
+     * <p>isSecurityEnabled.</p>
+     *
+     * @return a boolean.
+     */
     public static boolean isSecurityEnabled(){
     	return securityEnabled;
     }
     
+    /**
+     * <p>enableSecurity.</p>
+     */
     public static void enableSecurity(){
     	securityEnabled = true;
     }

@@ -5,15 +5,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Debugging utility which simply logs out all events it receives.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class DebugObserver implements Observer{
 
+	/** {@inheritDoc} */
 	@Override public void notifySubjectUpdatedForCurrentUser(SubjectUpdateEvent event) {
 		debugOutEvent("currentUser", event);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void notifySubjectUpdatedForUser(SubjectUpdateEvent event) {
 		debugOutEvent("aUser", event);
 		

@@ -8,9 +8,9 @@ import java.util.Locale;
 
 /**
  * The API's internal session. This session provides more functionality than the HttpSession and therefore should be preferred to the http session.
- * 
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public interface APISession {
 	/**
@@ -71,6 +71,7 @@ public interface APISession {
 	
 	/**
 	 * Sets the object in the session under the given name under the usage of the default policy.
+	 *
 	 * @param key the name of the attribute in the session
 	 * @param value the object to store in the session.
 	 */
@@ -78,6 +79,7 @@ public interface APISession {
 	
 	/**
 	 * Sets the object as session attribute into the session under the given policy.
+	 *
 	 * @param key the name under which the attribute is stored.
 	 * @param policy the policy to be applied to the attribute. See POLICY_ constants for details.
 	 * @param value the value to store in the session.
@@ -86,6 +88,7 @@ public interface APISession {
 	
 	/**
 	 * Adds an attribute with given key, policy, value and expiration time.
+	 *
 	 * @param key the name under which the attribute is stored.
 	 * @param policy the policy to be applied to the attribute. See POLICY_ constants for details.
 	 * @param value the value to store in the session.
@@ -95,12 +98,14 @@ public interface APISession {
 
 	/**
 	 * Returns the session attribute with the given key.
+	 *
 	 * @param key the key under which the attribute is stored.
 	 * @return the stored attribute or null if no attribute under that name is stored.
 	 */
 	Object getAttribute(String key);
 	/**
 	 * Removes the attribute with under the given key. If no such attribute is present the method returns without failing.
+	 *
 	 * @param key the attribute name(key) to remove
 	 */
 	void removeAttribute(String key);
@@ -108,33 +113,38 @@ public interface APISession {
 	/**
 	 * Return attribute names collection.
 	 *
-	 * @return {@link String} collection
+	 * @return {@link java.lang.String} collection
 	 */
 	List<String> getAttributeNames();
 
 	/**
 	 * Returns the session id.
+	 *
 	 * @return id
 	 */
 	String getId();
 	/**
 	 * Returns the ip address.
+	 *
 	 * @return ip address
 	 */
 	String getIpAddress();
 	/**
 	 * Sets the ip address which is associated with this session.
+	 *
 	 * @param anIpAddress user ip
 	 */
 	void setIpAddress(String anIpAddress);
 	
 	/**
 	 * Returns the user agent string submitted by the browser.
+	 *
 	 * @return  user agent
 	 */
 	String getUserAgent();
 	/**
 	 * Sets the user agent string for this session. Called by APIFilter.
+	 *
 	 * @param anUserAgent user agent
 	 */
 	void setUserAgent(String anUserAgent);
@@ -146,22 +156,26 @@ public interface APISession {
 	
 	/**
 	 * Returns the id of the currently logged in user.
+	 *
 	 * @return current user id
 	 */
 	String getCurrentUserId(); 
 	/**
 	 * Returns the id of the current CMS editor if applicable.
+	 *
 	 * @return current cms editor id
 	 */
 	String getCurrentEditorId();
 	
 	/**
 	 * Returns the locale associated with this session. Used to restore the server given locale between the requests in case we don't use browser supplied locale.
+	 *
 	 * @return  locale
 	 */
 	Locale getLocale();
 	/**
 	 * Sets the locale.
+	 *
 	 * @param toSet locale
 	 */
 	void setLocale(Locale toSet);

@@ -2,9 +2,9 @@ package net.anotheria.anoplass.api;
 
 /**
  * Base exception class for all exceptions thrown by the api.
- * 
+ *
  * @author lrosenberg
- * 
+ * @version $Id: $Id
  */
 public class APIException extends Exception{
 
@@ -22,6 +22,7 @@ public class APIException extends Exception{
 
 	/**
 	 * Constructor.
+	 *
 	 * @param message string message
 	 */
 	public APIException(String message){
@@ -30,6 +31,7 @@ public class APIException extends Exception{
 
 	/**
 	 * Constructor.
+	 *
 	 * @param message string message
 	 * @param cause exception cause
 	 */

@@ -4,6 +4,9 @@ import net.anotheria.util.Date;
 
 /**
  * Subject updated event.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class SubjectUpdateEvent {
 	/**
@@ -57,34 +60,70 @@ public class SubjectUpdateEvent {
 	}
 
 
+	/**
+	 * <p>Getter for the field <code>originator</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOriginator() {
 		return originator;
 	}
 
+	/**
+	 * <p>Setter for the field <code>originator</code>.</p>
+	 *
+	 * @param originator a {@link java.lang.String} object.
+	 */
 	public void setOriginator(String originator) {
 		this.originator = originator;
 	}
 
+	/**
+	 * <p>Getter for the field <code>subject</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSubject() {
 		return subject;
 	}
 
+	/**
+	 * <p>Setter for the field <code>subject</code>.</p>
+	 *
+	 * @param subject a {@link java.lang.String} object.
+	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
+	/**
+	 * <p>Getter for the field <code>timestamp</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getTimestamp() {
 		return timestamp;
 	}
 
+	/**
+	 * <p>Getter for the field <code>targetUserId</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTargetUserId() {
 		return targetUserId;
 	}
 
+	/**
+	 * <p>Setter for the field <code>targetUserId</code>.</p>
+	 *
+	 * @param targetUserId a {@link java.lang.String} object.
+	 */
 	public void setTargetUserId(String targetUserId) {
 		this.targetUserId = targetUserId;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder("S: ").append(getSubject()).append(", O: ").append(getOriginator());

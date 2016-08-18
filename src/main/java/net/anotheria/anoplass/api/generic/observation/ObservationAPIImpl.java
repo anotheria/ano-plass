@@ -9,8 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Implementation of the observation api.
- * @author lrosenberg.
  *
+ * @author lrosenberg.
+ * @version $Id: $Id
  */
 public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAPI{
 	
@@ -19,12 +20,18 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	 */
 	private Storage<String, List<Observer>> subjects;
 	
+	/**
+	 * <p>init.</p>
+	 *
+	 * @throws net.anotheria.anoplass.api.APIInitException if any.
+	 */
 	public void init() throws APIInitException {
 		super.init();
 		subjects = Storage.createConcurrentHashMapStorage("subjects");
 		//createDebugObserver();
 	}
 
+	/** {@inheritDoc} */
 	@Override public void fireSubjectUpdateForCurrentUser(String subject, String originator) {
 		log.debug("Firing update event for current user, originator: "+originator+" and subject: "+subject);
 		List<Observer> observers = subjects.get(subject);
@@ -40,6 +47,7 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override public void fireSubjectUpdateForUser(String subject, String originator, String userId) {
 		log.debug("Firing update event for user "+userId+", originator: "+originator+" and subject: "+subject);
 		List<Observer> observers = subjects.get(subject);
@@ -55,6 +63,7 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override public void unRegisterObserver(Observer observer, String... someSubjects) {
 		for (String subject : someSubjects)
 			unRegisterObserver(observer, subject);
@@ -73,6 +82,7 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 		observers.remove(observer);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void registerObserver(Observer observer, String... someSubjects) {
 		for (String subject : someSubjects)
 			registerObserver(subject, observer);

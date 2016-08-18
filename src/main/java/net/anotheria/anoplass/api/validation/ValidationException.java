@@ -7,6 +7,9 @@ import net.anotheria.anoplass.api.APIException;
 
 /**
  * ValidationException. Happens on validation errors.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class ValidationException extends APIException {
 	/**
@@ -21,18 +24,23 @@ public class ValidationException extends APIException {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param someErrors errors
 	 */
 	public ValidationException(List<ValidationError> someErrors){
 		errors = someErrors;
 	}
 	
+	/**
+	 * <p>Constructor for ValidationException.</p>
+	 */
 	public ValidationException(){
 		this(new ArrayList<ValidationError>());
 	}
 
 	/**
 	 * Returns errors.
+	 *
 	 * @return collection
 	 */
 	public List<ValidationError> getErrors(){

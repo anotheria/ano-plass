@@ -4,6 +4,7 @@ package net.anotheria.anoplass.api;
  * NoAPIFactoryException should be used in APIFinder, when API not founded.
  *
  * @author h3llka
+ * @version $Id: $Id
  */
 public class NoAPIFactoryException extends RuntimeException{
 

@@ -11,8 +11,10 @@ import java.lang.reflect.Proxy;
 
 /**
  * This is an api implementation for on the fly api construction for mocking.
- * For each method called on this object it performs a lookup in the MockAPIRegistry for the corresponding method impl. This object is used to construct an api on the fly. 
+ * For each method called on this object it performs a lookup in the MockAPIRegistry for the corresponding method impl. This object is used to construct an api on the fly.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APIMockImpl<T extends API> implements API, InvocationHandler{
 	/**
@@ -25,25 +27,34 @@ public class APIMockImpl<T extends API> implements API, InvocationHandler{
 	private static Logger log = LoggerFactory.getLogger(APIMockImpl.class);
 	/**
 	 * Creates a new mocked api.
-	 * @param aMockedClazz
+	 *
+	 * @param aMockedClazz a {@link java.lang.Class} object.
 	 */
 	public APIMockImpl(Class<T> aMockedClazz){
 		mockedClazz = aMockedClazz;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void deInit() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void init() {
 	}
 	
+	/**
+	 * <p>createAPIProxy.</p>
+	 *
+	 * @return a T object.
+	 */
 	@SuppressWarnings("unchecked")
 	public T createAPIProxy(){
 		return (T)Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{mockedClazz}, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {

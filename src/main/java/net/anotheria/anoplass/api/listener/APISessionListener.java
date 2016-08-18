@@ -8,6 +8,12 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 
+/**
+ * <p>APISessionListener class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class APISessionListener implements HttpSessionListener{
 
     /**
@@ -15,10 +21,12 @@ public class APISessionListener implements HttpSessionListener{
      */
 	private static Logger log = LoggerFactory.getLogger(APISessionListener.class);
 
+	/** {@inheritDoc} */
 	public void sessionCreated(HttpSessionEvent event) {
 		
 	}
 
+	/** {@inheritDoc} */
 	public void sessionDestroyed(HttpSessionEvent event) {
 		try{
 			APISessionManager.getInstance().destroyAPISessionByReferenceId(event.getSession().getId());

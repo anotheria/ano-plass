@@ -32,6 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This class manages api sessions.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APISessionManager {
 	/**
@@ -192,10 +193,10 @@ public class APISessionManager {
 	 * <p/>
 	 * Additional parameters :
 	 * <p/>
-	 * <b>remoteAddress</b> - additional parameter {@link javax.servlet.http.HttpServletRequest#getRemoteAddr()} which will be populated to just obtained {@link APISession}.
-	 * <b>userAgent</b> - user agent header {@link javax.servlet.http.HttpServletRequest#getHeader(String)} which will be populated to just obtained {@link APISession}.
-	 * <b>locale</b> - locale from request {@link javax.servlet.http.HttpServletRequest#getLocale()} which will be populated to  {@link APICallContext} if required.
-	 * <b>editorId</b> - cms editor id  from session attributes {@link javax.servlet.http.HttpSession#getAttribute(String)} which will be populated to  {@link APICallContext} if required.
+	 * <b>remoteAddress</b> - additional parameter {@link javax.servlet.http.HttpServletRequest#getRemoteAddr()} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
+	 * <b>userAgent</b> - user agent header {@link javax.servlet.http.HttpServletRequest#getHeader(String)} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
+	 * <b>locale</b> - locale from request {@link javax.servlet.http.HttpServletRequest#getLocale()} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
+	 * <b>editorId</b> - cms editor id  from session attributes {@link javax.servlet.http.HttpSession#getAttribute(String)} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
 	 * <p/>
 	 * <p/>
 	 *
@@ -207,8 +208,8 @@ public class APISessionManager {
 	 * @param userAgent              - request  remote ip property
 	 * @param locale                 request Locale property
 	 * @param editorId               cms editor id.. as HttpSession attribute
-	 * @return obtained {@link APISession}
-	 * @throws APISessionCreationException on Session obtain errors
+	 * @return obtained {@link net.anotheria.anoplass.api.session.APISession}
+	 * @throws net.anotheria.anoplass.api.session.APISessionCreationException on Session obtain errors
 	 */
 	public APISession obtainSession(final String httpSessionId, final String apiSessionId, final String dSessionIdFromCookies, String dSessionIdRequestParam,
 									final String remoteAddress, final String userAgent, final Locale locale, final String editorId) throws APISessionCreationException {
@@ -259,8 +260,8 @@ public class APISessionManager {
 	 * Usage only for tests, and different test context initialization stuff!
 	 *
 	 * @param referenceId reference id
-	 * @return {@link APISession}
-	 * @throws APISessionCreationException on errors
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
+	 * @throws net.anotheria.anoplass.api.session.APISessionCreationException on errors
 	 */
 	@Deprecated
 	public APISession obtainSession(String referenceId) throws APISessionCreationException {
@@ -305,7 +306,7 @@ public class APISessionManager {
 	 *
 	 * @param referenceId Http session ID
 	 * @return create APISession
-	 * @throws APISessionCreationException on distributed apiSession create errors
+	 * @throws net.anotheria.anoplass.api.session.APISessionCreationException on distributed apiSession create errors
 	 */
 	protected APISession createSession(String referenceId) throws APISessionCreationException {
 
@@ -332,8 +333,8 @@ public class APISessionManager {
 	 *
 	 * @param sessionId   id of session to restore
 	 * @param referenceId jSessionId  (after success restore - event should be generated! and all hosts without this session id - should loose curr session)
-	 * @return {@link APISession}
-	 * @throws APISessionRestoreException on restore and configuration failures
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
+	 * @throws net.anotheria.anoplass.api.session.APISessionRestoreException on restore and configuration failures
 	 */
 	protected APISession restoreSession(String sessionId, String referenceId) throws APISessionRestoreException {
 		if (!distributionConfig.isDistributionEnabled())
@@ -405,7 +406,7 @@ public class APISessionManager {
 	/**
 	 * Returns a list with all reference ids.
 	 *
-	 * @return {@link ArrayList<String> }
+	 * @return {@link ArrayList<String>}
 	 */
 	public ArrayList<String> getReferenceIds() {
 		ArrayList<String> ret = new ArrayList<String>(referenceIds.size());
@@ -417,7 +418,7 @@ public class APISessionManager {
 	/**
 	 * Returns a list with all session ids.
 	 *
-	 * @return {@link ArrayList<String> }
+	 * @return {@link ArrayList<String>}
 	 */
 	public ArrayList<String> getSessionIds() {
 		ArrayList<String> ret = new ArrayList<String>(sessions.size());
@@ -430,7 +431,7 @@ public class APISessionManager {
 	 * Returns the session with the given id.
 	 *
 	 * @param id session id
-	 * @return {@link APISession}
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
 	 */
 	public APISession getSession(String id) {
 		APISession session = sessions.get(id);
@@ -462,7 +463,7 @@ public class APISessionManager {
 	 * Returns a session by the reference id of its connected object.
 	 *
 	 * @param aReferenceId associated httpSession id
-	 * @return {@link APISession}
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
 	 */
 	public APISession getSessionByReferenceId(String aReferenceId) {
 		String sessionId;
@@ -545,7 +546,7 @@ public class APISessionManager {
 	/**
 	 * Adds an api session listener.
 	 *
-	 * @param listener {@link APISessionManagerListener}
+	 * @param listener {@link net.anotheria.anoplass.api.session.APISessionManagerListener}
 	 */
 	public void addAPISessionManagerListener(APISessionManagerListener listener) {
 		listeners.add(listener);

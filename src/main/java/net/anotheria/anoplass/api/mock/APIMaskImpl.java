@@ -14,9 +14,11 @@ import java.lang.reflect.Proxy;
 
 /**
  * This is a masking api implementation which is used as wrapper to an underlying api implementation and allows masking of methods.
+ *
  * @see MaskMethodRegistry
  * @see APIFinder
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 	/**
@@ -33,29 +35,38 @@ public class APIMaskImpl <T extends API> implements API, InvocationHandler{
 	private static Logger log = LoggerFactory.getLogger(APIMockImpl.class);
 	/**
 	 * Created a new masked api.
-	 * @param aMaskedInstance
-	 * @param aMaskedClazz
+	 *
+	 * @param aMaskedInstance a T object.
+	 * @param aMaskedClazz a {@link java.lang.Class} object.
 	 */
 	public APIMaskImpl(T aMaskedInstance, Class<T> aMaskedClazz){
 		maskedInstance = aMaskedInstance;
 		maskedClazz = aMaskedClazz;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void deInit() {
 		maskedInstance.deInit();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void init() throws APIInitException {
 		maskedInstance.init();
 	}
 	
+	/**
+	 * <p>createAPIProxy.</p>
+	 *
+	 * @return a T object.
+	 */
 	@SuppressWarnings("unchecked")
 	public T createAPIProxy(){
 		return (T)Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{maskedClazz}, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {

@@ -17,6 +17,7 @@ import java.io.IOException;
  * Utility class which helps with Session Distribution.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class APISessionDistributionHelper {
 	/**
@@ -43,8 +44,8 @@ public final class APISessionDistributionHelper {
 	 *
 	 * @param distributedSessionName the name of the distributed session.
 	 * @param callServiced           id of caller service
-	 * @return {@link APISession}
-	 * @throws APISessionDistributionException
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
+	 * @throws net.anotheria.anoplass.api.session.APISessionDistributionException
 	 *          on errors from backend service
 	 */
 	public static APISession restoreSession(String distributedSessionName, String callServiced) throws APISessionDistributionException {
@@ -219,7 +220,7 @@ public final class APISessionDistributionHelper {
 	 *
 	 * @param aSessionId session id.
 	 * @return session id will be returned
-	 * @throws APISessionDistributionException
+	 * @throws net.anotheria.anoplass.api.session.APISessionDistributionException
 	 *          on distribution exception.
 	 */
 	public static String createSession(String aSessionId) throws APISessionDistributionException {

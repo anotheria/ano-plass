@@ -10,8 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A registry for mocking methods.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class MockMethodRegistry {
 	/**
@@ -31,7 +32,9 @@ public class MockMethodRegistry {
 
 	/**
 	 * Adding mock method to the registry.
+	 *
 	 * @param m method
+	 * @param mock mocked implementation
 	 * @param mock mocked implementation
 	 */
 	public static void addMockMethod(Method m, APIMockMethod mock){
@@ -40,6 +43,7 @@ public class MockMethodRegistry {
 
 	/**
 	 * Return mocked method.
+	 *
 	 * @param m method itself
 	 * @return mocked implementation from registry
 	 */

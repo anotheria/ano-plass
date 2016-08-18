@@ -5,6 +5,9 @@ import org.configureme.annotations.ConfigureMe;
 
 /**
  * ConfigureME based Config. APIConfigurable - for API configuring.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 @ConfigureMe(name = "apiconfig")
 public class APIConfigurable {
@@ -29,26 +32,56 @@ public class APIConfigurable {
 	public APIConfigurable(){
 	}
 
+	/**
+	 * <p>isVerboseMethodCalls.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isVerboseMethodCalls() {
 		return verboseMethodCalls;
 	}
 
+	/**
+	 * <p>Setter for the field <code>verboseMethodCalls</code>.</p>
+	 *
+	 * @param value a boolean.
+	 */
 	public void setVerboseMethodCalls(boolean value) {
 		verboseMethodCalls = value;
 	}
 
+	/**
+	 * <p>isAssociateSessions.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAssociateSessions() {
 		return associateSessions;
 	}
 
+	/**
+	 * <p>Setter for the field <code>associateSessions</code>.</p>
+	 *
+	 * @param associateSessions a boolean.
+	 */
 	public void setAssociateSessions(boolean associateSessions) {
 		this.associateSessions = associateSessions;
 	}
 
+	/**
+	 * <p>isEnableApiMonitoring.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isEnableApiMonitoring() {
 		return enableApiMonitoring;
 	}
 
+	/**
+	 * <p>Setter for the field <code>enableApiMonitoring</code>.</p>
+	 *
+	 * @param enableApiMonitoring a boolean.
+	 */
 	public void setEnableApiMonitoring(boolean enableApiMonitoring) {
 		this.enableApiMonitoring = enableApiMonitoring;
 	}

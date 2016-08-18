@@ -6,6 +6,7 @@ import net.anotheria.anoplass.api.API;
  * This api is used to track users activity.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public interface ActivityAPI extends API {
     /**

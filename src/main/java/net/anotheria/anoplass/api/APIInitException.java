@@ -1,9 +1,10 @@
 package net.anotheria.anoplass.api;
 
 /**
- * APIInitException, for init - errors. 
+ * APIInitException, for init - errors.
  *
  * @author h3llka
+ * @version $Id: $Id
  */
 public class APIInitException extends APIException {
 

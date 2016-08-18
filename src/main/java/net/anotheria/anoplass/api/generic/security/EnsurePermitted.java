@@ -5,6 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p>EnsurePermitted class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 @Retention (RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface EnsurePermitted {

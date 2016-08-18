@@ -8,7 +8,9 @@ import java.lang.reflect.Method;
 /**
  * Return object mask method.
  *
- * @param <T> - masked API type {@link API}
+ * @param <T> - masked API type {@link net.anotheria.anoplass.api.API}
+ * @author another
+ * @version $Id: $Id
  */
 public class ReturnObjectMaskMethod<T extends API> implements APIMaskMethod<T> {
 	/**
@@ -19,12 +21,13 @@ public class ReturnObjectMaskMethod<T extends API> implements APIMaskMethod<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param anObject {@link Object}
+	 * @param anObject {@link java.lang.Object}
 	 */
 	public ReturnObjectMaskMethod(Object anObject) {
 		returnValue = anObject;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(Method method, Object[] args, T maskedAPI) throws APIException {
 		return returnValue;

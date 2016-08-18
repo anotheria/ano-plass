@@ -17,6 +17,9 @@ import java.util.Map;
 
 /**
  * APIConfig.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class APIConfig {
 
@@ -68,6 +71,19 @@ public class APIConfig {
 		}
 	}
 
+	static {
+		servicePolicy = SERVICE_POLICY_DEFAULT;
+
+		aliasMap = new HashMap<Class<? extends API>, List<Class<? extends API>>>();
+		// addAlias(ITargetingAPI.class, ITargetingTestingAPI.class);
+
+		configurable = new APIConfigurable();
+		try{
+			ConfigurationManager.INSTANCE.configure(configurable);
+		}catch(IllegalArgumentException apiConfigNotFound){
+			log.warn("apiconfig not found, running with default values");
+		}
+	}
 	@SuppressWarnings("unused")
 	private static void addAlias(Class<? extends API> interfaceClass,
 			Class<? extends API> aliasClass) {
@@ -81,6 +97,7 @@ public class APIConfig {
 
 	/**
 	 * Return configured Aliases for selected API.
+	 *
 	 * @param source API.
 	 * @return Collection
 	 */
@@ -91,6 +108,7 @@ public class APIConfig {
 
 	/**
 	 * Creates factories map.
+	 *
 	 * @return Collection
 	 */
 	public static Map<Class<? extends API>, APIFactory<? extends API>> getFactories() {
@@ -107,6 +125,7 @@ public class APIConfig {
 
 	/**
 	 * Returns configured interface aliases.
+	 *
 	 * @return collection.
 	 */
 	public static Map<Class<? extends API>, List<Class<? extends API>>> getInterfaceAliases() {
@@ -115,6 +134,7 @@ public class APIConfig {
 
 	/**
 	 * Returns current service policy.
+	 *
 	 * @return int value
 	 */
 	public static int getServicePolicy() {
@@ -123,16 +143,27 @@ public class APIConfig {
 
 	/**
 	 * Returns true if verboseMethodCall is enabled, false otherwise.
+	 *
 	 * @return boolean value
 	 */
 	public static boolean verboseMethodCalls() {
 		return configurable.isVerboseMethodCalls();
 	}
 
+	/**
+	 * <p>associateSessions.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public static boolean associateSessions(){
 		return configurable.isAssociateSessions();
 	}
 
+	/**
+	 * <p>enableAPIMonitoring.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public static boolean enableAPIMonitoring(){
 		return configurable.isEnableApiMonitoring();
 	}

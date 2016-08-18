@@ -4,8 +4,8 @@ package net.anotheria.anoplass.api.session;
  * APISessionManager  exception.
  *
  * @author h3ll
+ * @version $Id: $Id
  */
-
 public class APISessionManagerException extends Exception {
 
 	/**

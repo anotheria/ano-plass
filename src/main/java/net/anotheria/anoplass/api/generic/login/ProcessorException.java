@@ -3,7 +3,9 @@ package net.anotheria.anoplass.api.generic.login;
 import net.anotheria.anoplass.api.APIException;
 /**
  * Can be thrown by a login/logout preprocessor.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ProcessorException extends APIException {
 
@@ -21,6 +23,7 @@ public class ProcessorException extends APIException {
 	
 	/**
 	 * Creates a new ProcessorException.
+	 *
 	 * @param message string message
 	 */
 	public ProcessorException(String message){
@@ -29,6 +32,7 @@ public class ProcessorException extends APIException {
 
 	/**
 	 * Creates a new ProcessorException.
+	 *
 	 * @param message string message
 	 * @param cause exception
 	 */

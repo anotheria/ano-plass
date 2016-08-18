@@ -30,6 +30,7 @@ import java.io.IOException;
  * The filter which performs bounding of a user request and session to the previously created or new APISession and APICallContext.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APIFilter implements Filter {
 
@@ -76,11 +77,13 @@ public class APIFilter implements Filter {
 	private APISessionDistributionConfig configuration;
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void destroy() {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void doFilter(ServletRequest sReq, ServletResponse sRes, FilterChain chain) throws IOException, ServletException {
 
@@ -149,6 +152,7 @@ public class APIFilter implements Filter {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		activityAPI = APIFinder.findAPI(ActivityAPI.class);
@@ -158,12 +162,12 @@ public class APIFilter implements Filter {
 
 	/**
 	 * Initializes the APISession.
-	 * Simply obtain using {@link APISessionManager} instance.
+	 * Simply obtain using {@link net.anotheria.anoplass.api.session.APISessionManager} instance.
 	 * <p/>
 	 * <p/>
 	 *
 	 * @param req {@link javax.servlet.http.HttpServletRequest}}
-	 * @return {@link APISession}
+	 * @return {@link net.anotheria.anoplass.api.session.APISession}
 	 * @throws javax.servlet.ServletException on errors
 	 */
 	protected APISession initSession(HttpServletRequest req) throws ServletException {

@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * The default implementation of the APISession.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class APISessionImpl implements APISession, Serializable {
 
@@ -90,6 +91,7 @@ public class APISessionImpl implements APISession, Serializable {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getAttribute(String key) {
 		AttributeWrapper wrapper = attributes.get(key);
@@ -99,15 +101,23 @@ public class APISessionImpl implements APISession, Serializable {
 		return wrapper == null ? null : wrapper.getValue();
 	}
 
+    /**
+     * <p>getAttributeWrapper.</p>
+     *
+     * @param key a {@link java.lang.String} object.
+     * @return a {@link net.anotheria.anoplass.api.session.AttributeWrapper} object.
+     */
     public AttributeWrapper getAttributeWrapper(String key){
         return attributes.get(key);
     }
 
+	/** {@inheritDoc} */
 	@Override
 	public String getId() {
 		return id;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setAttribute(String key, int policy, Object value) {
 		AttributeWrapper wrapper = new AttributeWrapper(key, value, policy);
@@ -119,6 +129,7 @@ public class APISessionImpl implements APISession, Serializable {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void setAttribute(String key, int policy, Object value, long expiresWhen) {
 		AttributeWrapper wrapper = new AttributeWrapper(key, value, policy, expiresWhen);
@@ -129,11 +140,13 @@ public class APISessionImpl implements APISession, Serializable {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setAttribute(String key, Object value) {
 		setAttribute(key, APISession.POLICY_DEFAULT, value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeAttribute(String key) {
 		AttributeWrapper wrapper = attributes.get(key);
@@ -143,21 +156,25 @@ public class APISessionImpl implements APISession, Serializable {
 			sessionCallBack.attributeRemoved(getId(), key);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> getAttributeNames() {
 		return new ArrayList<String>(attributes.keySet());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "Id: " + id + ", attributes: " + attributes.size();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getIpAddress() {
 		return ipAddress;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setIpAddress(String anIpAddress) {
 		String oldIpAddress = ipAddress;
@@ -166,11 +183,13 @@ public class APISessionImpl implements APISession, Serializable {
 			log.warn(this + " session switches ip from " + oldIpAddress + ", to: " + ipAddress);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getUserAgent() {
 		return userAgent;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setUserAgent(String anUserAgent) {
 		userAgent = anUserAgent;
@@ -186,6 +205,8 @@ public class APISessionImpl implements APISession, Serializable {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Called on logout. Removes all attributes except those with the POLICY_SURVIVE_LOGOUT.
 	 */
 	@Override
@@ -221,7 +242,7 @@ public class APISessionImpl implements APISession, Serializable {
 	/**
 	 * Dump session to stream for debug purposes.
 	 *
-	 * @param out {@link PrintStream}
+	 * @param out {@link java.io.PrintStream}
 	 */
 	public void dumpSession(PrintStream out) {
 		out.println("API Session with id: " + getId() + ", Attributes: " + attributes);
@@ -232,13 +253,18 @@ public class APISessionImpl implements APISession, Serializable {
 	/**
 	 * Dump session to log for debug purposes.
 	 *
-	 * @param log {@link Logger}
+	 * @param log {@link org.slf4j.Logger}
 	 */
 	public void dumpSession(Logger log) {
 		log.debug("API Session with id: " + getId() + ", Attributes: " + attributes);
 	}
 
 
+	/**
+	 * <p>Getter for the field <code>referenceId</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getReferenceId() {
 		return referenceId;
 	}
@@ -253,6 +279,7 @@ public class APISessionImpl implements APISession, Serializable {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public String getCurrentUserId() {
 		return currentUserId;
@@ -272,6 +299,7 @@ public class APISessionImpl implements APISession, Serializable {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getCurrentEditorId() {
 		return currentEditorId;
@@ -316,14 +344,19 @@ public class APISessionImpl implements APISession, Serializable {
 		actionScope.clear();
 	}
 
+	/**
+	 * <p>Getter for the field <code>locale</code>.</p>
+	 *
+	 * @return a {@link java.util.Locale} object.
+	 */
 	public Locale getLocale() {
 		return locale;
 	}
 
 	/**
-	 * Set locale.
+	 * {@inheritDoc}
 	 *
-	 * @param aLocale locale to set
+	 * Set locale.
 	 */
 	public void setLocale(Locale aLocale) {
 		this.locale = aLocale;
@@ -331,6 +364,11 @@ public class APISessionImpl implements APISession, Serializable {
 
 
 
+	/**
+	 * <p>Setter for the field <code>sessionCallBack</code>.</p>
+	 *
+	 * @param sessionCallBack a {@link net.anotheria.anoplass.api.session.APISessionImpl.APISessionCallBack} object.
+	 */
 	protected void setSessionCallBack(APISessionCallBack sessionCallBack) {
 		this.sessionCallBack = sessionCallBack;
 	}

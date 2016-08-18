@@ -8,6 +8,9 @@ import java.util.Collection;
 
 /**
  * APIController. Just help  to manage init && deInit on  app startUp or shutdown.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class APIController {
 
@@ -46,6 +49,9 @@ public class APIController {
 
 	/*
 	 * Called on application start.
+	 */
+	/**
+	 * <p>notifyStart.</p>
 	 */
 	public void notifyStart() {
 	}
