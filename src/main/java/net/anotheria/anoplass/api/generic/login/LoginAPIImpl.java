@@ -1,8 +1,5 @@
 package net.anotheria.anoplass.api.generic.login;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.APIInitException;
@@ -13,6 +10,9 @@ import net.anotheria.anoplass.api.generic.observation.ObservationAPI;
 import net.anotheria.anoplass.api.generic.observation.ObservationSubjects;
 import net.anotheria.anoplass.api.session.APISessionImpl;
 import net.anotheria.util.StringUtils;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * An implementation for the login api.
@@ -133,11 +133,7 @@ public class LoginAPIImpl extends AbstractAPIImpl implements LoginAPI{
 
 	/** {@inheritDoc} */
 	@Override public boolean isLogedIn() {
-		//try{
-			return !StringUtils.isEmpty(getCallContext().getCurrentUserId());
-		/*}catch(APIException e){
-			return false;
-		}*/
+		return !StringUtils.isEmpty(getCallContext().getCurrentUserId());
 	}
 
 	/** {@inheritDoc} */
