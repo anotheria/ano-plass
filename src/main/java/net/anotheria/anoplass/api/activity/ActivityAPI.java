@@ -2,6 +2,9 @@ package net.anotheria.anoplass.api.activity;
 
 
 import net.anotheria.anoplass.api.API;
+
+import java.util.List;
+
 /**
  * This api is used to track users activity.
  *
@@ -17,5 +20,7 @@ public interface ActivityAPI extends API {
      * @param url resource url itself
      */
     void notifyMyActivity(String url);
+
+    List<Activity> getMyActivities();
 
 }
