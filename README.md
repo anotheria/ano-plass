@@ -1,4 +1,4 @@
 ano-plass
 =========
 
-Presenation login and stateful services.
+Presentation logic and stateful services.
