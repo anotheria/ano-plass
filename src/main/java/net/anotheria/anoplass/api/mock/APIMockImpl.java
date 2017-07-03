@@ -13,6 +13,7 @@ import java.lang.reflect.Proxy;
  * This is an api implementation for on the fly api construction for mocking.
  * For each method called on this object it performs a lookup in the MockAPIRegistry for the corresponding method impl. This object is used to construct an api on the fly.
  *
+ * @param <T> API interface.
  * @author lrosenberg
  * @version $Id: $Id
  */
