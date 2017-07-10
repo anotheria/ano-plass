@@ -331,7 +331,7 @@ public class APISessionImpl implements APISession, Serializable {
 	/**
 	 * Return action scope map.
 	 *
-	 * @return {@link Map<String,Object>}
+	 * @return {@link Map}
 	 */
 	public Map<String, Object> getActionScope() {
 		return actionScope;

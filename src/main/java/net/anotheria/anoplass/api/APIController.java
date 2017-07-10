@@ -7,7 +7,7 @@ import java.util.Collection;
 
 
 /**
- * APIController. Just help  to manage init && deInit on  app startUp or shutdown.
+ * APIController. Just help  to manage init &amp;&amp; deInit on  app startUp or shutdown.
  *
  * @author another
  * @version $Id: $Id

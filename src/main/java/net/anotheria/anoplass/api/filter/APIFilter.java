@@ -163,8 +163,6 @@ public class APIFilter implements Filter {
 	/**
 	 * Initializes the APISession.
 	 * Simply obtain using {@link net.anotheria.anoplass.api.session.APISessionManager} instance.
-	 * <p/>
-	 * <p/>
 	 *
 	 * @param req {@link javax.servlet.http.HttpServletRequest}}
 	 * @return {@link net.anotheria.anoplass.api.session.APISession}

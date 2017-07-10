@@ -172,33 +172,24 @@ public class APISessionManager {
 	 * Obtain session.
 	 * There are few options available.
 	 * First if distribution is enabled and "dSessionIdRequestParam" is available - system will try to restore distributed session, if session will be successfully restored - that's it.
-	 * <p/>
 	 * In case if "apiSessionId" is not available, distribution is enabled and "dSessionIdFromCookies" present - system  will try to restore distributed session, in case of failure
 	 * new session will be created.
-	 * <p/>
 	 * The last  chance to obtain session  is next :
-	 * <p/>
 	 * If "apiSessionId"  -  is present - system will try to find session with such in local storage, in case of failure  new session will be created...
-	 * <p/>
-	 * <p/>
 	 * Base parameters :
 	 * <b>httpSessionId</b>  reference id , actually {@link javax.servlet.http.HttpSession#getId()}.
 	 * <b>apiSessionId</b>   actually api session id - which is  linked to current HttpSession.
-	 * <p/>
 	 * Session-Restore options/parameters:
-	 * <p>Each of them can be NULL!</p>
+	 * Each of them can be NULL!
 	 * <b>dSessionIdFromCookies</b>  - has  the highest priority .. In case when session distribution is enabled and  properly configured + session with such id  still was not restored,
-	 * system  will try to restore  Distributed api session  using this  property...</p>
-	 * <b>dSessionIdFromCookies</b> - will be used if no API session still attached to HttpSession, and distribution is  enabled.<p/>
-	 * <p/>
+	 * system  will try to restore  Distributed api session  using this  property...
+	 * <b>dSessionIdFromCookies</b> - will be used if no API session still attached to HttpSession, and distribution is  enabled.
+	 * 
 	 * Additional parameters :
-	 * <p/>
 	 * <b>remoteAddress</b> - additional parameter {@link javax.servlet.http.HttpServletRequest#getRemoteAddr()} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
 	 * <b>userAgent</b> - user agent header {@link javax.servlet.http.HttpServletRequest#getHeader(String)} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
 	 * <b>locale</b> - locale from request {@link javax.servlet.http.HttpServletRequest#getLocale()} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
 	 * <b>editorId</b> - cms editor id  from session attributes {@link javax.servlet.http.HttpSession#getAttribute(String)} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
-	 * <p/>
-	 * <p/>
 	 *
 	 * @param httpSessionId          reference id itself
 	 * @param apiSessionId           id of  api session  which should be obtained .. NULL is possible
@@ -406,7 +397,7 @@ public class APISessionManager {
 	/**
 	 * Returns a list with all reference ids.
 	 *
-	 * @return {@link ArrayList<String>}
+	 * @return {@link ArrayList}
 	 */
 	public ArrayList<String> getReferenceIds() {
 		ArrayList<String> ret = new ArrayList<String>(referenceIds.size());
@@ -418,7 +409,7 @@ public class APISessionManager {
 	/**
 	 * Returns a list with all session ids.
 	 *
-	 * @return {@link ArrayList<String>}
+	 * @return {@link ArrayList}
 	 */
 	public ArrayList<String> getSessionIds() {
 		ArrayList<String> ret = new ArrayList<String>(sessions.size());
