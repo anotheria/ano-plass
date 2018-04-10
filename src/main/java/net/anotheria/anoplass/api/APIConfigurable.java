@@ -25,6 +25,11 @@ public class APIConfigurable {
 	 * If api's should be monitored. Default true.
 	 */
 	@Configure private boolean enableApiMonitoring = true;
+
+	/**
+	 * Support remoting for observation. If true remoting events should be propagated.
+	 */
+	@Configure private boolean supportRemotingForObservation = false;
 	
 	/**
 	 * Constructor.
@@ -84,5 +89,13 @@ public class APIConfigurable {
 	 */
 	public void setEnableApiMonitoring(boolean enableApiMonitoring) {
 		this.enableApiMonitoring = enableApiMonitoring;
+	}
+
+	public boolean isSupportRemotingForObservation() {
+		return supportRemotingForObservation;
+	}
+
+	public void setSupportRemotingForObservation(boolean supportRemotingForObservation) {
+		this.supportRemotingForObservation = supportRemotingForObservation;
 	}
 }

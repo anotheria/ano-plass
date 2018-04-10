@@ -53,6 +53,8 @@ public class APIConfig {
      * {@link Logger} logger.
      */
 	private static Logger log = LoggerFactory.getLogger(APIConfig.class);
+
+
 	
 	/**
 	 * Initialisation.
@@ -166,6 +168,10 @@ public class APIConfig {
 	 */
 	public static boolean enableAPIMonitoring(){
 		return configurable.isEnableApiMonitoring();
+	}
+
+	public static boolean supportRemotingForObservation(){
+		return configurable.isSupportRemotingForObservation();
 	}
 
 }

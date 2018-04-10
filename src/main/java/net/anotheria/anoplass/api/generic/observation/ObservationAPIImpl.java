@@ -1,5 +1,6 @@
 package net.anotheria.anoplass.api.generic.observation;
 
+import net.anotheria.anoplass.api.APIConfig;
 import net.anotheria.anoplass.api.APIInitException;
 import net.anotheria.anoplass.api.AbstractAPIImpl;
 import net.anotheria.moskito.core.util.storage.Storage;
@@ -19,6 +20,8 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	 * Internal storage for subject-observer mappings.
 	 */
 	private Storage<String, List<Observer>> subjects;
+
+	private ObservationAPIEventingBridge observationAPIEventingBridge = null;
 	
 	/**
 	 * <p>init.</p>
@@ -29,6 +32,12 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 		super.init();
 		subjects = Storage.createConcurrentHashMapStorage("subjects");
 		//createDebugObserver();
+
+		log.debug("Support remoting for observation is "+ APIConfig.supportRemotingForObservation());
+		if (APIConfig.supportRemotingForObservation()){
+			observationAPIEventingBridge = new ObservationAPIEventingBridge(this);
+		}
+
 	}
 
 	/** {@inheritDoc} */
@@ -50,18 +59,35 @@ public class ObservationAPIImpl extends AbstractAPIImpl implements ObservationAP
 	/** {@inheritDoc} */
 	@Override public void fireSubjectUpdateForUser(String subject, String originator, String userId) {
 		log.debug("Firing update event for user "+userId+", originator: "+originator+" and subject: "+subject);
-		List<Observer> observers = subjects.get(subject);
-		if (observers == null || observers.size() == 0)
+		fireSubjectUpdateForUserInternally(subject, originator, userId);
+		//we check both conditions for check if we support remoting, this was we can switch off remoting via config if necessary for this instance, even the bridge is still here.
+		boolean supportRemoting = APIConfig.supportRemotingForObservation() && observationAPIEventingBridge != null;
+		if (!supportRemoting)
 			return;
+		observationAPIEventingBridge.fireSubjectUpdateForUser(subject, originator, userId);
+	}
+
+	public void remotelyFiredSubjectUpdateForUser(String subject, String originator, String userId) {
+		log.debug("Remotely fired update event for user "+userId+", originator: "+originator+" and subject: "+subject);
+		fireSubjectUpdateForUserInternally(subject, originator, userId);
+	}
+
+
+	private void fireSubjectUpdateForUserInternally(String subject, String originator, String userId){
+		List<Observer> observers = subjects.get(subject);
+		if (observers==null || observers.size()==0) {
+			return;
+		}
 		SubjectUpdateEvent event = new SubjectUpdateEvent(subject, originator, userId);
-		for (Observer anObserver : observers){
-			try{
+		for (Observer anObserver : observers) {
+			try {
 				anObserver.notifySubjectUpdatedForUser(event);
-			}catch(Exception e){
-				log.warn("(Uncaught exception in observer: "+anObserver+" .notifySubjectUpdatedForCurrentUser("+event+")",e);
+			} catch (Exception e) {
+				log.warn("(Uncaught exception in observer: " + anObserver + " .notifySubjectUpdatedForCurrentUser(" + event + ")", e);
 			}
 		}
 	}
+
 
 	/** {@inheritDoc} */
 	@Override public void unRegisterObserver(Observer observer, String... someSubjects) {
