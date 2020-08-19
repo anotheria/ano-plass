@@ -127,7 +127,7 @@ public class APICallHandler<T extends API> implements InvocationHandler {
 
 	}
 
-	static <T extends API> T createProxy(Class<T> identifier, Class<? extends API>[] interfaces, T impl) {
+	static <T extends API> T createProxy(Class<T> identifier, Class<?>[] interfaces, T impl) {
 
 		APICallHandler<T> handler = new APICallHandler<T>(impl);
 		@SuppressWarnings("unchecked")
