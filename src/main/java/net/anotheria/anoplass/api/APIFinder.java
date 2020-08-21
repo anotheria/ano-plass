@@ -8,6 +8,7 @@ import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandlerWithCallSysout;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
+import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,22 +146,30 @@ public final class APIFinder {
 		if (!APIConfig.enableAPIMonitoring())
 			return newAPI;
 		
-		Class<? extends API>[] interfaces = null;
+		Class<?>[] interfaces = null;
+		List<Class<?>> allInterfaces = ClassUtils.getAllInterfaces(identifier);
+		allInterfaces.remove(identifier);
+		allInterfaces.remove(API.class);
+
 		try{
 			List<Class<? extends API>> aliases = APIConfig.getAliases(identifier);
+			int i = 2;
+
 			if (aliases!=null && aliases.size()>0){
 				@SuppressWarnings("unchecked") 
-				Class<? extends API>[] interfacesWithAliases = (Class<? extends API>[]) new Class[aliases.size()+2];
+				Class<? extends API>[] interfacesWithAliases = (Class<? extends API>[]) new Class[aliases.size() + allInterfaces.size() + 2];
 				interfaces = interfacesWithAliases;
-				int i = 2;
 				for (Class<? extends API> a : aliases)
 					interfaces[i++] = a;
 			}else{
 				@SuppressWarnings("unchecked") 
-				Class<? extends API>[] interfacesWithoutAliases = (Class<? extends API>[]) new Class[2];
+				Class<? extends API>[] interfacesWithoutAliases = (Class<? extends API>[]) new Class[allInterfaces.size() + 2];
 				interfaces = interfacesWithoutAliases;
 			}
-			
+
+			for (Class<?> a : allInterfaces)
+				interfaces[i++] = a;
+
 			interfaces[0] = identifier;
 			interfaces[1] = API.class;
 
