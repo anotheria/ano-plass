@@ -179,26 +179,4 @@ public interface APISession {
 	 * @param toSet locale
 	 */
 	void setLocale(Locale toSet);
-	/**
-	 * <p>Getter for the field <code>cfIpCountry</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCfIpCountry();
-	/**
-	 * IP Country to set.
-	 * @param cfIpCountry Cloudflare ip country to set
-	 */
-	void setCfIpCountry(String cfIpCountry);
-	/**
-	 * <p>Getter for the field <code>cfConnectingIp</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCfConnectingIp();
-	/**
-	 * Connecting IP to set.
-	 * @param cfConnectingIp Cloudflare connecting ip to set
-	 */
-	void setCfConnectingIp(String cfConnectingIp);
 }

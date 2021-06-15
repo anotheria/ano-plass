@@ -58,15 +58,6 @@ public class APISessionImpl implements APISession, Serializable {
 	 */
 	private Locale locale;
 	/**
-	 * Contains a two character country code of the originating visitor’s country.
-	 * XX is used for unknown country information.
-	 */
-	private String cfIpCountry;
-	/**
-	 * Provides the client (visitor) IP address (connecting to Cloudflare) to the origin web server.
-	 */
-	private String cfConnectingIp;
-	/**
 	 * APISessionCallBack instance.
 	 * NULL - when distribution is disabled!!!
 	 */
@@ -369,30 +360,6 @@ public class APISessionImpl implements APISession, Serializable {
 	 */
 	public void setLocale(Locale aLocale) {
 		this.locale = aLocale;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getCfIpCountry() {
-		return cfIpCountry;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setCfIpCountry(String cfIpCountry) {
-		this.cfIpCountry = cfIpCountry;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getCfConnectingIp() {
-		return cfConnectingIp;
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setCfConnectingIp(String cfConnectingIp) {
-		this.cfConnectingIp = cfConnectingIp;
 	}
 
 	/**

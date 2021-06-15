@@ -211,10 +211,10 @@ public class APIFilter implements Filter {
 			APISession apiSession = APISessionManager.getInstance().obtainSession(session.getId(), apiSessionId, dSessionIdFromCookies,
 					dSessionIdFromRequest, req.getRemoteAddr(), userAgent, req.getLocale(), editorId);
 			if (!StringUtils.isEmpty(cfIpCountry)){
-				apiSession.setCfIpCountry(cfIpCountry);
+				apiSession.setAttribute(CF_IP_COUNTRY_HEADER_CONSTANT, cfIpCountry);
 			}
 			if (!StringUtils.isEmpty(cfConnectingIp)){
-				apiSession.setCfConnectingIp(cfConnectingIp);
+				apiSession.setAttribute(CF_CONNECTING_IP_HEADER_CONSTANT, cfConnectingIp);
 			}
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("APISession - successfully obtained!");
