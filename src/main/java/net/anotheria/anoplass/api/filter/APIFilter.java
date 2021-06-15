@@ -53,6 +53,16 @@ public class APIFilter implements Filter {
 	 * User - Agent header constant.
 	 */
 	private static final String USER_AGENT_HEADER_CONSTANT = "user-agent";
+	/**
+	 * Cloudflare ip country header constant.
+	 * This header is added to requests by enabling Cloudflare IP Geolocation in the dashboard.
+	 */
+	private static final String CF_IP_COUNTRY_HEADER_CONSTANT = "CF-IPCountry";
+	/**
+	 * Cloudflare connecting ip header constant.
+	 * This header will only be sent on the traffic from Cloudflare's edge to your origin webserver.
+	 */
+	private static final String CF_CONNECTING_IP_HEADER_CONSTANT = "CF-Connecting-IP";
 
 	/**
 	 * The activity api, which is notified about all actions by the user.
@@ -184,6 +194,8 @@ public class APIFilter implements Filter {
 			final String dSessionIdFromRequest = req.getParameter(configuration.getDistributedSessionParameterName());
 			final String userAgent = req.getHeader(USER_AGENT_HEADER_CONSTANT);
 			final String editorId = (session.getAttribute(CURRENT_USER_ID) instanceof String) ? String.class.cast(session.getAttribute(CURRENT_USER_ID)) : null;
+			final String cfIpCountry = req.getHeader(CF_IP_COUNTRY_HEADER_CONSTANT);
+			final String cfConnectingIp = req.getHeader(CF_CONNECTING_IP_HEADER_CONSTANT);
 			//debug info
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("apiSessionId : " + apiSessionId);
@@ -191,11 +203,19 @@ public class APIFilter implements Filter {
 				LOG.debug("dSessionIdFromRequest : " + dSessionIdFromRequest);
 				LOG.debug("userAgent : " + userAgent);
 				LOG.debug("editorId : " + editorId);
+				LOG.debug("cfIpCountry : " + cfIpCountry);
+				LOG.debug("cfConnectingIp : " + cfConnectingIp);
 			}
 
 			//calling obtain session
 			APISession apiSession = APISessionManager.getInstance().obtainSession(session.getId(), apiSessionId, dSessionIdFromCookies,
 					dSessionIdFromRequest, req.getRemoteAddr(), userAgent, req.getLocale(), editorId);
+			if (!StringUtils.isEmpty(cfIpCountry)){
+				apiSession.setAttribute(CF_IP_COUNTRY_HEADER_CONSTANT, cfIpCountry);
+			}
+			if (!StringUtils.isEmpty(cfConnectingIp)){
+				apiSession.setAttribute(CF_CONNECTING_IP_HEADER_CONSTANT, cfConnectingIp);
+			}
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("APISession - successfully obtained!");
 			}

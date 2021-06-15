@@ -362,8 +362,6 @@ public class APISessionImpl implements APISession, Serializable {
 		this.locale = aLocale;
 	}
 
-
-
 	/**
 	 * <p>Setter for the field <code>sessionCallBack</code>.</p>
 	 *
