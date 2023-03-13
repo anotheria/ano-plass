@@ -177,7 +177,7 @@ public class APISessionManager {
 	 * The last  chance to obtain session  is next :
 	 * If "apiSessionId"  -  is present - system will try to find session with such in local storage, in case of failure  new session will be created...
 	 * Base parameters :
-	 * <b>httpSessionId</b>  reference id , actually {@link javax.servlet.http.HttpSession#getId()}.
+	 * <b>httpSessionId</b>  reference id , actually {@link jakarta.servlet.http.HttpSession#getId()}.
 	 * <b>apiSessionId</b>   actually api session id - which is  linked to current HttpSession.
 	 * Session-Restore options/parameters:
 	 * Each of them can be NULL!
@@ -186,10 +186,10 @@ public class APISessionManager {
 	 * <b>dSessionIdFromCookies</b> - will be used if no API session still attached to HttpSession, and distribution is  enabled.
 	 * 
 	 * Additional parameters :
-	 * <b>remoteAddress</b> - additional parameter {@link javax.servlet.http.HttpServletRequest#getRemoteAddr()} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
-	 * <b>userAgent</b> - user agent header {@link javax.servlet.http.HttpServletRequest#getHeader(String)} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
-	 * <b>locale</b> - locale from request {@link javax.servlet.http.HttpServletRequest#getLocale()} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
-	 * <b>editorId</b> - cms editor id  from session attributes {@link javax.servlet.http.HttpSession#getAttribute(String)} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
+	 * <b>remoteAddress</b> - additional parameter {@link jakarta.servlet.http.HttpServletRequest#getRemoteAddr()} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
+	 * <b>userAgent</b> - user agent header {@link jakarta.servlet.http.HttpServletRequest#getHeader(String)} which will be populated to just obtained {@link net.anotheria.anoplass.api.session.APISession}.
+	 * <b>locale</b> - locale from request {@link jakarta.servlet.http.HttpServletRequest#getLocale()} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
+	 * <b>editorId</b> - cms editor id  from session attributes {@link jakarta.servlet.http.HttpSession#getAttribute(String)} which will be populated to  {@link net.anotheria.anoplass.api.APICallContext} if required.
 	 *
 	 * @param httpSessionId          reference id itself
 	 * @param apiSessionId           id of  api session  which should be obtained .. NULL is possible
