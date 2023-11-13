@@ -1,24 +1,11 @@
 package net.anotheria.anoplass.api.filter;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import net.anotheria.anoplass.api.session.APISessionManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-import jakarta.servlet.AsyncContext;
-import jakarta.servlet.DispatcherType;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionContext;
-import jakarta.servlet.http.HttpUpgradeHandler;
-import jakarta.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -112,6 +99,24 @@ public class APIFilterTest {
 			currentSession = session;
 			params = new HashMap<String, String>();
 			attrs = new HashMap<String, Object>();
+		}
+
+		@Override
+		public String getRequestId() {
+			//TODO : Implement me!
+			throw new UnsupportedOperationException("Implement me please!!!");
+		}
+
+		@Override
+		public String getProtocolRequestId() {
+			//TODO : Implement me!
+			throw new UnsupportedOperationException("Implement me please!!!");
+		}
+
+		@Override
+		public ServletConnection getServletConnection() {
+			//TODO : Implement me!
+			throw new UnsupportedOperationException("Implement me please!!!");
 		}
 
 		@Override
@@ -238,13 +243,6 @@ public class APIFilterTest {
 
 		@Override
 		public boolean isRequestedSessionIdFromURL() {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
-		}
-
-		@Override
-		public boolean isRequestedSessionIdFromUrl() {
 
 			//TODO : Implement me!
 			throw new UnsupportedOperationException("Implement me please!!!");
@@ -428,13 +426,6 @@ public class APIFilterTest {
 		}
 
 		@Override
-		public String getRealPath(String s) {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
-		}
-
-		@Override
 		public int getRemotePort() {
 
 			//TODO : Implement me!
@@ -549,22 +540,8 @@ public class APIFilterTest {
 		}
 
 		@Override
-		public HttpSessionContext getSessionContext() {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
-		}
-
-		@Override
 		public Object getAttribute(String s) {
 			return attributes.get(s);
-		}
-
-		@Override
-		public Object getValue(String s) {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
 		}
 
 		@Override
@@ -575,34 +552,14 @@ public class APIFilterTest {
 		}
 
 		@Override
-		public String[] getValueNames() {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
-		}
-
-		@Override
 		public void setAttribute(String s, Object o) {
 			attributes.put(s, o);
 		}
 
-		@Override
-		public void putValue(String s, Object o) {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
-		}
 
 		@Override
 		public void removeAttribute(String s) {
 			attributes.remove(s);
-		}
-
-		@Override
-		public void removeValue(String s) {
-
-			//TODO : Implement me!
-			throw new UnsupportedOperationException("Implement me please!!!");
 		}
 
 		@Override
