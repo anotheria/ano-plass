@@ -13,12 +13,7 @@ import net.anotheria.util.concurrency.SafeIdBasedLockManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -208,8 +203,9 @@ public class APIFilter implements Filter {
 			}
 
 			//calling obtain session
+			String remoteIpAddress = !StringUtils.isEmpty(cfConnectingIp) ? cfConnectingIp : req.getRemoteAddr();
 			APISession apiSession = APISessionManager.getInstance().obtainSession(session.getId(), apiSessionId, dSessionIdFromCookies,
-					dSessionIdFromRequest, req.getRemoteAddr(), userAgent, req.getLocale(), editorId);
+					dSessionIdFromRequest, remoteIpAddress, userAgent, req.getLocale(), editorId);
 			if (!StringUtils.isEmpty(cfIpCountry)){
 				apiSession.setAttribute(CF_IP_COUNTRY_HEADER_CONSTANT, cfIpCountry);
 			}
