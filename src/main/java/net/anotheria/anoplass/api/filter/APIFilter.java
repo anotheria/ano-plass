@@ -208,8 +208,9 @@ public class APIFilter implements Filter {
 			}
 
 			//calling obtain session
+			String remoteIpAddress = !StringUtils.isEmpty(cfConnectingIp) ? cfConnectingIp : req.getRemoteAddr();
 			APISession apiSession = APISessionManager.getInstance().obtainSession(session.getId(), apiSessionId, dSessionIdFromCookies,
-					dSessionIdFromRequest, req.getRemoteAddr(), userAgent, req.getLocale(), editorId);
+					dSessionIdFromRequest, remoteIpAddress, userAgent, req.getLocale(), editorId);
 			if (!StringUtils.isEmpty(cfIpCountry)){
 				apiSession.setAttribute(CF_IP_COUNTRY_HEADER_CONSTANT, cfIpCountry);
 			}
