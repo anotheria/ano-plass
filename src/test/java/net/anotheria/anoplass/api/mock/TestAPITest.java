@@ -4,18 +4,18 @@ import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.validation.ValidationException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestAPITst {
-	@Before public void init(){
+public class TestAPITest {
+	@BeforeEach public void init(){
 		APIFinder.addAPIFactory(TestAPI.class, new TestAPIFactory());
 	}
 	
-	@After public void cleanup(){
+	@AfterEach public void cleanup(){
 		APIFinder.findAPI(TestAPI.class).deInit();
 		APIFinder.cleanUp();
 	}

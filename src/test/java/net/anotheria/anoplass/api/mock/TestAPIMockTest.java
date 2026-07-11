@@ -7,19 +7,19 @@ import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.validation.ValidationException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This test does the same as TestAPITest, but instead of using the real implementation it creates one on the fly.
  * @author lrosenberg.
  *
  */
-public class TestAPIMockTst {
-	@Before public void init() throws Exception{
+public class TestAPIMockTest {
+	@BeforeEach public void init() throws Exception{
 		APIFinder.setMockingEnabled(true);
 		
 		MockMethodRegistry.addMockMethod(TestAPI.class.getMethod("methodIsReturning42"), new ReturnIntegerMockMethod(42));
@@ -43,7 +43,7 @@ public class TestAPIMockTst {
 		MockMethodRegistry.addMockMethod(API.class.getMethod("deInit"), new NoopMockMethod());
 	}
 	
-	@After public void cleanup(){
+	@AfterEach public void cleanup(){
 		APIFinder.findAPI(TestAPI.class).deInit();
 		APIFinder.cleanUp();
 	}

@@ -7,13 +7,13 @@ import net.anotheria.anoplass.api.APICallContext;
 import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ObservationAPITest {
 	
-	@Before public void setup(){
+	@BeforeEach public void setup(){
 		APICallContext.getCallContext().reset();
 		APIFinder.addAPIFactory(ObservationAPI.class, new ObservationAPIFactory());
 	}

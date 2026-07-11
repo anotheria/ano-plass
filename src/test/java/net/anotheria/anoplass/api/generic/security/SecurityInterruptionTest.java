@@ -2,13 +2,13 @@ package net.anotheria.anoplass.api.generic.security;
 
 import net.anotheria.anoplass.api.APIFinder;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SecurityInterruptionTest {
 	
-	@Before public void init(){
+	@BeforeEach public void init(){
 		APIFinder.cleanUp();
 		APIFinder.addAPIFactory(GuardedAPI.class, new GuardedAPIFactory());
 		APIFinder.addAPIFactory(SecurityAPI.class, new DenyAllSecurityAPIImpl());

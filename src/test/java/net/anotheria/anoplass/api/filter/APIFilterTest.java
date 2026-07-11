@@ -3,8 +3,8 @@ package net.anotheria.anoplass.api.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import net.anotheria.anoplass.api.session.APISessionManager;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class APIFilterTest {
 		try {
 			filter.init(null);
 		} catch (ServletException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		for (int i = 0; i < nThreads; i++) {
@@ -57,10 +57,10 @@ public class APIFilterTest {
 						try {
 							resultSetWithSessionIds.add(filter.initSession(new RequestMock(session)).getId());
 						} catch (ServletException e) {
-							Assert.fail(e.getMessage());
+							Assertions.fail(e.getMessage());
 						}
 					} catch (InterruptedException e) {
-						Assert.fail(e.getMessage());
+						Assertions.fail(e.getMessage());
 					} finally {
 						stopLatch.countDown();
 					}
@@ -75,13 +75,13 @@ public class APIFilterTest {
 
 			stopLatch.await();
 		} catch (InterruptedException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		// Now  checking how many sessions Do we have!
 		//Should be exactly 1!
-		Assert.assertEquals(1, resultSetWithSessionIds.size());
-		Assert.assertEquals("Only 1 additional session should be created!!", APISessionManager.getInstance().getSessionIds().size(), sessionSizeBeforeTest + 1);
+		Assertions.assertEquals(1, resultSetWithSessionIds.size());
+		Assertions.assertEquals(APISessionManager.getInstance().getSessionIds().size(), sessionSizeBeforeTest + 1, "Only 1 additional session should be created!!");
 	}
 
 	/**

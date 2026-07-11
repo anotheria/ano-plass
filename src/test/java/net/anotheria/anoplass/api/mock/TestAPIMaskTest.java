@@ -6,14 +6,14 @@ import net.anotheria.anoplass.api.APIException;
 import net.anotheria.anoplass.api.APIFinder;
 import net.anotheria.anoplass.api.validation.ValidationException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestAPIMaskTst {
-	@Before public void init() throws Exception{
+public class TestAPIMaskTest {
+	@BeforeEach public void init() throws Exception{
 		APIFinder.setMaskingEnabled(true);
 		APIFinder.addAPIFactory(TestAPI.class, new TestAPIFactory());
 		
@@ -35,7 +35,7 @@ public class TestAPIMaskTst {
 		
 	}
 
-	@After public void cleanup(){
+	@AfterEach public void cleanup(){
 		APIFinder.findAPI(TestAPI.class).deInit();
 		APIFinder.cleanUp();
 	}

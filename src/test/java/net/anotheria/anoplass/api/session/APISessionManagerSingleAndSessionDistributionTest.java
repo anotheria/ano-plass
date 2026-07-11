@@ -8,9 +8,9 @@ import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceConfig
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceImpl;
 import net.anotheria.util.IdCodeGenerator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,7 +34,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 	private static SessionDistributorService service;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 
 		createCall = 0;
@@ -84,9 +84,9 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 				method.invoke(APISessionManager.getInstance());
 			}
 		} catch (InvocationTargetException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		} catch (IllegalAccessException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 
@@ -105,7 +105,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 		try {
 
-			Assert.assertTrue("There are SOME sessions!!! count=[" + manager.getSessionCount() + "]", manager.getSessionCount() == 0);
+			Assertions.assertTrue(manager.getSessionCount() == 0, "There are SOME sessions!!! count=[" + manager.getSessionCount() + "]");
 
 			//created session
 			APISessionImpl session = APISessionImpl.class.cast(manager.createSession(referenceId));
@@ -122,32 +122,32 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 			Thread.sleep(500);
 
-			Assert.assertEquals("Should be 1 call for create", 1, createCall);
-			Assert.assertEquals("Should be 1 call for updateUser", 1, updateUserCall);
-			Assert.assertEquals("Should be 1 call for updateEditor", 1, updateEditorCall);
-			Assert.assertEquals("Should be 1 call for create attribute", 1, addAttributeCall);
+			Assertions.assertEquals(1, createCall, "Should be 1 call for create");
+			Assertions.assertEquals(1, updateUserCall, "Should be 1 call for updateUser");
+			Assertions.assertEquals(1, updateEditorCall, "Should be 1 call for updateEditor");
+			Assertions.assertEquals(1, addAttributeCall, "Should be 1 call for create attribute");
 			try {
-				Assert.assertEquals("Should be 1 session in SessionDistributor", 1, service.getDistributedSessionNames().size());
+				Assertions.assertEquals(1, service.getDistributedSessionNames().size(), "Should be 1 session in SessionDistributor");
 			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Can't happen here!");
+				Assertions.fail("Can't happen here!");
 			}
 
 			//creating keep alive call
 			manager.getSession(session.getId());
 			Thread.sleep(500);
-			Assert.assertEquals("Should be 1 call for keep alive", 1, keepAliveCall);
+			Assertions.assertEquals(1, keepAliveCall, "Should be 1 call for keep alive");
 
 
 			// Trying To restore session!!!  now!
-			Assert.assertEquals("Should contains only 1 session ", 1, manager.getSessionCount());
+			Assertions.assertEquals(1, manager.getSessionCount(), "Should contains only 1 session ");
 
 			try {
 				APISessionImpl restoredSession = APISessionImpl.class.cast(manager.restoreSession(session.getId(), referenceId));
-				Assert.assertTrue("Should contains 1 distributed attribute", restoredSession.getAttribute("h3llka_attribute") != null);
-				Assert.assertEquals("Should be 1 call for restore session", 1, restoreCall);
-				Assert.assertEquals("Should contains only 1 session ", 1, manager.getSessionCount());
+				Assertions.assertTrue(restoredSession.getAttribute("h3llka_attribute") != null, "Should contains 1 distributed attribute");
+				Assertions.assertEquals(1, restoreCall, "Should be 1 call for restore session");
+				Assertions.assertEquals(1, manager.getSessionCount(), "Should contains only 1 session ");
 			} catch (APISessionRestoreException e) {
-				Assert.fail("Should not happen!!!");
+				Assertions.fail("Should not happen!!!");
 			}
 
 
@@ -155,23 +155,23 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 			session.removeAttribute("h3llka_attribute");
 			Thread.sleep(500);
-			Assert.assertEquals("Should be 1 remove attribute call", 1, removeAttributeCall);
+			Assertions.assertEquals(1, removeAttributeCall, "Should be 1 remove attribute call");
 
-			Assert.assertEquals(1, manager.getSessionCount());
+			Assertions.assertEquals(1, manager.getSessionCount());
 
 			manager.destroyAPISessionByReferenceId(referenceId);
 			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
+				Assertions.assertEquals(0, service.getDistributedSessionNames().size(), "Should be 0 session in SessionDistributor");
 			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Should not happen!!!");
+				Assertions.fail("Should not happen!!!");
 			}
-			Assert.assertEquals("Should be 1 call for delete session", 1, deleteCall);
+			Assertions.assertEquals(1, deleteCall, "Should be 1 call for delete session");
 
 
 		} catch (APISessionCreationException e) {
-			Assert.fail("Should not happen!");
+			Assertions.fail("Should not happen!");
 		} catch (InterruptedException e) {
-			Assert.fail("Should not happen!");
+			Assertions.fail("Should not happen!");
 		}
 
 
@@ -199,27 +199,27 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 			Thread.sleep(500);
 
-			Assert.assertEquals("Should be 0 call for create", 0, createCall);
-			Assert.assertEquals("Should be 0 call for updateUser", 0, updateUserCall);
-			Assert.assertEquals("Should be 0 call for updateEditor", 0, updateEditorCall);
-			Assert.assertEquals("Should be 0 call for create attribute", 0, addAttributeCall);
+			Assertions.assertEquals(0, createCall, "Should be 0 call for create");
+			Assertions.assertEquals(0, updateUserCall, "Should be 0 call for updateUser");
+			Assertions.assertEquals(0, updateEditorCall, "Should be 0 call for updateEditor");
+			Assertions.assertEquals(0, addAttributeCall, "Should be 0 call for create attribute");
 			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
+				Assertions.assertEquals(0, service.getDistributedSessionNames().size(), "Should be 0 session in SessionDistributor");
 			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Can't happen here!");
+				Assertions.fail("Can't happen here!");
 			}
 
 			//creating keep alive call
 			manager.getSession(session.getId());
 			Thread.sleep(500);
-			Assert.assertEquals("Should be 0 call for keep alive", 0, keepAliveCall);
+			Assertions.assertEquals(0, keepAliveCall, "Should be 0 call for keep alive");
 
 
 			// Trying To restore session!!!  now!
 
 			try {
 				APISessionImpl restoredSession = APISessionImpl.class.cast(manager.restoreSession(session.getId(), referenceId));
-				Assert.fail("Should fail here!");
+				Assertions.fail("Should fail here!");
 			} catch (APISessionRestoreException e) {
 				// distribution is turned OFF!!!
 			}
@@ -228,23 +228,23 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 			session.removeAttribute("h3llka_attribute");
 			Thread.sleep(500);
-			Assert.assertEquals("Should be 0 remove attribute call", 0, removeAttributeCall);
+			Assertions.assertEquals(0, removeAttributeCall, "Should be 0 remove attribute call");
 
 
 			manager.destroyAPISessionBySessionId(session.getId());
 			Thread.sleep(500);
 			try {
-				Assert.assertEquals("Should be 0 session in SessionDistributor", 0, service.getDistributedSessionNames().size());
+				Assertions.assertEquals(0, service.getDistributedSessionNames().size(), "Should be 0 session in SessionDistributor");
 			} catch (SessionDistributorServiceException e) {
-				Assert.fail("Should not happen!!!");
+				Assertions.fail("Should not happen!!!");
 			}
-			Assert.assertEquals("Should be 0 call for delete session", 0, deleteCall);
+			Assertions.assertEquals(0, deleteCall, "Should be 0 call for delete session");
 
 
 		} catch (APISessionCreationException e) {
-			Assert.fail("Should not happen!");
+			Assertions.fail("Should not happen!");
 		} catch (InterruptedException e) {
-			Assert.fail("Should not happen!");
+			Assertions.fail("Should not happen!");
 		}
 
 	}
@@ -266,18 +266,18 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			//waiting for clean!
 			Thread.sleep(500);
 			try {
-				Assert.assertNull("Can't be restored!!!", APISessionManager.getInstance().restoreSession(id, "h3llka"));
-				Assert.fail("Should not happen!!!  There is no such session!!!!");
+				Assertions.assertNull(APISessionManager.getInstance().restoreSession(id, "h3llka"), "Can't be restored!!!");
+				Assertions.fail("Should not happen!!!  There is no such session!!!!");
 			} catch (APISessionRestoreException e) {
 			}
 
 			//Badly configured service!!!
 			APISessionDistributionHelper.setSessionDistributorService(null);
 			try {
-				Assert.assertNotNull(APISessionManager.getInstance().createSession("123"));
-				Assert.assertFalse(APISessionDistributionHelper.isSessionDistributorServiceConfigured());
+				Assertions.assertNotNull(APISessionManager.getInstance().createSession("123"));
+				Assertions.assertFalse(APISessionDistributionHelper.isSessionDistributorServiceConfigured());
 			} catch (Exception e) {
-				Assert.fail("Should not happen! " + e.getMessage());
+				Assertions.fail("Should not happen! " + e.getMessage());
 			}
 
 
@@ -308,14 +308,14 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		try {
 			restoreCall = 0;
 			session = manager.obtainSession(referenceId, null, null, distributedSessionId, "", "", null, "");
-			Assert.assertNotNull(session);
-			Assert.assertEquals(session.getId(), distributedSessionId);
-			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session);
+			Assertions.assertEquals(session.getId(), distributedSessionId);
+			Assertions.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 1  restore call", restoreCall, 1);
+			Assertions.assertEquals(restoreCall, 1, "There should be  exactly 1  restore call");
 
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 
@@ -323,14 +323,14 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		try {
 			restoreCall = 0;
 			session = manager.obtainSession(referenceId, session.getId(), null, distributedSessionId, "", "", null, "");
-			Assert.assertNotNull(session);
-			Assert.assertEquals(session.getId(), distributedSessionId);
-			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session);
+			Assertions.assertEquals(session.getId(), distributedSessionId);
+			Assertions.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+			Assertions.assertEquals(restoreCall, 0, "There should be  exactly 0  restore call's ! Cause  session allraedy restored!");
 
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 
@@ -339,13 +339,13 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			APISessionDistributionConfig.getInstance().setDistributionEnabled(false);
 			restoreCall = 0;
 			APISession session2 = manager.obtainSession(referenceId, "", null, distributedSessionId, "", "", null, "");
-			Assert.assertNotNull(session2);
-			Assert.assertFalse(" False -  cause  new  session was  created!!!!", session2.getId().equals(distributedSessionId));
-			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session2);
+			Assertions.assertFalse(session2.getId().equals(distributedSessionId), " False -  cause  new  session was  created!!!!");
+			Assertions.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+			Assertions.assertEquals(restoreCall, 0, "There should be  exactly 0  restore call's ! Cause  session allraedy restored!");
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
@@ -371,28 +371,28 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		try {
 			restoreCall = 0;
 			session = manager.obtainSession(referenceId, null, distributedSessionIdFromCookies, null, "", "", null, "");
-			Assert.assertNotNull(session);
-			Assert.assertEquals(session.getId(), distributedSessionIdFromCookies);
-			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session);
+			Assertions.assertEquals(session.getId(), distributedSessionIdFromCookies);
+			Assertions.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 1  restore call", restoreCall, 1);
+			Assertions.assertEquals(restoreCall, 1, "There should be  exactly 1  restore call");
 
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		// now  let's try to  obtain  same  session  once again!!! AS session  already restored  there should not be restore call's
 		try {
 			restoreCall = 0;
 			session = manager.obtainSession(referenceId, session.getId(), distributedSessionIdFromCookies, null, "", "", null, "");
-			Assert.assertNotNull(session);
-			Assert.assertEquals(session.getId(), distributedSessionIdFromCookies);
-			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session);
+			Assertions.assertEquals(session.getId(), distributedSessionIdFromCookies);
+			Assertions.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+			Assertions.assertEquals(restoreCall, 0, "There should be  exactly 0  restore call's ! Cause  session allraedy restored!");
 
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		// now  let's try to  obtain  same  session  once again!!! with disabled Distribution!
@@ -400,13 +400,13 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 			APISessionDistributionConfig.getInstance().setDistributionEnabled(false);
 			restoreCall = 0;
 			APISession session2 = manager.obtainSession(referenceId, "", distributedSessionIdFromCookies, null, "", "", null, "");
-			Assert.assertNotNull(session2);
-			Assert.assertFalse(" False -  cause  new  session was  created!!!!", session2.getId().equals(distributedSessionIdFromCookies));
-			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session2);
+			Assertions.assertFalse(session2.getId().equals(distributedSessionIdFromCookies), " False -  cause  new  session was  created!!!!");
+			Assertions.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
 
-			Assert.assertEquals("There should be  exactly 0  restore call's ! Cause  session allraedy restored!", restoreCall, 0);
+			Assertions.assertEquals(restoreCall, 0, "There should be  exactly 0  restore call's ! Cause  session allraedy restored!");
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		APISessionDistributionConfig.getInstance().setDistributionEnabled(true);
@@ -428,10 +428,10 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 		try {
 			session = manager.obtainSession(referenceId, null, "", "", "", "", null, "");
-			Assert.assertNotNull(session);
-			Assert.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
+			Assertions.assertNotNull(session);
+			Assertions.assertEquals(APISessionImpl.class.cast(session).getReferenceId(), referenceId);
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 
 		//obtain now!
@@ -439,11 +439,11 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 
 		try {
 			APISession session2 = manager.obtainSession(referenceId, session.getId(), "", "", "", "", null, "");
-			Assert.assertNotNull(session2);
-			Assert.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
-			Assert.assertEquals(session, session2);
+			Assertions.assertNotNull(session2);
+			Assertions.assertEquals(APISessionImpl.class.cast(session2).getReferenceId(), referenceId);
+			Assertions.assertEquals(session, session2);
 		} catch (APISessionCreationException e) {
-			Assert.fail(e.getMessage());
+			Assertions.fail(e.getMessage());
 		}
 	}
 
@@ -457,7 +457,7 @@ public class APISessionManagerSingleAndSessionDistributionTest {
 		try {
 			return service.createDistributedSession(IdCodeGenerator.generateCode(20));
 		} catch (SessionDistributorServiceException e) {
-			Assert.fail("Should not happens! " + e.getMessage());
+			Assertions.fail("Should not happens! " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}
