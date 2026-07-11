@@ -6,7 +6,7 @@ import net.anotheria.anoprise.sessiondistributor.NoSuchDistributedSessionExcepti
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorService;
 import net.anotheria.anoprise.sessiondistributor.SessionDistributorServiceException;
 import net.anotheria.anoprise.sessiondistributor.SessionsCountLimitReachedSessionDistributorServiceException;
-import net.anotheria.net.util.ByteArraySerializer;
+import net.anotheria.util.ByteArraySerializer;
 import org.distributeme.core.exception.DistributemeRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

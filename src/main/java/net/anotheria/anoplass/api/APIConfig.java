@@ -72,20 +72,6 @@ public class APIConfig {
 			log.warn("apiconfig not found, running with default values");
 		}
 	}
-
-	static {
-		servicePolicy = SERVICE_POLICY_DEFAULT;
-
-		aliasMap = new HashMap<Class<? extends API>, List<Class<? extends API>>>();
-		// addAlias(ITargetingAPI.class, ITargetingTestingAPI.class);
-
-		configurable = new APIConfigurable();
-		try{
-			ConfigurationManager.INSTANCE.configure(configurable);
-		}catch(IllegalArgumentException apiConfigNotFound){
-			log.warn("apiconfig not found, running with default values");
-		}
-	}
 	@SuppressWarnings("unused")
 	private static void addAlias(Class<? extends API> interfaceClass,
 			Class<? extends API> aliasClass) {
