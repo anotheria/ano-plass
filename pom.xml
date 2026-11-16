@@ -12,6 +12,17 @@
     <version>4.1.2-SNAPSHOT</version>
     <name>anotheria.net presentation logic and stateful services</name>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- ano-util 4.0.10 still pulls bcprov 1.84 (CVE fixes in 1.85); remove once ano-util ships 1.85+ -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>1.85</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -25,7 +36,7 @@
         <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>ano-util</artifactId>
-            <version>4.0.7</version>
+            <version>4.0.10</version>
         </dependency>
         <dependency>
             <groupId>net.anotheria</groupId>
@@ -42,7 +53,7 @@
         <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>moskito-core</artifactId>
-            <version>5.0.0</version>
+            <version>5.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
